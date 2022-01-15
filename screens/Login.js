@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, StatusBar, Image, ToastAndroid, ImageBackground} from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, StatusBar, Image, ToastAndroid, ActivityIndicator} from 'react-native';
 
 import {serverQa, base_url} from '../Env'    
 import axios from 'axios'
@@ -20,13 +20,11 @@ function Index(props) {
 
     navigation.navigate(screen, {randomCode : Math.random()})
   }
-
-
     
     const [notificationToken , setNotificationToken] = React.useState('')
     const { UserDetails, setUserDetails } = React.useContext(UserContext)
     const [editable, setEditable] = React.useState(false)
-
+    const [Load, setLoad] = React.useState(false);
 
     
     React.useEffect(()=>{
@@ -91,15 +89,9 @@ function Index(props) {
       const data = {
         ...formInfo
       }
-
-        ToastAndroid.showWithGravity(
-            "LOGIN",
-            ToastAndroid.SHORT,
-            ToastAndroid.CENTER
-          );
-      
-  return false
-      data.fcmToken = notificationToken
+      setLoad(true)
+     
+      data.fcmToken = "124412"
 
       if( data.email === '' || data.password === ''){
 
@@ -108,20 +100,19 @@ function Index(props) {
             ToastAndroid.SHORT,
             ToastAndroid.CENTER
           );
-           
+          setLoad(false)
         return false;
       }
 
 
       console.log('Enviando formulario')
-      console.log(base_url(serverQa,`auth/app/financing`))
+      console.log(base_url(serverQa,`auth/app`))
       console.log(data)
 
-
-      axios.post( base_url(serverQa,`auth/app/financing`), data ).then(function (res) {
+      axios.post( base_url(serverQa,`auth/app`), data ).then(function (res) {
 
         _storeData(res.data)
-    
+        setLoad(false)
       })
       .catch(function (error) {
           console.log('Error al enviar formulario')
@@ -132,7 +123,7 @@ function Index(props) {
             ToastAndroid.CENTER
         );
 
-
+        setLoad(false)
 
       })
       .then(function () {
@@ -187,7 +178,14 @@ function Index(props) {
             </View>
 
              <TouchableOpacity style={styles.loginBtn} onPress={()=>sendForm()}>
-              <Text style={styles.loginText}>Iniciar sesión</Text>
+              <Text style={styles.loginText}>
+                    {Load &&
+                        <ActivityIndicator size="large" color="#fff" />
+                    }
+                    {!Load &&
+                        <Text>Iniciar sesión</Text>
+                    }
+              </Text>
             </TouchableOpacity>
 
             <TouchableOpacity onPress={()=>goToScreen('Forgout') }>

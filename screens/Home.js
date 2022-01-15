@@ -32,10 +32,11 @@ function Index(props){
 
            
                 
-            if (value && value.token !== undefined) {
+            if (value && value.email !== undefined) {
 
                 setUserDetails(value)
 
+                console.log(value.email, "value.email")
                 setTimeout(()=>{
 
                     setIsSplashing(false)
@@ -57,7 +58,7 @@ function Index(props){
 
       useEffect(()=>{
 
-        console.log(userDetails, "userDetailssss")
+        console.log(userDetails, "userDetail123")
         if (Platform.OS === 'android') {
             RequestPermission().then(_ => {
               console.log('requested!');
