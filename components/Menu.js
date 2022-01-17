@@ -9,23 +9,10 @@ function Index(props) {
  
 
   function goToScreen(screen) {
-
-    Alert.alert("No Disponible")
-    
-    return false
     props.props.navigation.navigate(screen, { randomCode: Math.random() })
   }
 
-  const logout = async () => {
-    try {
-      await AsyncStorage.removeItem('@Passport');
-      console.log('logout')
-      setUserDetails({})
-      goToScreen("Dashboard")
-    } catch (error) {
-      console.log(error.message);
-    }
-  }
+  
 
 
   return (

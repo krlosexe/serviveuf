@@ -7,6 +7,8 @@ import DatePicker from 'react-native-date-picker'
 import UserContext from '../contexts/UserContext'
 
 import HeadNavigate from '../components/HeadNavigate'
+import PhotoUpload from 'react-native-photo-upload'
+import { back } from 'react-native/Libraries/Animated/Easing';
 
 function Index(props) {  
 
@@ -31,8 +33,9 @@ function Index(props) {
     const [editable, setEditable] = React.useState(false)
     const [isSelected, setSelection] = React.useState(false);
     const [Load, setLoad] = React.useState(false);
-    const [date, setDate] = useState(new Date())
+    const [date, setDate] = useState(new Date)
     const [open, setOpen] = useState(false)
+    const [DateString, setDateString] = useState(false)
     
     React.useEffect(()=>{
       setTimeout(() => {
@@ -136,31 +139,41 @@ function Index(props) {
          <Text style={styles.titleService}>{props.route.params.service}</Text>
 
 
-         <Button title="Open" onPress={() => setOpen(true)} />
-      <DatePicker
-        modal
-        open={open}
-        date={date}
-        onConfirm={(date) => {
-          setOpen(false)
-          setDate(date)
-        }}
-        onCancel={() => {
-          setOpen(false)
-        }}
 
-        />
-          <View style={{width : "100%",alignItems: 'center', marginTop : 40}}>
-            <View style={styles.inputView} >
-              <TextInput  
-                style={styles.inputText}
-                placeholder="Elige una fecha" 
-                placeholderTextColor="#777"
-                editable={editable}
-                onChangeText={text => onChangeText(text, 'names')}/>
-            </View>
+          <DatePicker
+            modal
+            open={open}
+            date={date}
+            onConfirm={(date) => {
+              setOpen(false)
+              setDate(date)
+              var datestring = ("0" + date.getDate()).slice(-2) + "-" + ("0"+(date.getMonth()+1)).slice(-2) + "-" + date.getFullYear() + " " + ("0" + date.getHours()).slice(-2) + ":" + ("0" + date.getMinutes()).slice(-2);
 
+              setDateString(datestring)
+              console.log(datestring)
+            }}
+            onCancel={() => {
+              setOpen(false)
+            }}
+          />
+          <View style={{width : "100%",alignItems: 'center'}}>
+            <TouchableOpacity onPress={() => setOpen(true)} style={{width : "100%",alignItems: 'center', marginTop : 40}}>
+              <View style={{...styles.inputView, height:60}} >
 
+                    {DateString &&
+                      <Text style={ {textAlign : "center"}}>{DateString}</Text>
+                    }
+
+                    {!DateString &&  
+                        <Text style={ {textAlign : "center"}}>Elige una fecha</Text>
+                    }
+                 
+              </View>
+            </TouchableOpacity>
+          
+            
+         
+{/* 
             <View style={styles.inputView} >
                 
               <TextInput  
@@ -169,7 +182,7 @@ function Index(props) {
                 placeholderTextColor="#777"
                 editable={editable}
                 onChangeText={text => onChangeText(text, 'last_names')}/>
-            </View>
+            </View> */}
 
 
             <View style={styles.inputView} >
@@ -178,7 +191,6 @@ function Index(props) {
                 style={styles.inputText}
                 placeholder="Dirección" 
                 placeholderTextColor="#777"
-                keyboardType={'email-address'}
                 editable={editable}
                 onChangeText={text => onChangeText(text, 'email')}/>
             </View>
@@ -186,7 +198,6 @@ function Index(props) {
 
             <View style={styles.inputView} >
               <TextInput  
-                secureTextEntry
                 style={styles.inputText}
                 placeholder="Teléfono / Celular" 
                 placeholderTextColor="#777"
@@ -196,24 +207,37 @@ function Index(props) {
 
             <View style={styles.inputView} >
               <TextInput  
-                secureTextEntry
                 style={styles.inputText}
                 placeholder="Comentarios" 
                 placeholderTextColor="#777"
                 onChangeText={text => onChangeText(text, 'repeat_password')}/>
             </View>
+          </View>
 
-           
+
+              
+            <PhotoUpload containerStyle={{marginTop : -70}}   onPhotoSelect={image => {
+              if (image) {
+                  console.log(image) }}
+              }>
+
+              
+                <Image style={{
+                    paddingVertical: 30,
+                    width: 280,
+                    resizeMode : "contain"
+                }}title = "jaja"
+                source={require('../src/images/upload_image.png')} />
+            </PhotoUpload>
+
             <TouchableOpacity style={{
                width:"70%",
                 backgroundColor:"#0B4E6B",
-                borderTopLeftRadius: 40,
-                borderTopRightRadius: 40,
+                borderRadius: 40,
                 height:60,
                 alignItems:"center",
                 justifyContent:"center",
-                marginTop:5,
-                marginBottom:20
+                alignSelf : "center",
             }} onPress={()=>sendForm() }>
               <Text style={styles.register}>
                 
@@ -221,14 +245,12 @@ function Index(props) {
                         <ActivityIndicator size="large" color="#fff" />
                     }
                     {!Load &&
-                        <Text>Registrarse</Text>
+                        <Text>Enviar</Text>
                     }
                   </Text>
             </TouchableOpacity>
-          </View>
 
 
-      
 
     </View>
   );

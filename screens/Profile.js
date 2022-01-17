@@ -1,46 +1,38 @@
 import React, {useEffect} from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, StatusBar, Image, ToastAndroid, ActivityIndicator, ImageBackground} from 'react-native';
-
-import {server, base_url} from '../Env'    
-import axios from 'axios'
+import { StyleSheet, Text, View, TouchableOpacity, StatusBar, Image, ImageBackground} from 'react-native';
 
 
-import messaging from '@react-native-firebase/messaging';
 import AsyncStorage from '@react-native-community/async-storage'
 import UserContext from '../contexts/UserContext'
-import CheckBox from '@react-native-community/checkbox';
-
+import Menu from '../components/Menu'
 function Index(props) {  
 
-
-  const { navigation } = props
-
-  function goToScreen(screen)
-  {   
-
-      ToastAndroid.showWithGravity(
-           screen,
-            ToastAndroid.SHORT,
-            ToastAndroid.CENTER
-          );
-   return false
+  function goToScreen(screen) {
+    props.navigation.navigate(screen, { randomCode: Math.random() })
   }
 
     const { UserDetails, setUserDetails } = React.useContext(UserContext)
     const userDetails  = React.useContext(UserContext)
     
-    React.useEffect(()=>{
+    useEffect(()=>{
         
     },[])
 
 
-
+    const logout = async () => {
+        try {
+          await AsyncStorage.removeItem('@Passport');
+          console.log('logout')
+          setUserDetails({})
+          goToScreen("Home")
+        } catch (error) {
+          console.log(error.message);
+        }
+      }
   return (
     <View style={styles.container}>
         <StatusBar translucent backgroundColor="transparent" barStyle="dark-content" />
-          <View style={{
-            //  flexDirection  : "row",
-           }}>
+          <View>
                 <Image
                       style={{resizeMode: "contain",width: 95, height: 95, position: "absolute", marginLeft: "25%", top:-20, left: -150}}
                          source={require('../src/images/round_blue.png')}
@@ -57,38 +49,84 @@ function Index(props) {
           </View>
 
 
-
           <View style={{width : "100%",alignItems: 'center', marginTop: 130}}>
             
             <View style={styles.HeadProfile}>
-                <View style={{backgroundColor : "red"}}>
+                <View>
                     <ImageBackground source={require('../src/images/back_profile.png')}
-                            style={{flex: 1,
-                                resizeMode: "cover",
-                                width : 110,
-                                height : 110,
-                                justifyContent : "center",
-                                alignContent : "center",
-                                paddingTop: "2.5%"
-                            }}>
+                            style={styles.HeadProfileImageBackgroud}>
 
                     </ImageBackground>
-                    <Image
-                        style={{resizeMode: "contain",width: 90, height: 90, alignSelf : "center"}}
-                            source={require('../src/images/profile.png')}
+                    <Image style={styles.HeadProfileImage} source={require('../src/images/profile.png')}
                     />
                 </View>
-                <View>
-                    <Text>{userDetails.nombres}</Text>
-                    <Text>Saldo $000.000</Text>
+                <View style={{marginTop : 10}}>
+                    <Text style={{...styles.HeadProfileText, fontWeight : "bold"}}>{userDetails.nombres}</Text>
+                    <Text style={{...styles.HeadProfileText, fontSize : 20}}>Saldo $000.000</Text>
+
+                    <TouchableOpacity style={styles.BtnMode} onPress={()=>sendForm()}>
+                        <Text style={styles.loginText}>
+                            <Text>Modo prestador de servicios</Text>
+                        </Text>
+                    </TouchableOpacity>
+
                 </View>
+            </View>
+
+
+
+            <TouchableOpacity style={styles.BtnOptions} onPress={()=>sendForm()}>
+                <Text style={{fontSize: 18}}>
+                    <Text>Editar perfil</Text>
+                </Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity style={styles.BtnOptions} onPress={()=>sendForm()}>
+                <Text style={{fontSize: 18}}>
+                    <Text>Historial de movimientos</Text>
+                </Text>
+            </TouchableOpacity>
+
+
+            <TouchableOpacity style={styles.BtnOptions} onPress={()=>sendForm()}>
+                <Text style={{fontSize: 18}}>
+                    <Text>Compras y pedidos</Text>
+                </Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity style={styles.BtnOptions} onPress={()=>logout()}>
+                <Text style={{fontSize: 18}}>
+                    <Text>Abonar a la cuenta</Text>
+                </Text>
+            </TouchableOpacity>
+
+
+
+            <Text style={{marginTop : 20, fontSize : 23, color : "#063046"}}>Soporte</Text>
+
+            <View style={styles.ContentSuport}>
+                <TouchableOpacity style={{...styles.BtnOptions, width : "35%", backgroundColor : "#808080"}} onPress={()=>logout()}>
+                    <Image
+                        style={{width: 35, height: 35}}
+                            source={require('../src/images/icon_phone_suport.png')}
+                    />
+                </TouchableOpacity>
+
+                <TouchableOpacity style={{...styles.BtnOptions, width : "35%", backgroundColor : "#39B54A"}} onPress={()=>logout()}>
+                    <Image
+                        style={{width: 35, height: 35}}
+                            source={require('../src/images/icon_whatsap.png')}
+                    />
+            </TouchableOpacity>
+
+
             </View>
 
            
             
           </View>
 
-
+          <Menu props={props}/>
       
 
     </View>
@@ -129,18 +167,32 @@ const styles = StyleSheet.create({
     color:"#000000",
     fontSize:14
   },
-  loginBtn:{
-    width:"55%",
-    backgroundColor:"#063046",
+  BtnMode:{
+    width:"80%",
+    backgroundColor:"#0B4E6B",
     borderRadius:25,
-    height:50,
+    height:35,
     alignItems:"center",
     justifyContent:"center",
     marginTop:10,
-    marginBottom:20
+    alignSelf : "center"
   },
+  BtnOptions:{
+    width:"80%",
+    backgroundColor:"#E6E6E6",
+    borderRadius:25,
+    height:55,
+    alignItems:"center",
+    justifyContent:"center",
+    marginTop:20,
+    alignSelf : "center"
+  },
+
+  
   loginText:{
-    color:"white"
+    color:"white",
+    textAlign : "center",
+    fontSize : 10
   },
 
   register:{
@@ -164,8 +216,32 @@ const styles = StyleSheet.create({
       width : "100%",
     flexDirection : "row",
     justifyContent: "space-around"
-  }
+  },
 
+  HeadProfileImage:{
+      width: 90, height: 90, 
+      alignSelf : "center",
+      justifyContent : "center",
+      position: "relative",
+      top : -9
+   },
+  HeadProfileImageBackgroud : {flex: 1,
+    width : 110,
+    height : 110
+   },
+
+   HeadProfileText : {
+       fontSize : 20,
+       color : "#063046",
+       textAlign : "center"
+   },
+
+   ContentSuport : {
+       width : "100%",
+       flexDirection : "row",
+       justifyContent : "space-around",
+       alignItems : "center"
+   }
 
 
 });

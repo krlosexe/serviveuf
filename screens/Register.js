@@ -68,8 +68,8 @@ function Index(props) {
 
 
     const _storeData = async (data) => {
-
         console.log(data, "SUCCESS")
+        data.register = true
       try {
           await AsyncStorage.setItem('@Passport', JSON.stringify(data) );
           //console.log(data)

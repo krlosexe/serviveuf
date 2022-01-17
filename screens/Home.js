@@ -29,8 +29,6 @@ function Index(props){
        
         try {
             const value = JSON.parse(await AsyncStorage.getItem('@Passport'));
-
-           
                 
             if (value && value.email !== undefined) {
 

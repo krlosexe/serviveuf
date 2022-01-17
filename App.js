@@ -11,6 +11,9 @@ import Register from './screens/Register'
 import Forgout from './screens/ForgoutPassword'
 import ForgoutPasswordSuccess from './screens/ForgoutPasswordSuccess'
 import Dashboard from './screens/Dashboard'
+import StepOne from './screens/StepOne'
+import StepTwo from './screens/StepTwo'
+import StepThree from './screens/StepThree'
 import RequestService from './screens/RequestService'
 
 import Profile from './screens/Profile'
@@ -30,6 +33,9 @@ function App(){
          <Drawer.Screen name="ForgoutPasswordSuccess" component={ ForgoutPasswordSuccess } />
          <Drawer.Screen name="Profile"                component={ Profile } />
          <Drawer.Screen name="Dashboard"              component={ Dashboard } />
+         <Drawer.Screen name="StepOne"                component={ StepOne } />
+         <Drawer.Screen name="StepTwo"                component={ StepTwo } />
+         <Drawer.Screen name="StepThree"              component={ StepThree } />
          <Drawer.Screen name="RequestService"         component={ RequestService } />
        </Drawer.Navigator>
       </UserProvider>

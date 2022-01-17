@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   Head : {
-      marginTop : 100,
+      marginTop : 50,
       flexDirection : "row",
       justifyContent: "space-between",
       width : "100%",

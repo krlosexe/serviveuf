@@ -16,7 +16,7 @@ function Index(props) {
 
   const { UserDetails, setUserDetails } = React.useContext(UserContext)
   const [Load, setLoad] = React.useState(false);
-
+  const userDetails  = React.useContext(UserContext)
 
   function goToScreen(screen, service)
   {   
@@ -28,7 +28,9 @@ function Index(props) {
 
 
     React.useEffect(()=>{
-     
+      if(userDetails.register){
+        goToScreen("StepOne", false)
+      }
     },[])
 
 
@@ -144,7 +146,7 @@ function Index(props) {
 
         </View>
 
-        <Menu/>
+        <Menu props={props}/>
         
     </View>
   );
