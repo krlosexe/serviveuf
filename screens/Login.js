@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, StatusBar, Image, ToastAndroid, ActivityIndicator} from 'react-native';
 
-import {serverQa, base_url} from '../Env'    
+import {server, base_url} from '../Env'    
 import axios from 'axios'
 
 
@@ -106,10 +106,10 @@ function Index(props) {
 
 
       console.log('Enviando formulario')
-      console.log(base_url(serverQa,`auth/app`))
+      console.log(base_url(server,`authApp`))
       console.log(data)
 
-      axios.post( base_url(serverQa,`auth/app`), data ).then(function (res) {
+      axios.post( base_url(server,`authApp`), data ).then(function (res) {
 
         _storeData(res.data)
         setLoad(false)
