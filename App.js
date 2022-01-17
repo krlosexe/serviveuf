@@ -11,6 +11,7 @@ import Register from './screens/Register'
 import Forgout from './screens/ForgoutPassword'
 import ForgoutPasswordSuccess from './screens/ForgoutPasswordSuccess'
 import Dashboard from './screens/Dashboard'
+import Profile from './screens/Profile'
 const Drawer = createDrawerNavigator();
 
 
@@ -25,6 +26,7 @@ function App(){
          <Drawer.Screen name="Forgout"  component={ Forgout } />
          <Drawer.Screen name="ForgoutPasswordSuccess"     component={ ForgoutPasswordSuccess } />
          <Drawer.Screen name="Dashboard"     component={ Dashboard } />
+         <Drawer.Screen name="Profile"     component={ Profile } />
        </Drawer.Navigator>
       </UserProvider>
     </NavigationContainer>
