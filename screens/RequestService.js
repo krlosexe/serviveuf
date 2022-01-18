@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useContext} from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, StatusBar, Button, Image, ToastAndroid, ActivityIndicator} from 'react-native';
 
 import {server, base_url} from '../Env'    
@@ -8,8 +8,7 @@ import UserContext from '../contexts/UserContext'
 
 import HeadNavigate from '../components/HeadNavigate'
 import PhotoUpload from 'react-native-photo-upload'
-import { back } from 'react-native/Libraries/Animated/Easing';
-
+import { Pulse } from 'react-native-animated-spinkit'
 function Index(props) {  
 
 
@@ -17,39 +16,33 @@ function Index(props) {
 
   function goToScreen(screen)
   {   
-
-      ToastAndroid.showWithGravity(
-           screen,
-            ToastAndroid.SHORT,
-            ToastAndroid.CENTER
-          );
-   return false
+    navigation.navigate(screen, {randomCode : Math.random()})
   }
 
-
+    const { UserDetails, setUserDetails } = useContext(UserContext)
+    const userDetails                     = useContext(UserContext)
+    const [editable, setEditable]         = useState(false)
+    const [Load, setLoad]                 = useState(false);
+    const [LoadOrder, setLoadOrder]       = useState(true);
+    const [date, setDate]                 = useState(new Date)
+    const [open, setOpen]                 = useState(false)
+    const [DateString, setDateString]     = useState(false)
     
-    const [notificationToken , setNotificationToken] = React.useState('')
-    const { UserDetails, setUserDetails } = React.useContext(UserContext)
-    const [editable, setEditable] = React.useState(false)
-    const [isSelected, setSelection] = React.useState(false);
-    const [Load, setLoad] = React.useState(false);
-    const [date, setDate] = useState(new Date)
-    const [open, setOpen] = useState(false)
-    const [DateString, setDateString] = useState(false)
-    
-    React.useEffect(()=>{
+    useEffect(()=>{
       setTimeout(() => {
         setEditable(true)
       }, 100)
     },[])
 
 
-    const [formInfo , setFormInfo]       = React.useState({
-      names            : '',
-      last_names       : '',
-      email            : '',
-      password         : '',
-      repeat_password  : ''
+    const [formInfo , setFormInfo] = useState({
+      id_client   : userDetails.id,
+      id_category : props.route.params.id_service,
+      date        : '',
+      phone       : '',
+      address     : '',
+      comments    : '',
+      photo       : ''
   })
 
 
@@ -70,46 +63,28 @@ function Index(props) {
       const data = {
         ...formInfo
       }
-      data.fcmToken = notificationToken
+
+    
       setLoad(true)
-      if( data.names === '' || data.last_names === '' || data.email === '' || data.password === '' || data.repeat_password === ''){
+      setLoadOrder(true)
+      if(data.id_client === '' || data.id_category === '' || data.date === '' || data.phone === '' || data.address === '' || data.comments === '' || data.photo === ''){
         ToastAndroid.showWithGravity(
             "Completa todos los campos",
             ToastAndroid.SHORT,
             ToastAndroid.CENTER
-          );
-          setLoad(false)
-        return false;
-      }
-
-      if(data.password != data.repeat_password){
-        ToastAndroid.showWithGravity(
-            "Las contraseñas no coinciden",
-            ToastAndroid.SHORT,
-            ToastAndroid.CENTER
-          );
-          setLoad(false)
-        return false;
-      }
-
-
-
-      if(!isSelected){
-        ToastAndroid.showWithGravity(
-            "Debe aceptar los términos y condiciones",
-            ToastAndroid.SHORT,
-            ToastAndroid.CENTER
-          );
-          setLoad(false)
+        );
+        setLoad(false)
         return false;
       }
       console.log('Enviando formulario')
-      console.log(base_url(server,`clients`))
+      console.log(base_url(server,`request/service`))
       console.log(data)
 
-      axios.post( base_url(server,`clients`), data ).then(function (res) {
-        setLoad(false)
-        _storeData(res.data)
+      axios.post( base_url(server,`request/service`), data ).then(function (res) {
+        //setLoad(false)
+        setLoadOrder(false)
+       // _storeData(res.data)
+       console.log("SUCCESSFUL")
       })
       .catch(function (error) {
           console.log('Error al enviar formulario')
@@ -119,13 +94,9 @@ function Index(props) {
             ToastAndroid.SHORT,
             ToastAndroid.CENTER
         );
-
         setLoad(false)
       })
-      .then(function () {
-
-
-      });
+      .then(function () {});
      
     }
 
@@ -138,120 +109,183 @@ function Index(props) {
 
          <Text style={styles.titleService}>{props.route.params.service}</Text>
 
+          {!Load && 
+
+            <View>
+                <DatePicker
+                  modal
+                  open={open}
+                  date={date}
+                  onConfirm={(date) => {
+                    setOpen(false)
+                    setDate(date)
+                    //var datestring = ("0" + date.getDate()).slice(-2) + "-" + ("0"+(date.getMonth()+1)).slice(-2) + "-" + date.getFullYear() + " " + ("0" + date.getHours()).slice(-2) + ":" + ("0" + date.getMinutes()).slice(-2);
 
 
-          <DatePicker
-            modal
-            open={open}
-            date={date}
-            onConfirm={(date) => {
-              setOpen(false)
-              setDate(date)
-              var datestring = ("0" + date.getDate()).slice(-2) + "-" + ("0"+(date.getMonth()+1)).slice(-2) + "-" + date.getFullYear() + " " + ("0" + date.getHours()).slice(-2) + ":" + ("0" + date.getMinutes()).slice(-2);
+                    var datestring = date.getFullYear() + "-" + ("0"+(date.getMonth()+1)).slice(-2) + "-" + ("0" + date.getDate()).slice(-2) + " " + ("0" + date.getHours()).slice(-2) + ":" + ("0" + date.getMinutes()).slice(-2);
 
-              setDateString(datestring)
-              console.log(datestring)
-            }}
-            onCancel={() => {
-              setOpen(false)
-            }}
-          />
-          <View style={{width : "100%",alignItems: 'center'}}>
-            <TouchableOpacity onPress={() => setOpen(true)} style={{width : "100%",alignItems: 'center', marginTop : 40}}>
-              <View style={{...styles.inputView, height:60}} >
 
-                    {DateString &&
-                      <Text style={ {textAlign : "center"}}>{DateString}</Text>
-                    }
 
-                    {!DateString &&  
-                        <Text style={ {textAlign : "center"}}>Elige una fecha</Text>
-                    }
-                 
+                    setDateString(datestring)
+
+                    onChangeText(datestring, "date")
+
+                    console.log(datestring)
+                  }}
+                  onCancel={() => {
+                    setOpen(false)
+                  }}
+                />
+                <View style={{width : "100%",alignItems: 'center'}}>
+                  <TouchableOpacity onPress={() => setOpen(true)} style={{width : "100%",alignItems: 'center', marginTop : 40}}>
+                    <View style={{...styles.inputView, height:60}} >
+
+                          {DateString &&
+                            <Text style={ {textAlign : "center"}}>{DateString}</Text>
+                          }
+
+                          {!DateString &&  
+                              <Text style={ {textAlign : "center"}}>Elige una fecha</Text>
+                          }
+                      
+                    </View>
+                  </TouchableOpacity>
+                
+                  <View style={styles.inputView} >
+                      
+                    <TextInput  
+                      style={styles.inputText}
+                      placeholder="Dirección" 
+                      placeholderTextColor="#777"
+                      editable={editable}
+                      onChangeText={text => onChangeText(text, 'address')}/>
+                  </View>
+
+
+                  <View style={styles.inputView} >
+                    <TextInput  
+                      style={styles.inputText}
+                      placeholder="Teléfono / Celular" 
+                      placeholderTextColor="#777"
+                      onChangeText={text => onChangeText(text, 'phone')}/>
+                  </View>
+
+
+                  <View style={styles.inputView} >
+                    <TextInput  
+                      style={styles.inputText}
+                      placeholder="Comentarios" 
+                      placeholderTextColor="#777"
+                      onChangeText={text => onChangeText(text, 'comments')}/>
+                  </View>
+
+                  <PhotoUpload containerStyle={{marginTop : -10, backgroundColor : "red"}}   onPhotoSelect={image => {
+                    if (image) {
+                        console.log(image) 
+                        onChangeText(image, 'photo')
+                      }}
+                    }>
+                    
+                      <Image style={{
+                          width: 250,
+                          height : 150,
+                          resizeMode : "contain"
+                      }}title = "jaja"
+                      source={require('../src/images/upload_image.png')} />
+                  </PhotoUpload>
+
+
+                </View>
+
+
+
+                  
+                  
+                  <TouchableOpacity style={{
+                    width:"70%",
+                      backgroundColor:"#0B4E6B",
+                      borderRadius: 40,
+                      height:60,
+                      alignItems:"center",
+                      justifyContent:"center",
+                      alignSelf : "center",
+                      marginTop: 200
+                  }} onPress={()=>sendForm() }>
+                    <Text style={styles.register}>
+                      
+                          {Load &&
+                              <ActivityIndicator size="large" color="#fff" />
+                          }
+                          {!Load &&
+                              <Text>Enviar</Text>
+                          }
+                        </Text>
+                  </TouchableOpacity>
+            </View>
+
+          }
+
+
+
+            {Load &&
+              <View style = {{width : "100%"}}>
+                
+
+                {LoadOrder && 
+                   <Text style={{textAlign : "center", marginTop : 20, fontSize : 25, color : "#FF9700"}}>Estamos creando tu orden</Text>
+                }
+
+                {!LoadOrder && 
+                   <Text style={{textAlign : "center", marginTop : 20, fontSize : 25, color : "#FF9700"}}>Tu pedido ha sido creado correctamente</Text>
+                }
+                
+                {LoadOrder && 
+                   <View style={{alignItems :"center", marginTop : 100}}>
+                     <Pulse size={200} color="#0B4E6B" />
+                   </View>
+                }
+
+
+                {!LoadOrder && 
+                   <View style={{alignItems :"center", marginTop : 100}}>
+                     <Image
+                      style={styles.image_sucess}
+                      source={require('../src/images/success.png')}
+                    />
+                   </View>
+                }
+
+
+                {!LoadOrder && 
+                   <Text style={{textAlign : "center", marginTop : 50, fontSize : 16, color : "#FF9700", width : "80%", textAlign : "center", alignSelf : "center"}}>Espera las ofertas de nuestros prestadores de servicio</Text>
+                }
+
+
+                {!LoadOrder && 
+                    <TouchableOpacity style={{
+                      width:"50%",
+                        backgroundColor:"#0B4E6B",
+                        borderRadius: 40,
+                        height:50,
+                        alignItems:"center",
+                        justifyContent:"center",
+                        alignSelf : "center",
+                        marginTop : 25
+                    }} onPress={()=>goToScreen("Dashboard") }>
+                      <Text style={styles.register}>
+                        Finalizar</Text>
+                    </TouchableOpacity>
+                }
+
+
+
+
+                
+
+
+
               </View>
-            </TouchableOpacity>
-          
-            
-         
-{/* 
-            <View style={styles.inputView} >
-                
-              <TextInput  
-                style={styles.inputText}
-                placeholder="Hora" 
-                placeholderTextColor="#777"
-                editable={editable}
-                onChangeText={text => onChangeText(text, 'last_names')}/>
-            </View> */}
-
-
-            <View style={styles.inputView} >
-                
-              <TextInput  
-                style={styles.inputText}
-                placeholder="Dirección" 
-                placeholderTextColor="#777"
-                editable={editable}
-                onChangeText={text => onChangeText(text, 'email')}/>
-            </View>
-
-
-            <View style={styles.inputView} >
-              <TextInput  
-                style={styles.inputText}
-                placeholder="Teléfono / Celular" 
-                placeholderTextColor="#777"
-                onChangeText={text => onChangeText(text, 'password')}/>
-            </View>
-
-
-            <View style={styles.inputView} >
-              <TextInput  
-                style={styles.inputText}
-                placeholder="Comentarios" 
-                placeholderTextColor="#777"
-                onChangeText={text => onChangeText(text, 'repeat_password')}/>
-            </View>
-          </View>
-
-
-              
-            <PhotoUpload containerStyle={{marginTop : -70}}   onPhotoSelect={image => {
-              if (image) {
-                  console.log(image) }}
-              }>
-
-              
-                <Image style={{
-                    paddingVertical: 30,
-                    width: 280,
-                    resizeMode : "contain"
-                }}title = "jaja"
-                source={require('../src/images/upload_image.png')} />
-            </PhotoUpload>
-
-            <TouchableOpacity style={{
-               width:"70%",
-                backgroundColor:"#0B4E6B",
-                borderRadius: 40,
-                height:60,
-                alignItems:"center",
-                justifyContent:"center",
-                alignSelf : "center",
-            }} onPress={()=>sendForm() }>
-              <Text style={styles.register}>
-                
-                    {Load &&
-                        <ActivityIndicator size="large" color="#fff" />
-                    }
-                    {!Load &&
-                        <Text>Enviar</Text>
-                    }
-                  </Text>
-            </TouchableOpacity>
-
-
-
+          }
     </View>
   );
 
@@ -348,6 +382,13 @@ const styles = StyleSheet.create({
       fontSize : 25,
      textAlign: "center",
      fontWeight : "bold"
-  }
+  },
+
+  image_sucess : {
+    width: 150,
+    height: 150,
+    resizeMode: "contain"
+  },
+
 
 });

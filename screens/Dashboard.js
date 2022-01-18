@@ -16,22 +16,58 @@ function Index(props) {
 
   const { UserDetails, setUserDetails } = React.useContext(UserContext)
   const [Load, setLoad] = React.useState(false);
+  const [Request, setRequest] = React.useState(false);
+  const [RequestStatus, setRequestStatus] = React.useState(false);
+  const [RequestCategory, setRequestCategory] = React.useState(false);
+  const [RequestDate, setRequestDate] = React.useState(false);
   const userDetails  = React.useContext(UserContext)
 
-  function goToScreen(screen, service)
+  function goToScreen(screen, service, id_service)
   {   
-    navigation.navigate(screen, {randomCode : Math.random(), service})
+    navigation.navigate(screen, {randomCode : Math.random(), service, id_service})
   }
     
+  let randomCode 
+  if(props.route.params){
+      randomCode = props.route.params.randomCode
+  }else{
+      randomCode = 1
+  }
+
+  React.useEffect(()=>{
     
+    setLoad(true)
+    console.log(base_url(server,`request/service/by/client/${userDetails.id}`))
+    axios.get( base_url(server,`request/service/by/client/${userDetails.id}`)).then(function (response) {
+      if(response.data.id){
 
+        setRequest(true)
 
-
-    React.useEffect(()=>{
-      if(userDetails.register){
-        goToScreen("StepOne", false)
+        setRequestStatus(response.data.status)
+        setRequestCategory(response.data.name_category)
+        setRequestDate(response.data.date)
+        console.log(response.data.id)
       }
-    },[])
+    })
+    .catch(function (error) {
+
+        console.log(error.response.data.message)
+        console.log('Error al enviar formularioss')
+        setLoad(false)
+    })
+    .then(function (response) {
+        setLoad(false)
+    });
+
+
+
+  },[randomCode])
+
+  React.useEffect(()=>{
+    if(userDetails.register){
+      goToScreen("StepOne", false)
+    }
+  },[])
 
 
 
@@ -73,7 +109,7 @@ function Index(props) {
                     justifyContent:"center",
                     alignSelf : "center",
                     marginTop : -14
-                }} onPress={()=>goToScreen("RequestService", "Barberia") }>
+                }} onPress={()=>goToScreen("RequestService", "Barberia", 1) }>
                   <Text style={{color : "white"}}>
                       Comprar
                   </Text>
@@ -105,7 +141,7 @@ function Index(props) {
                     justifyContent:"center",
                     alignSelf : "center",
                     marginTop : -14
-                }} onPress={()=>goToScreen("RequestService", "Manicure") }>
+                }} onPress={()=>goToScreen("RequestService", "Manicure", 2) }>
                   <Text style={{color : "white"}}>
                       Comprar
                   </Text>
@@ -113,7 +149,7 @@ function Index(props) {
             </View>
 
 
-            <View style = {{marginBottom : 20}}>
+            <View style = {{marginBottom : 10}}>
               <View style={styles.services_item}>
                   <View style={styles.services_text_right}>
                     <Text style={styles.services_item_text_small}>Servicio de</Text>
@@ -136,7 +172,7 @@ function Index(props) {
                     justifyContent:"center",
                     alignSelf : "center",
                     marginTop : -14
-                }} onPress={()=>goToScreen("RequestService", "Pedicure") }>
+                }} onPress={()=>goToScreen("RequestService", "Pedicure", 3) }>
                   <Text style={{color : "white"}}>
                       Comprar
                   </Text>
@@ -145,6 +181,34 @@ function Index(props) {
             </View>
 
         </View>
+
+
+        {Load == true &&
+            <ActivityIndicator size="large" color="#0B4E6B" />
+        }
+
+
+        {Request && 
+          <View style={styles.request}>
+            <View style={{flexDirection : "row", justifyContent: "space-between"}}>
+              <View>
+                <Text>Solicitud: {RequestStatus}</Text>
+                <Text>{RequestCategory}</Text>
+                <Text>{RequestDate}</Text>
+              </View>
+
+              <View>
+                <ActivityIndicator size="small" color="#0B4E6B" />
+
+                <Text style={{fontWeight : "bold", textAlign : "center", marginTop : 10}}>4</Text>
+              </View>
+            </View>
+          </View>
+        }
+
+
+        
+
 
         <Menu props={props}/>
         
@@ -238,5 +302,26 @@ const styles = StyleSheet.create({
     color: '#ffffff',
     backgroundColor: 'transparent',
   },
+
+  request : {
+    width : "80%",
+    alignContent : "center",
+    alignSelf : "center",
+    padding : 14,
+    borderRadius : 4,
+    backgroundColor : "#fff",
+    borderLeftColor : "#00d763",
+    borderLeftWidth : 3,
+    marginBottom : 20,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+
+    elevation: 5,
+  }
 
 });
