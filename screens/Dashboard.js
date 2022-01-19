@@ -187,23 +187,26 @@ function Index(props) {
             <ActivityIndicator size="large" color="#0B4E6B" />
         }
 
-
         {Request && 
-          <View style={styles.request}>
-            <View style={{flexDirection : "row", justifyContent: "space-between"}}>
-              <View>
-                <Text>Solicitud: {RequestStatus}</Text>
-                <Text>{RequestCategory}</Text>
-                <Text>{RequestDate}</Text>
-              </View>
 
-              <View>
-                <ActivityIndicator size="small" color="#0B4E6B" />
+          <TouchableOpacity onPress={()=>goToScreen("RequestOfferts") }>
+              <View style={styles.request}>
+                <View style={{flexDirection : "row", justifyContent: "space-between"}}>
+                  <View>
+                    <Text>Solicitud: {RequestStatus}</Text>
+                    <Text>{RequestCategory}</Text>
+                    <Text>{RequestDate}</Text>
+                  </View>
 
-                <Text style={{fontWeight : "bold", textAlign : "center", marginTop : 10}}>4</Text>
+                  <View>
+                    <ActivityIndicator size="small" color="#0B4E6B" />
+
+                    <Text style={{fontWeight : "bold", textAlign : "center", marginTop : 10}}>3</Text>
+                  </View>
+                </View>
               </View>
-            </View>
-          </View>
+          </TouchableOpacity>
+          
         }
 
 

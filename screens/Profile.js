@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, StatusBar, Image, ImageBackground} from 'react-native';
 
 
@@ -13,10 +13,23 @@ function Index(props) {
 
     const { UserDetails, setUserDetails } = React.useContext(UserContext)
     const userDetails  = React.useContext(UserContext)
-    
+
+
+    const [PhotoProfile, setPhotoProfile] = useState(false)
+
+
+
+    let randomCode 
+    if(props.route.params){
+        randomCode = props.route.params.randomCode
+    }else{
+        randomCode = 1
+    }
     useEffect(()=>{
-        
-    },[])
+      if(userDetails.photo_profile == null){
+        setPhotoProfile('https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg')
+      }
+    },[randomCode])
 
 
     const logout = async () => {
@@ -57,8 +70,7 @@ function Index(props) {
                             style={styles.HeadProfileImageBackgroud}>
 
                     </ImageBackground>
-                    <Image style={styles.HeadProfileImage} source={require('../src/images/profile.png')}
-                    />
+                    <Image style={styles.HeadProfileImage} source={{ uri: PhotoProfile}}/>
                 </View>
                 <View style={{marginTop : 10}}>
                     <Text style={{...styles.HeadProfileText, fontWeight : "bold"}}>{userDetails.nombres}</Text>
@@ -75,7 +87,7 @@ function Index(props) {
 
 
 
-            <TouchableOpacity style={styles.BtnOptions} onPress={()=>sendForm()}>
+            <TouchableOpacity style={styles.BtnOptions} onPress={()=>goToScreen("ProfileEdit")}>
                 <Text style={{fontSize: 18}}>
                     <Text>Editar perfil</Text>
                 </Text>
@@ -223,6 +235,7 @@ const styles = StyleSheet.create({
       alignSelf : "center",
       justifyContent : "center",
       position: "relative",
+      borderRadius : 100,
       top : -9
    },
   HeadProfileImageBackgroud : {flex: 1,

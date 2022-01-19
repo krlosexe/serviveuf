@@ -10,13 +10,19 @@ import Login from './screens/Login'
 import Register from './screens/Register'
 import Forgout from './screens/ForgoutPassword'
 import ForgoutPasswordSuccess from './screens/ForgoutPasswordSuccess'
+
+import Profile from './screens/Profile'
+import ProfileEdit from './screens/ProfileEdit'
+
 import Dashboard from './screens/Dashboard'
 import StepOne from './screens/StepOne'
 import StepTwo from './screens/StepTwo'
 import StepThree from './screens/StepThree'
 import RequestService from './screens/RequestService'
+import RequestOfferts from './screens/RequestOfferts'
+import RequestOffertsDetails from './screens/RequestOffertsDetails'
 
-import Profile from './screens/Profile'
+
 
 const Drawer = createDrawerNavigator();
 
@@ -32,11 +38,14 @@ function App(){
          <Drawer.Screen name="Forgout"                component={ Forgout } />
          <Drawer.Screen name="ForgoutPasswordSuccess" component={ ForgoutPasswordSuccess } />
          <Drawer.Screen name="Profile"                component={ Profile } />
+         <Drawer.Screen name="ProfileEdit"            component={ ProfileEdit } />
          <Drawer.Screen name="Dashboard"              component={ Dashboard } />
          <Drawer.Screen name="StepOne"                component={ StepOne } />
          <Drawer.Screen name="StepTwo"                component={ StepTwo } />
          <Drawer.Screen name="StepThree"              component={ StepThree } />
          <Drawer.Screen name="RequestService"         component={ RequestService } />
+         <Drawer.Screen name="RequestOfferts"         component={ RequestOfferts } />
+         <Drawer.Screen name="RequestOffertsDetails"  component={ RequestOffertsDetails } />
        </Drawer.Navigator>
       </UserProvider>
     </NavigationContainer>

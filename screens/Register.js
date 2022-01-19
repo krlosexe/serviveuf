@@ -48,7 +48,7 @@ function Index(props) {
       email            : '',
       password         : '',
       repeat_password  : ''
-  })
+    })
 
 
     React.useEffect(()=>{
