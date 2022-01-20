@@ -1,7 +1,7 @@
 import React, {useEffect, useState, useContext} from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, StatusBar, Button, Image, ToastAndroid, ActivityIndicator} from 'react-native';
+import { StyleSheet, Text, View,  TouchableOpacity, StatusBar, Image, ToastAndroid, ActivityIndicator} from 'react-native';
 
-import {server, base_url} from '../Env'    
+import {server, file_server, base_url} from '../Env'    
 import axios from 'axios'
 import UserContext from '../contexts/UserContext'
 
@@ -9,84 +9,55 @@ import HeadNavigate from '../components/HeadNavigate'
 import Menu from '../components/Menu'
 
 import { Icon } from 'react-native-eva-icons';
-
+import messaging from '@react-native-firebase/messaging';
 
 function Index(props) {  
 
 
   const { navigation } = props
 
-  function goToScreen(screen)
-  {   
-    navigation.navigate(screen, {randomCode : Math.random()})
+  function goToScreen(screen, detail_offert)
+  {     
+
+    console.log(detail_offert, "detail_offert")
+    navigation.navigate(screen, {randomCode : Math.random(), detail_offert})
   }
 
     const { UserDetails, setUserDetails } = useContext(UserContext)
     const userDetails                     = useContext(UserContext)
-    const [editable, setEditable]         = useState(false)
-    const [Load, setLoad]                 = useState(false);
-    const [LoadOrder, setLoadOrder]       = useState(true);
-    const [date, setDate]                 = useState(new Date)
-    const [open, setOpen]                 = useState(false)
-    const [DateString, setDateString]     = useState(false)
-    
-    useEffect(()=>{
-      setTimeout(() => {
-        setEditable(true)
-      }, 100)
-    },[])
+
+    const [Offerts , setOfferts] = useState([])
+    const [Load , setLoad] = useState(false)
+
+  useEffect(() => {
+
+    GetOfferts(props.route.params.service, true)
+    const unsubscribe = messaging().onMessage(async remoteMessage => {
+     GetOfferts(props.route.params.service, false)
+    });
+
+//     //const unsubscribe = messaging().setBackgroundMessageHandler(async remoteMessage => {
+//     messaging().setBackgroundMessageHandler(async remoteMessage => {
+//       console.log("notificación en segundo plano")
+// //      console.log("noti---->", remoteMessage)
+//   //    console.log()
+//       setremoteMessage(remoteMessage)
+//     });
+
+   // return unsubscribe;
+  }, [])
 
 
-    const [formInfo , setFormInfo] = useState({
-      id_client   : userDetails.id,
-      id_category : props.route.params.id_service,
-      date        : '',
-      phone       : '',
-      address     : '',
-      comments    : '',
-      photo       : ''
-  })
+  function GetOfferts(id_service, init){
+    console.log('Enviando formulario')
+      console.log(base_url(server,`request/offerts/by/service/${id_service}`))
 
-
-    React.useEffect(()=>{
-      
-    },[])
-
-
-
-    function onChangeText(text, key){
-      setFormInfo({
-          ...formInfo,
-          [key] : text
-      })
-    }
-
-    function sendForm(){
-      const data = {
-        ...formInfo
+      if(init){
+        setLoad(true)
       }
-
-    
-      setLoad(true)
-      setLoadOrder(true)
-      if(data.id_client === '' || data.id_category === '' || data.date === '' || data.phone === '' || data.address === '' || data.comments === '' || data.photo === ''){
-        ToastAndroid.showWithGravity(
-            "Completa todos los campos",
-            ToastAndroid.SHORT,
-            ToastAndroid.CENTER
-        );
+      axios.get( base_url(server,`request/offerts/by/service/${id_service}`)).then(function (response) {
         setLoad(false)
-        return false;
-      }
-      console.log('Enviando formulario')
-      console.log(base_url(server,`request/service`))
-      console.log(data)
-
-      axios.post( base_url(server,`request/service`), data ).then(function (res) {
-        //setLoad(false)
-        setLoadOrder(false)
-       // _storeData(res.data)
-       console.log("SUCCESSFUL")
+        setOfferts(response.data)
       })
       .catch(function (error) {
           console.log('Error al enviar formulario')
@@ -99,8 +70,54 @@ function Index(props) {
         setLoad(false)
       })
       .then(function () {});
-     
+  }
+
+
+  const CardOffert = (props)=>{
+
+    let photo_profile
+
+    if(props.photo == null){
+      photo_profile = 'https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg'
+    }else{
+      photo_profile = `${file_server}/img/usuarios/profile/${props.photo}`
     }
+
+    return  <View style={styles.Card}>
+              <View>
+                  <Image
+                      style={styles.profile}
+                      source={{ uri: photo_profile}}
+                  />
+              </View>
+              <View style={styles.TextCardName}>
+                  <Text style={styles.Name}>{props.name}</Text>
+                  <Text style={{fontSize : 10}}>102 servicios completados</Text>
+
+                  <TouchableOpacity style={{
+                          width: 100,
+                          backgroundColor:"#063046",
+                          borderRadius : 100,
+                          alignItems:"center",
+                          justifyContent:"center",
+                          marginTop: 7,
+                          padding : 5
+                      }} onPress={()=> goToScreen("RequestOffertsDetails", props.data)}>
+                      <Text style={{color : "white"}}>Detalle</Text>
+                    </TouchableOpacity>
+
+
+              </View>
+              <View style={styles.TextCardPrice}>
+                  <Text style={styles.Price}>{props.price} COP</Text>
+
+                  <View style={styles.Start}>
+                      <Icon name='star' width={20} height={20} fill='#FF9700' /> 
+                      <Text >4.8</Text>
+                  </View>
+              </View>
+          </View>
+  }
 
 
   return (
@@ -109,87 +126,22 @@ function Index(props) {
 
          <HeadNavigate title="Servicios" props={props} />
 
-         <Text style={styles.titleService}>{props.route.params.service}</Text>
+
+         {Load == true &&
+            <ActivityIndicator size="large" color="#0B4E6B" />
+        }
 
 
-
-         <View style={styles.Card}>
-            <View>
-                <Image
-                    style={styles.profile}
-                    source={require('../src/images/profile_barber.jpeg')}
-                />
-            </View>
-            <View style={styles.TextCardName}>
-                <Text style={styles.Name}>Carlos Cardenas</Text>
-                <Text style={{fontSize : 10}}>102 servicios completados</Text>
-
-
-                <TouchableOpacity style={{
-                        width: 100,
-                        backgroundColor:"#063046",
-                        borderRadius : 100,
-                        alignItems:"center",
-                        justifyContent:"center",
-                        marginTop: 7,
-                        padding : 5
-                    }} onPress={()=> goToScreen("RequestOffertsDetails")}>
-                    <Text style={{color : "white"}}>Detalle</Text>
-                    </TouchableOpacity>
-
-
-            </View>
-            <View style={styles.TextCardPrice}>
-                <Text style={styles.Price}>80000 COP</Text>
-
-                <View style={styles.Start}>
-                    <Icon name='star' width={20} height={20} fill='#FF9700' /> 
-                    <Text >4.8</Text>
-                </View>
-            </View>
-         </View>
-
-
-
-
-         <View style={styles.Card}>
-            <View>
-                <Image
-                    style={styles.profile}
-                    source={require('../src/images/profile.png')}
-                />
-            </View>
-            <View style={styles.TextCardName}>
-                <Text style={styles.Name}>Carlos Cardenas</Text>
-                <Text style={{fontSize : 10}}>24 servicios completados</Text>
-
-
-                <TouchableOpacity style={{
-                        width: 100,
-                        backgroundColor:"#063046",
-                        borderRadius : 100,
-                        alignItems:"center",
-                        justifyContent:"center",
-                        marginTop: 7,
-                        padding : 5
-                    }} onPress={()=> goToScreen("RequestOffertsDetails")}>
-                    <Text style={{color : "white"}}>Detalle</Text>
-                    </TouchableOpacity>
-
-
-            </View>
-            <View style={styles.TextCardPrice}>
-                <Text style={styles.Price}>80000 COP</Text>
-
-                <View style={styles.Start}>
-                    <Icon name='star' width={20} height={20} fill='#FF9700' /> 
-                    <Text >4.8</Text>
-                </View>
-            </View>
-         </View>
-
-
-           
+          {Offerts.length > 0 &&
+            Offerts.map((item, key)=>{
+                return <CardOffert
+                         name  = {`${item.name_client} ${item.last_name_client}`}
+                         price = {item.price}
+                         photo = {item.photo_profile}
+                         data  = {item}
+                      />
+            })
+          }
 
          <Menu props={props}/>
     </View>
@@ -221,7 +173,8 @@ const styles = StyleSheet.create({
     borderRadius : 400
   },
   TextCardName :{
-      justifyContent : "center"
+      justifyContent : "center",
+      width: "50%"
   },
 
   TextCardPrice :{

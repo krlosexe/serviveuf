@@ -20,6 +20,7 @@ function Index(props) {
   const [RequestStatus, setRequestStatus] = React.useState(false);
   const [RequestCategory, setRequestCategory] = React.useState(false);
   const [RequestDate, setRequestDate] = React.useState(false);
+  const [RequestId, setRequestId] = React.useState(false);
   const userDetails  = React.useContext(UserContext)
 
   function goToScreen(screen, service, id_service)
@@ -46,6 +47,7 @@ function Index(props) {
         setRequestStatus(response.data.status)
         setRequestCategory(response.data.name_category)
         setRequestDate(response.data.date)
+        setRequestId(response.data.id)
         console.log(response.data.id)
       }
     })
@@ -189,7 +191,7 @@ function Index(props) {
 
         {Request && 
 
-          <TouchableOpacity onPress={()=>goToScreen("RequestOfferts") }>
+          <TouchableOpacity onPress={()=>goToScreen("RequestOfferts", RequestId) }>
               <View style={styles.request}>
                 <View style={{flexDirection : "row", justifyContent: "space-between"}}>
                   <View>

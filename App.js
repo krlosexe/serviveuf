@@ -13,6 +13,7 @@ import ForgoutPasswordSuccess from './screens/ForgoutPasswordSuccess'
 
 import Profile from './screens/Profile'
 import ProfileEdit from './screens/ProfileEdit'
+import MovementHistory from './screens/MovementHistory'
 
 import Dashboard from './screens/Dashboard'
 import StepOne from './screens/StepOne'
@@ -21,6 +22,7 @@ import StepThree from './screens/StepThree'
 import RequestService from './screens/RequestService'
 import RequestOfferts from './screens/RequestOfferts'
 import RequestOffertsDetails from './screens/RequestOffertsDetails'
+
 
 
 
@@ -39,6 +41,7 @@ function App(){
          <Drawer.Screen name="ForgoutPasswordSuccess" component={ ForgoutPasswordSuccess } />
          <Drawer.Screen name="Profile"                component={ Profile } />
          <Drawer.Screen name="ProfileEdit"            component={ ProfileEdit } />
+         <Drawer.Screen name="MovementHistory"        component={ MovementHistory } />
          <Drawer.Screen name="Dashboard"              component={ Dashboard } />
          <Drawer.Screen name="StepOne"                component={ StepOne } />
          <Drawer.Screen name="StepTwo"                component={ StepTwo } />

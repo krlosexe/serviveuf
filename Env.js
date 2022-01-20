@@ -1,6 +1,6 @@
 
-const server = 'https://serviceuf.pdtcomunicaciones.com/api'
-const file_server1 =  'https://pdtclientsolutions.com/crm-public'
+const server      = 'https://serviceuf.pdtcomunicaciones.com/api'
+const file_server = 'https://serviceuf.pdtcomunicaciones.com'
 
 
               
@@ -18,7 +18,7 @@ const base_url = function base_url(server, uri){
 export  {
     base_url,
     server,
-    file_server1,
+    file_server,
     token_wompi,
     ApiWompi
 }

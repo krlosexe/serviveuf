@@ -92,7 +92,7 @@ function Index(props) {
       }
       setLoad(true)
      
-      data.fcmToken = "124412"
+      data.fcmToken = notificationToken
 
       if( data.email === '' || data.password === ''){
 

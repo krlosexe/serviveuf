@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, StatusBar, Image, ImageBackground} from 'react-native';
 
-
+import {file_server} from '../Env'   
 import AsyncStorage from '@react-native-community/async-storage'
 import UserContext from '../contexts/UserContext'
 import Menu from '../components/Menu'
@@ -28,7 +28,10 @@ function Index(props) {
     useEffect(()=>{
       if(userDetails.photo_profile == null){
         setPhotoProfile('https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg')
+      }else{
+        setPhotoProfile(`${file_server}/img/usuarios/profile/${userDetails.photo_profile}`)
       }
+
     },[randomCode])
 
 
@@ -93,7 +96,7 @@ function Index(props) {
                 </Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.BtnOptions} onPress={()=>sendForm()}>
+            <TouchableOpacity style={styles.BtnOptions} onPress={()=>goToScreen("MovementHistory")}>
                 <Text style={{fontSize: 18}}>
                     <Text>Historial de movimientos</Text>
                 </Text>

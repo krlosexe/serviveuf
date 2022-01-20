@@ -1,7 +1,7 @@
 import React, {useEffect, useState, useContext} from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, StatusBar, ImageBackground, Image, ToastAndroid, ActivityIndicator} from 'react-native';
 
-import {server, base_url} from '../Env'    
+import {file_server} from '../Env'   
 import axios from 'axios'
 import UserContext from '../contexts/UserContext'
 
@@ -23,104 +23,44 @@ function Index(props) {
 
     const { UserDetails, setUserDetails } = useContext(UserContext)
     const userDetails                     = useContext(UserContext)
-    const [editable, setEditable]         = useState(false)
-    const [Load, setLoad]                 = useState(false);
-    const [LoadOrder, setLoadOrder]       = useState(true);
-    const [date, setDate]                 = useState(new Date)
-    const [open, setOpen]                 = useState(false)
-    const [DateString, setDateString]     = useState(false)
-    const [checked, setChecked] = React.useState(false);
-    useEffect(()=>{
-      setTimeout(() => {
-        setEditable(true)
-      }, 100)
-    },[])
+    const [PhotoProfile, setPhotoProfile] = useState(false)
 
-
-    const [formInfo , setFormInfo] = useState({
-      id_client   : userDetails.id,
-      id_category : props.route.params.id_service,
-      date        : '',
-      phone       : '',
-      address     : '',
-      comments    : '',
-      photo       : ''
-  })
-
-
-    React.useEffect(()=>{
-      
-    },[])
-
-
-
-    function onChangeText(text, key){
-      setFormInfo({
-          ...formInfo,
-          [key] : text
-      })
+    let randomCode 
+    if(props.route.params){
+        randomCode = props.route.params.randomCode
+    }else{
+        randomCode = 1
     }
-
-    function sendForm(){
-      const data = {
-        ...formInfo
-      }
-
     
-      setLoad(true)
-      setLoadOrder(true)
-      if(data.id_client === '' || data.id_category === '' || data.date === '' || data.phone === '' || data.address === '' || data.comments === '' || data.photo === ''){
-        ToastAndroid.showWithGravity(
-            "Completa todos los campos",
-            ToastAndroid.SHORT,
-            ToastAndroid.CENTER
-        );
-        setLoad(false)
-        return false;
+    useEffect(()=>{
+      if(props.route.params.detail_offert.photo_profile == null){
+        setPhotoProfile('https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg')
+      }else{
+        setPhotoProfile(`${file_server}/img/usuarios/profile/${props.route.params.detail_offert.photo_profile}`)
       }
-      console.log('Enviando formulario')
-      console.log(base_url(server,`request/service`))
-      console.log(data)
 
-      axios.post( base_url(server,`request/service`), data ).then(function (res) {
-        //setLoad(false)
-        setLoadOrder(false)
-       // _storeData(res.data)
-       console.log("SUCCESSFUL")
-      })
-      .catch(function (error) {
-          console.log('Error al enviar formulario')
-        console.log(error.response.data)
-          ToastAndroid.showWithGravity(
-            error.response.data,
-            ToastAndroid.SHORT,
-            ToastAndroid.CENTER
-        );
-        setLoad(false)
-      })
-      .then(function () {});
-     
-    }
+    },[randomCode])
+
+
 
 
   return (
     <View style={styles.container}>
         <StatusBar translucent backgroundColor="transparent" barStyle="dark-content" />
         <HeadNavigate title="Detalle oferta" props={props} />
-        <Text style={styles.titleService}>{props.route.params.service}</Text>
-
+        
         <View style={styles.Banner}>
             <View>
                 <ImageBackground source={require('../src/images/back_profile.png')}
                         style={styles.HeadProfileImageBackgroud}>
 
                 </ImageBackground>
-                <Image style={styles.HeadProfileImage} source={require('../src/images/profile_barber.jpeg')}
+                <Image style={styles.HeadProfileImage} source={{ uri: PhotoProfile}}
                 />
             </View>
 
             <View style={{alignItems : "center"}}>
-                <Text style={styles.Name}>Carlos Cardenas</Text>
+                <Text style={styles.Name}>{props.route.params.detail_offert.name_client} {props.route.params.detail_offert.last_name_client}</Text>
                 <View style={styles.Starts}>
                     <Icon name='star' width={20} height={20} fill='#FF9700' /> 
                     <Icon name='star' width={20} height={20} fill='#FF9700' /> 
@@ -128,8 +68,8 @@ function Index(props) {
                     <Icon name='star' width={20} height={20} fill='#FF9700' /> 
                     <Icon name='star' width={20} height={20} fill='#fff' /> 
                 </View>
-                <Text style={styles.Price}>Tiempo : 35 Minutos </Text>
-                <Text style={styles.Price}>Precio : 35.000 </Text>
+                <Text style={styles.Price}>Tiempo : {props.route.params.detail_offert.time} </Text>
+                <Text style={styles.Price}>Precio : {props.route.params.detail_offert.price} </Text>
             </View>
         </View>
 
@@ -161,11 +101,7 @@ function Index(props) {
 
         <View style={styles.Comments}>
             <Text style={styles.CommentsText}>
-                ¡Hola! 
-                Te ofrecemos nuestro increible
-                servicio de manicure totalmente
-                gratis, por solicitar nuestro
-                servicio de pedicure.
+              {props.route.params.detail_offert.comments}
             </Text>
         </View>
 
@@ -264,7 +200,8 @@ const styles = StyleSheet.create({
   
   Name : {
       color : "white",
-      fontSize : 19
+      fontSize : 19,
+      textAlign : "center"
   },
 
   Starts : {

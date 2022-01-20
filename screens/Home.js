@@ -12,7 +12,7 @@ import Splash from './Splash'
 import Login from './Login'
 import Dashboard from './Dashboard'
 
-
+import messaging from '@react-native-firebase/messaging';
 
 function Index(props){
 
@@ -31,7 +31,7 @@ function Index(props){
             const value = JSON.parse(await AsyncStorage.getItem('@Passport'));
                 
             if (value && value.email !== undefined) {
-
+                
                 setUserDetails(value)
 
                 console.log(value.email, "value.email")
@@ -64,6 +64,30 @@ function Index(props){
         }
         _retrieveData()
     },[])
+
+
+
+
+
+
+//   useEffect(() => {
+//     const unsubscribe = messaging().onMessage(async remoteMessage => {
+//       console.log("notificación en primer plano")
+//       console.log("noti---->", remoteMessage)
+//       //setremoteMessage(remoteMessage)
+//     });
+
+// //     //const unsubscribe = messaging().setBackgroundMessageHandler(async remoteMessage => {
+// //     messaging().setBackgroundMessageHandler(async remoteMessage => {
+// //       console.log("notificación en segundo plano")
+// // //      console.log("noti---->", remoteMessage)
+// //   //    console.log()
+// //       setremoteMessage(remoteMessage)
+// //     });
+
+//     return unsubscribe;
+//   }, [])
+
 
 
 

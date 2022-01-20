@@ -62,7 +62,8 @@ const styles = StyleSheet.create({
 
   register:{
     color:"#fff",
-    fontSize: 20
+    fontSize: 20,
+    textAlign : "center"
   },
  
   btn_back: {

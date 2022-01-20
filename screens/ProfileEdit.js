@@ -6,7 +6,7 @@ import UserContext from '../contexts/UserContext'
 import AsyncStorage from '@react-native-community/async-storage'
 import HeadNavigate from '../components/HeadNavigate'
 
-import {server, base_url} from '../Env'    
+import {server, file_server, base_url} from '../Env'    
 import axios from 'axios'
 import ImagePicker from 'react-native-image-picker';
 
@@ -48,6 +48,8 @@ function Index(props) {
 
       if(userDetails.photo_profile == null){
         setPhotoProfile('https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg')
+      }else{
+        setPhotoProfile(`${file_server}/img/usuarios/profile/${userDetails.photo_profile}`)
       }
     },[randomCode])
 
@@ -74,7 +76,7 @@ function Index(props) {
           //console.log(data)
           console.log('Authentication successfully')
           setUserDetails({...userDetails,...data})
-          props.navigation.goBack()
+          goToScreen("Profile")
       }
       catch (error) {
           console.log(error)
@@ -150,10 +152,46 @@ function Index(props) {
 
           if(response.data){
             setPhotoProfile(`data:image/png;base64,${response.data}`)
+
+            UpdatePhotoProfile(response.data)
           }
             
         });
     
+      }
+
+
+
+      function UpdatePhotoProfile(image){
+          console.log('Enviando formulario')
+          console.log(base_url(server,`update/photo/clients/${userDetails.id}`))
+          
+          const data = {
+            photo : image
+          }
+    
+          axios.put( base_url(server,`update/photo/clients/${userDetails.id}`), data ).then(function (response) {
+            _storeData({"photo_profile" : response.data})
+            ToastAndroid.showWithGravity(
+              "Tu perfil se actualizo exitosamente",
+              ToastAndroid.SHORT,
+              ToastAndroid.CENTER
+            );
+
+          })
+          .catch(function (error) {
+              console.log('Error al enviar formulario')
+            console.log(error.response.data)
+              ToastAndroid.showWithGravity(
+                error.response.data,
+                ToastAndroid.SHORT,
+                ToastAndroid.CENTER
+              );
+r          })
+          .then(function () {
+    
+    
+          });
       }
 
 

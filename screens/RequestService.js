@@ -52,6 +52,30 @@ function Index(props) {
 
 
 
+
+
+//   useEffect(() => {
+//     const unsubscribe = messaging().onMessage(async remoteMessage => {
+//       console.log("notificación en primer plano")
+//       console.log("noti---->", remoteMessage)
+//       //setremoteMessage(remoteMessage)
+//     });
+
+// //     //const unsubscribe = messaging().setBackgroundMessageHandler(async remoteMessage => {
+// //     messaging().setBackgroundMessageHandler(async remoteMessage => {
+// //       console.log("notificación en segundo plano")
+// // //      console.log("noti---->", remoteMessage)
+// //   //    console.log()
+// //       setremoteMessage(remoteMessage)
+// //     });
+
+//     return unsubscribe;
+//   }, [])
+
+
+
+
+
     function onChangeText(text, key){
       setFormInfo({
           ...formInfo,
