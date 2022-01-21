@@ -159,6 +159,8 @@ function Index(props) {
 
 
           <View style={{width : "100%",alignItems: 'center', marginTop: 230}}>
+
+            
             <View style={styles.inputView} >
               <TextInput  
                 style={styles.inputText}

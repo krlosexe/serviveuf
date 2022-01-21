@@ -1,10 +1,13 @@
 import React, {useEffect, useState} from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, StatusBar, Image, ImageBackground} from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, StatusBar, Image, ImageBackground, ActivityIndicator} from 'react-native';
 
-import {file_server} from '../Env'   
+import {file_server, server, base_url} from '../Env'   
 import AsyncStorage from '@react-native-community/async-storage'
 import UserContext from '../contexts/UserContext'
 import Menu from '../components/Menu'
+import axios from 'axios'
+
+
 function Index(props) {  
 
   function goToScreen(screen) {
@@ -16,7 +19,8 @@ function Index(props) {
 
 
     const [PhotoProfile, setPhotoProfile] = useState(false)
-
+    const [Load, setLoad]                 = useState(false)
+    const [LabelBtnServiceProvider, setLabelBtnServiceProvider] = useState("Modo prestador de servicios")
 
 
     let randomCode 
@@ -32,7 +36,97 @@ function Index(props) {
         setPhotoProfile(`${file_server}/img/usuarios/profile/${userDetails.photo_profile}`)
       }
 
+      GetStatusServiceProvider()
+
     },[randomCode])
+
+
+
+    function GetStatusServiceProvider(){
+        setLoad(true)
+        console.log('Enviando formulario')
+        console.log(base_url(server,`get/status/service/provider/${userDetails.id}`))
+  
+        axios.get( base_url(server,`get/status/service/provider/${userDetails.id}`) ).then(function (response) {
+          setLoad(false)
+
+          if(response.data.service_provider){
+
+            if(response.data.service_provider == "Reviewing"){
+              setLabelBtnServiceProvider("En revisión")
+            }
+
+            if(response.data.service_provider == "Approved"){
+                if(response.data.service_provider_status == "Inactive"){
+                  setLabelBtnServiceProvider("Modo prestador de servicios")
+                }
+                if(response.data.service_provider_status == "Active"){
+                  setLabelBtnServiceProvider("Desactivar")
+                }
+            }
+
+            
+          }
+          console.log(response.data)
+        })
+        .catch(function (error) {
+            console.log('Error al enviar formulario')
+          console.log(error)
+            ToastAndroid.showWithGravity(
+              "ha ocurrido un error",
+              ToastAndroid.SHORT,
+              ToastAndroid.CENTER
+          );
+          setLoad(false)
+  
+        })
+        .then(function () { setLoad(false)});
+    }
+
+
+
+
+    const ServiceProvider = () =>{
+      setLoad(true)
+      console.log(base_url(server,`get/status/service/provider/${userDetails.id}`))
+      axios.get( base_url(server,`get/status/service/provider/${userDetails.id}`)).then(function (response) {
+        setLoad(false)
+        if(response.data.service_provider == null){
+          goToScreen("ServiceProviderRegister")
+        }
+
+        if(response.data.service_provider == "Approved" && response.data.service_provider_status == "Inactive"){
+          ModeActiveProvider("Active")
+        }
+
+        if(response.data.service_provider == "Approved" && response.data.service_provider_status == "Active"){
+          ModeActiveProvider("Inactive")
+        }
+      })
+      .catch(function (error) {
+          console.log(error.response.data.message)
+          console.log('Error al enviar formularioss')
+          setLoad(false)
+      })
+      .then(function (response) {setLoad(false)});
+
+    }
+
+
+    const ModeActiveProvider = (status) =>{
+      setLoad(true)
+      console.log(base_url(server,`update/status/service/provider/${userDetails.id}/${status}`))
+      axios.get( base_url(server,`update/status/service/provider/${userDetails.id}/${status}`)).then(function (response) {
+        setLoad(false)
+        GetStatusServiceProvider()
+      })
+      .catch(function (error) {
+          console.log(error.response.data.message)
+          console.log('Error al enviar formularioss')
+          setLoad(false)
+      })
+      .then(function (response) {setLoad(false)});
+    }
 
 
     const logout = async () => {
@@ -79,9 +173,16 @@ function Index(props) {
                     <Text style={{...styles.HeadProfileText, fontWeight : "bold"}}>{userDetails.nombres}</Text>
                     <Text style={{...styles.HeadProfileText, fontSize : 20}}>Saldo $000.000</Text>
 
-                    <TouchableOpacity style={styles.BtnMode} onPress={()=>sendForm()}>
+                    <TouchableOpacity style={styles.BtnMode} onPress={()=>ServiceProvider()}>
                         <Text style={styles.loginText}>
-                            <Text>Modo prestador de servicios</Text>
+
+                        {Load &&
+                            <ActivityIndicator size="small" color="#fff" />
+                        }
+                        {!Load &&
+                            <Text>{LabelBtnServiceProvider}</Text>
+                        }
+                            
                         </Text>
                     </TouchableOpacity>
 
