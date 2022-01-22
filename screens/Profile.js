@@ -6,6 +6,7 @@ import AsyncStorage from '@react-native-community/async-storage'
 import UserContext from '../contexts/UserContext'
 import Menu from '../components/Menu'
 import axios from 'axios'
+import { stat } from 'react-native-fs';
 
 
 function Index(props) {  
@@ -30,6 +31,7 @@ function Index(props) {
         randomCode = 1
     }
     useEffect(()=>{
+
       if(userDetails.photo_profile == null){
         setPhotoProfile('https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg')
       }else{
@@ -119,6 +121,14 @@ function Index(props) {
       axios.get( base_url(server,`update/status/service/provider/${userDetails.id}/${status}`)).then(function (response) {
         setLoad(false)
         GetStatusServiceProvider()
+
+        if(status == "Active"){
+          _storeData({"mode_service_provider" : true})
+        }
+        if(status == "Inactive"){
+          _storeData({"mode_service_provider" : false})
+        }
+       
       })
       .catch(function (error) {
           console.log(error.response.data.message)
@@ -127,6 +137,27 @@ function Index(props) {
       })
       .then(function (response) {setLoad(false)});
     }
+
+
+
+    const _storeData = async (data) => {
+      console.log({...userDetails,...data}, "SUCCESS")
+      data.register = false
+    try {
+        await AsyncStorage.setItem('@Passport', JSON.stringify({...userDetails,...data}) );
+        //console.log(data)
+        console.log('Authentication successfully')
+        setUserDetails({...userDetails,...data})
+        goToScreen("Profile")
+    }
+    catch (error) {
+        console.log(error)
+      // Error saving data
+    }
+  }
+
+
+
 
 
     const logout = async () => {

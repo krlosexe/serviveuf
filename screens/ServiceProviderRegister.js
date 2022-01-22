@@ -24,7 +24,7 @@ function Index(props) {
     const userDetails                         = useContext(UserContext)
     const [Load, setLoad]                     = useState(false)
     const [CheckBarber, setCheckBarber]       = useState(false)
-    const [CheckManicure, setCheckManicure]   = useState(false)
+    const [CheckTrenzas, setCheckTrenzas]   = useState(false)
     const [CheckPedicure, setCheckPedicure]   = useState(false)
     const [editable, setEditable]             = useState(false)
     const [TypeDocument, setTypeDocument]     = useState("Tipo de documento")
@@ -39,7 +39,7 @@ function Index(props) {
         type_identification  : userDetails.type_identification,
         phone                : userDetails.phone,
         municipality         : userDetails.municipality,
-      })
+    })
 
 
 
@@ -82,7 +82,6 @@ function Index(props) {
       setLoad(true)
 
       const data = {
-        
         "names"               : formInfo.names,        
         "last_names"          : formInfo.last_names,
         "email"               : formInfo.email,
@@ -91,7 +90,7 @@ function Index(props) {
         "phone"               : formInfo.phone,
         "municipality"        : formInfo.municipality,
         "barber"              : CheckBarber,
-        "manicure"            : CheckManicure,
+        "trenzado"            : CheckTrenzas,
         "pedicure"            : CheckPedicure,
         "id_client"           : userDetails.id
       }
@@ -105,7 +104,6 @@ function Index(props) {
       console.log(data)
 
       axios.post( base_url(server,`postulated/service/provicer`), data ).then(function (res) {
-
         setLoad(false)
         goToScreen("Profile")
       })
@@ -233,10 +231,10 @@ function Index(props) {
                         </View>
 
                         <View style={styles.itemCheck}>
-                            <Text>Manicure</Text>
+                            <Text>Trenzados</Text>
                             <CheckBox
-                                value={CheckManicure}
-                                onValueChange={(newValue) => setCheckManicure(newValue)}
+                                value={CheckTrenzas}
+                                onValueChange={(newValue) => setCheckTrenzas(newValue)}
                             />
                         </View>
 

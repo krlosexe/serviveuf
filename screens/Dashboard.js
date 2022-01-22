@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, StatusBar, Image, ActivityIndicator, Alert} from 'react-native';
+import { StyleSheet, Text, View, ScrollView, TouchableOpacity, StatusBar, Image, ActivityIndicator, Alert} from 'react-native';
 
 import {server, base_url} from '../Env'    
 import axios from 'axios'
@@ -21,6 +21,7 @@ function Index(props) {
   const [RequestCategory, setRequestCategory] = React.useState(false);
   const [RequestDate, setRequestDate] = React.useState(false);
   const [RequestId, setRequestId] = React.useState(false);
+
   const userDetails  = React.useContext(UserContext)
 
   function goToScreen(screen, service, id_service)
@@ -35,8 +36,12 @@ function Index(props) {
       randomCode = 1
   }
 
-  React.useEffect(()=>{
-    
+  useEffect(()=>{
+
+    getRequestServices()
+  },[randomCode])
+
+  const getRequestServices = () =>{
     setLoad(true)
     console.log(base_url(server,`request/service/by/client/${userDetails.id}`))
     axios.get( base_url(server,`request/service/by/client/${userDetails.id}`)).then(function (response) {
@@ -60,12 +65,9 @@ function Index(props) {
     .then(function (response) {
         setLoad(false)
     });
+  }
 
-
-
-  },[randomCode])
-
-  React.useEffect(()=>{
+  useEffect(()=>{
     if(userDetails.register){
       goToScreen("StepOne", false)
     }
@@ -84,132 +86,144 @@ function Index(props) {
 
 
         <Head/>
-
-        <View style={styles.content_services}>
-
-           <View style = {{marginBottom : 20}}>
-              <View style={styles.services_item}>
-                  <View style={styles.services_text_right}>
-                    <Text style={styles.services_item_text_small}>Servicio de</Text>
-                    <Text style={styles.services_item_text_long}>Barberia</Text>
-                  </View>
-                  <View style={styles.services_image_right}>
-                    <Image
-                      style={styles.services_right}
-                      source={require('../src/images/service_barber.png')}
-                    />
-                  </View>
-               </View>
-
-
-                <TouchableOpacity style={{
-                    width:90,
-                    padding : 5,
-                    backgroundColor:"#ED6306",
-                    borderRadius : 100,
-                    alignItems:"center",
-                    justifyContent:"center",
-                    alignSelf : "center",
-                    marginTop : -14
-                }} onPress={()=>goToScreen("RequestService", "Barberia", 1) }>
-                  <Text style={{color : "white"}}>
-                      Comprar
-                  </Text>
-                </TouchableOpacity>
-           </View>
-
-
-
-              
-           <View style = {{marginBottom : 20}}>
-              <View style={styles.services_item}>
-                  <View style={styles.services_image_left}>
-                    <Image
-                      style={styles.services_left}
-                      source={require('../src/images/manicure.png')}
-                    />
-                  </View>
-                  <View style={styles.services_text_left}>
-                    <Text style={styles.services_item_text_small}>Servicio de</Text>
-                    <Text style={styles.services_item_text_long}>Manicure</Text>
-                  </View>
-              </View>
-              <TouchableOpacity style={{
-                    width:90,
-                    padding : 5,
-                    backgroundColor:"#ED6306",
-                    borderRadius : 100,
-                    alignItems:"center",
-                    justifyContent:"center",
-                    alignSelf : "center",
-                    marginTop : -14
-                }} onPress={()=>goToScreen("RequestService", "Manicure", 2) }>
-                  <Text style={{color : "white"}}>
-                      Comprar
-                  </Text>
-                </TouchableOpacity>
-            </View>
-
-
-            <View style = {{marginBottom : 10}}>
-              <View style={styles.services_item}>
-                  <View style={styles.services_text_right}>
-                    <Text style={styles.services_item_text_small}>Servicio de</Text>
-                    <Text style={styles.services_item_text_long}>Pedicure</Text>
-                  </View>
-                  <View style={styles.services_image_right}>
-                    <Image
-                      style={styles.services_right}
-                      source={require('../src/images/service_pedicure.png')}
-                    />
-                  </View>
-              </View>
-
-              <TouchableOpacity style={{
-                    width:90,
-                    padding : 5,
-                    backgroundColor:"#ED6306",
-                    borderRadius : 100,
-                    alignItems:"center",
-                    justifyContent:"center",
-                    alignSelf : "center",
-                    marginTop : -14
-                }} onPress={()=>goToScreen("RequestService", "Pedicure", 3) }>
-                  <Text style={{color : "white"}}>
-                      Comprar
-                  </Text>
-                </TouchableOpacity>
-
-            </View>
-
-        </View>
-
-
-        {Load == true &&
-            <ActivityIndicator size="large" color="#0B4E6B" />
+        
+        {userDetails.mode_service_provider == true &&
+          <Text>Service Provider</Text>
         }
 
-        {Request && 
 
-          <TouchableOpacity onPress={()=>goToScreen("RequestOfferts", RequestId) }>
-              <View style={styles.request}>
-                <View style={{flexDirection : "row", justifyContent: "space-between"}}>
-                  <View>
-                    <Text>Solicitud: {RequestStatus}</Text>
-                    <Text>{RequestCategory}</Text>
-                    <Text>{RequestDate}</Text>
-                  </View>
+        {userDetails.mode_service_provider == false &&
+          <ScrollView>
+              <View style={styles.content_services}>
 
-                  <View>
-                    <ActivityIndicator size="small" color="#0B4E6B" />
+                <View style = {{marginBottom : 20}}>
+                  <View style={styles.services_item}>
+                      <View style={styles.services_text_right}>
+                        <Text style={styles.services_item_text_small}>Servicio de</Text>
+                        <Text style={styles.services_item_text_long}>Barberia</Text>
+                      </View>
+                      <View style={styles.services_image_right}>
+                        <Image
+                          style={styles.services_right}
+                          source={require('../src/images/service_barber.png')}
+                        />
+                      </View>
+                    </View>
 
-                    <Text style={{fontWeight : "bold", textAlign : "center", marginTop : 10}}>3</Text>
-                  </View>
+
+                    <TouchableOpacity style={{
+                        width:90,
+                        padding : 5,
+                        backgroundColor:"#ED6306",
+                        borderRadius : 100,
+                        alignItems:"center",
+                        justifyContent:"center",
+                        alignSelf : "center",
+                        marginTop : -14
+                    }} onPress={()=>goToScreen("RequestService", "Barberia", 1) }>
+                      <Text style={{color : "white"}}>
+                      Ordenar
+                      </Text>
+                    </TouchableOpacity>
                 </View>
-              </View>
-          </TouchableOpacity>
-          
+
+
+
+                  
+                <View style = {{marginBottom : 20}}>
+                  <View style={styles.services_item}>
+                      <View style={styles.services_image_left}>
+                        <Image
+                          style={styles.services_left}
+                          source={require('../src/images/manicure.png')}
+                        />
+                      </View>
+                      <View style={styles.services_text_left}>
+                        <Text style={styles.services_item_text_small}>Servicio de</Text>
+                        <Text style={styles.services_item_text_long}>Trenzas</Text>
+                      </View>
+                  </View>
+                  <TouchableOpacity style={{
+                        width:90,
+                        padding : 5,
+                        backgroundColor:"#ED6306",
+                        borderRadius : 100,
+                        alignItems:"center",
+                        justifyContent:"center",
+                        alignSelf : "center",
+                        marginTop : -14
+                    }} onPress={()=>goToScreen("RequestService", "Trenzas", 2) }>
+                      <Text style={{color : "white"}}>
+                      Ordenar
+                      </Text>
+                    </TouchableOpacity>
+                </View>
+
+
+                <View style = {{marginBottom : 10}}>
+                  <View style={styles.services_item}>
+                      <View style={styles.services_text_right}>
+                        <Text style={styles.services_item_text_small}>Servicio de</Text>
+                        <Text style={styles.services_item_text_long}>Manicure y Pedicure</Text>
+                      </View>
+                      <View style={styles.services_image_right}>
+                        <Image
+                          style={styles.services_right}
+                          source={require('../src/images/service_pedicure.png')}
+                        />
+                      </View>
+                  </View>
+
+                  <TouchableOpacity style={{
+                        width:90,
+                        padding : 5,
+                        backgroundColor:"#ED6306",
+                        borderRadius : 100,
+                        alignItems:"center",
+                        justifyContent:"center",
+                        alignSelf : "center",
+                        marginTop : -14
+                    }} onPress={()=>goToScreen("RequestService", "Pedicure", 3) }>
+                      <Text style={{color : "white"}}>
+                          Ordenar
+                      </Text>
+                    </TouchableOpacity>
+
+                </View>
+
+            </View>
+
+
+            {Load == true &&
+                <ActivityIndicator size="large" color="#0B4E6B" />
+            }
+
+            {Request && 
+
+              <TouchableOpacity onPress={()=>goToScreen("RequestOfferts", RequestId) }>
+                  <View style={styles.request}>
+                    <View style={{flexDirection : "row", justifyContent: "space-between"}}>
+                      <View>
+                        <Text>Solicitud: {RequestStatus}</Text>
+                        <Text>{RequestCategory}</Text>
+                        <Text>{RequestDate}</Text>
+                      </View>
+
+                      <View>
+                        <ActivityIndicator size="small" color="#0B4E6B" />
+
+                        <Text style={{fontWeight : "bold", textAlign : "center", marginTop : 10}}>3</Text>
+                      </View>
+                    </View>
+                  </View>
+              </TouchableOpacity>
+              
+            }
+          </ScrollView>
         }
+
+
+        
 
 
         

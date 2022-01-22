@@ -276,8 +276,7 @@ function Index(props) {
             <TouchableOpacity style={{
                width:"70%",
                 backgroundColor:"#0B4E6B",
-                borderTopLeftRadius: 40,
-                borderTopRightRadius: 40,
+                borderRadius : 40,
                 height:60,
                 alignItems:"center",
                 justifyContent:"center",

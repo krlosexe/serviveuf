@@ -1,5 +1,5 @@
 import React, {useEffect, useState, useContext} from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, StatusBar, Button, Image, ToastAndroid, ActivityIndicator} from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, StatusBar, ScrollView, Image, ToastAndroid, ActivityIndicator} from 'react-native';
 
 import {server, base_url} from '../Env'    
 import axios from 'axios'
@@ -9,6 +9,10 @@ import UserContext from '../contexts/UserContext'
 import HeadNavigate from '../components/HeadNavigate'
 import PhotoUpload from 'react-native-photo-upload'
 import { Pulse } from 'react-native-animated-spinkit'
+
+import { ActionSheet } from 'react-native-cross-actionsheet'
+
+
 function Index(props) {  
 
 
@@ -19,20 +23,47 @@ function Index(props) {
     navigation.navigate(screen, {randomCode : Math.random()})
   }
 
-    const { UserDetails, setUserDetails } = useContext(UserContext)
-    const userDetails                     = useContext(UserContext)
-    const [editable, setEditable]         = useState(false)
-    const [Load, setLoad]                 = useState(false);
-    const [LoadOrder, setLoadOrder]       = useState(true);
-    const [date, setDate]                 = useState(new Date)
-    const [open, setOpen]                 = useState(false)
-    const [DateString, setDateString]     = useState(false)
-    
+    const { UserDetails, setUserDetails }   = useContext(UserContext)
+    const userDetails                       = useContext(UserContext)
+    const [editable, setEditable]           = useState(false)
+    const [Load, setLoad]                   = useState(false);
+    const [LoadOrder, setLoadOrder]         = useState(true);
+    const [date, setDate]                   = useState(new Date)
+    const [open, setOpen]                   = useState(false)
+    const [DateString, setDateString]       = useState(false)
+
+    const [SelectType, setSelectType]   = useState(false)
+
+    const [TypeService, setTypeService]   = useState("Tipo")
+
+
+    let randomCode 
+    if(props.route.params){
+        randomCode = props.route.params.randomCode
+    }else{
+        randomCode = 1
+    }
+
+    console.log(randomCode, "randomCode")
+
     useEffect(()=>{
       setTimeout(() => {
         setEditable(true)
       }, 100)
-    },[])
+      setSelectType(false)
+
+      if(props.route.params.service == "Trenzas"){
+        console.log("TRENZAS")
+        setSelectType(true)
+      }
+
+      if(props.route.params.service == "Pedicure"){
+        console.log("Pedicure")
+        setSelectType(true)
+      }
+
+
+    },[randomCode])
 
 
     const [formInfo , setFormInfo] = useState({
@@ -42,16 +73,39 @@ function Index(props) {
       phone       : '',
       address     : '',
       comments    : '',
-      photo       : ''
+      photo       : '',
+      type        : ''
   })
 
 
-    React.useEffect(()=>{
-      
-    },[])
+   const typeSelect = ()=>{
 
+    let optionsSelect = []
+    if(props.route.params.service == "Trenzas"){
+       optionsSelect = [
+        { text: 'Cabello',   onPress:() => setTypeService('Cabello') },
+        { text: 'Kanekalon', onPress:() => setTypeService('Kanekalon') },
+        { text: 'Sintético', onPress:() => setTypeService('Sintético') },
+        { text: 'Kinky',     onPress:() => setTypeService('Kinky') },
+        { text: 'Lana',      onPress:() => setTypeService('Lana') }
+      ]
+    }
 
+    if(props.route.params.service == "Pedicure"){
+       optionsSelect =  [
+        { text: 'Sencillas',      onPress:()  => setTypeService('Sencillas') },
+        { text: 'Semipermanente', onPress:()  => setTypeService('Semipermanente') },
+        { text: 'Acrílicas',      onPress:()  => setTypeService('Acrílicas') },
+        { text: 'Esculpidas',     onPress:()  => setTypeService('Esculpidas') },
+        { text: 'Retoque',         onPress:() => setTypeService('Retoque') }
+      ]
+    }
 
+      ActionSheet.options({
+          options: optionsSelect,
+          cancel: { onPress: () => console.log('cancel') }
+      })
+    }
 
 
 //   useEffect(() => {
@@ -87,6 +141,9 @@ function Index(props) {
       const data = {
         ...formInfo
       }
+
+
+      data.type = TypeService
 
     
       setLoad(true)
@@ -128,124 +185,121 @@ function Index(props) {
   return (
     <View style={styles.container}>
         <StatusBar translucent backgroundColor="transparent" barStyle="dark-content" />
-
          <HeadNavigate title="Ordenar" props={props} />
 
          <Text style={styles.titleService}>{props.route.params.service}</Text>
 
           {!Load && 
 
-            <View>
-                <DatePicker
-                  modal
-                  open={open}
-                  date={date}
-                  onConfirm={(date) => {
-                    setOpen(false)
-                    setDate(date)
-                    //var datestring = ("0" + date.getDate()).slice(-2) + "-" + ("0"+(date.getMonth()+1)).slice(-2) + "-" + date.getFullYear() + " " + ("0" + date.getHours()).slice(-2) + ":" + ("0" + date.getMinutes()).slice(-2);
-
-
-                    var datestring = date.getFullYear() + "-" + ("0"+(date.getMonth()+1)).slice(-2) + "-" + ("0" + date.getDate()).slice(-2) + " " + ("0" + date.getHours()).slice(-2) + ":" + ("0" + date.getMinutes()).slice(-2);
-
-
-
-                    setDateString(datestring)
-
-                    onChangeText(datestring, "date")
-
-                    console.log(datestring)
-                  }}
-                  onCancel={() => {
-                    setOpen(false)
-                  }}
-                />
-                <View style={{width : "100%",alignItems: 'center'}}>
-                  <TouchableOpacity onPress={() => setOpen(true)} style={{width : "100%",alignItems: 'center', marginTop : 40}}>
-                    <View style={{...styles.inputView, height:60}} >
-
-                          {DateString &&
-                            <Text style={ {textAlign : "center"}}>{DateString}</Text>
-                          }
-
-                          {!DateString &&  
-                              <Text style={ {textAlign : "center"}}>Elige una fecha</Text>
-                          }
+            <ScrollView>
+                <View>
+                  <DatePicker
+                    modal
+                    open={open}
+                    date={date}
+                    onConfirm={(date) => {
+                      setOpen(false)
+                      setDate(date)
                       
+                      var datestring = date.getFullYear() + "-" + ("0"+(date.getMonth()+1)).slice(-2) + "-" + ("0" + date.getDate()).slice(-2) + " " + ("0" + date.getHours()).slice(-2) + ":" + ("0" + date.getMinutes()).slice(-2);
+                      setDateString(datestring)
+                      onChangeText(datestring, "date")
+
+                      console.log(datestring)
+                    }}
+                    onCancel={() => {
+                      setOpen(false)
+                    }}
+                  />
+                  <View style={{width : "100%",alignItems: 'center'}}>
+                    <TouchableOpacity onPress={() => setOpen(true)} style={{width : "100%",alignItems: 'center', marginTop : 40}}>
+                      <View style={{...styles.inputView, height:60}} >
+
+                            {DateString &&
+                              <Text style={ {textAlign : "center"}}>{DateString}</Text>
+                            }
+
+                            {!DateString &&  
+                                <Text style={ {textAlign : "center"}}>Elige una fecha</Text>
+                            }
+                        
+                      </View>
+                    </TouchableOpacity>
+                  
+                    <View style={styles.inputView} >
+                        
+                      <TextInput  
+                        style={styles.inputText}
+                        placeholder="Dirección" 
+                        placeholderTextColor="#777"
+                        editable={editable}
+                        onChangeText={text => onChangeText(text, 'address')}/>
                     </View>
-                  </TouchableOpacity>
-                
-                  <View style={styles.inputView} >
+
+
+                    <View style={styles.inputView} >
+                      <TextInput  
+                        style={styles.inputText}
+                        placeholder="Teléfono / Celular" 
+                        placeholderTextColor="#777"
+                        onChangeText={text => onChangeText(text, 'phone')}/>
+                    </View>
+
+                    {SelectType &&
+                      <TouchableOpacity style={styles.inputView} onPress={()=>typeSelect()}>
+                          <View style={styles.inputText}>
+                              <Text style={{marginTop : 14, textAlign : "center"}}>{TypeService}</Text>
+                          </View>
+                      </TouchableOpacity>
+                    }
+
+                    <View style={styles.inputView} >
+                      <TextInput  
+                        style={styles.inputText}
+                        placeholder="Comentarios" 
+                        placeholderTextColor="#777"
+                        onChangeText={text => onChangeText(text, 'comments')}/>
+                    </View>
+
+                    <PhotoUpload containerStyle={{marginTop : -10}}   onPhotoSelect={image => {
+                      if (image) {
+                          console.log(image) 
+                          onChangeText(image, 'photo')
+                        }}
+                      }>
                       
-                    <TextInput  
-                      style={styles.inputText}
-                      placeholder="Dirección" 
-                      placeholderTextColor="#777"
-                      editable={editable}
-                      onChangeText={text => onChangeText(text, 'address')}/>
+                        <Image style={{
+                            width: 250,
+                            height : 150,
+                            resizeMode : "contain"
+                        }}title = "jaja"
+                        source={require('../src/images/upload_image.png')} />
+                    </PhotoUpload>
+
+
                   </View>
 
-
-                  <View style={styles.inputView} >
-                    <TextInput  
-                      style={styles.inputText}
-                      placeholder="Teléfono / Celular" 
-                      placeholderTextColor="#777"
-                      onChangeText={text => onChangeText(text, 'phone')}/>
-                  </View>
-
-
-                  <View style={styles.inputView} >
-                    <TextInput  
-                      style={styles.inputText}
-                      placeholder="Comentarios" 
-                      placeholderTextColor="#777"
-                      onChangeText={text => onChangeText(text, 'comments')}/>
-                  </View>
-
-                  <PhotoUpload containerStyle={{marginTop : -10, backgroundColor : "red"}}   onPhotoSelect={image => {
-                    if (image) {
-                        console.log(image) 
-                        onChangeText(image, 'photo')
-                      }}
-                    }>
-                    
-                      <Image style={{
-                          width: 250,
-                          height : 150,
-                          resizeMode : "contain"
-                      }}title = "jaja"
-                      source={require('../src/images/upload_image.png')} />
-                  </PhotoUpload>
-
-
-                </View>
-
-
-
-                  
-                  
-                  <TouchableOpacity style={{
-                    width:"70%",
-                      backgroundColor:"#0B4E6B",
-                      borderRadius: 40,
-                      height:60,
-                      alignItems:"center",
-                      justifyContent:"center",
-                      alignSelf : "center",
-                      marginTop: 200
-                  }} onPress={()=>sendForm() }>
-                    <Text style={styles.register}>
-                      
-                          {Load &&
-                              <ActivityIndicator size="large" color="#fff" />
-                          }
-                          {!Load &&
-                              <Text>Enviar</Text>
-                          }
-                        </Text>
-                  </TouchableOpacity>
-            </View>
+                    <TouchableOpacity style={{
+                      width:"70%",
+                        backgroundColor:"#0B4E6B",
+                        borderRadius: 40,
+                        height:60,
+                        alignItems:"center",
+                        justifyContent:"center",
+                        alignSelf : "center"
+                    }} onPress={()=>sendForm() }>
+                      <Text style={styles.register}>
+                        
+                            {Load &&
+                                <ActivityIndicator size="large" color="#fff" />
+                            }
+                            {!Load &&
+                                <Text>Enviar</Text>
+                            }
+                          </Text>
+                    </TouchableOpacity>
+              </View>
+            </ScrollView>
 
           }
 
@@ -300,12 +354,6 @@ function Index(props) {
                         Finalizar</Text>
                     </TouchableOpacity>
                 }
-
-
-
-
-                
-
 
 
               </View>
