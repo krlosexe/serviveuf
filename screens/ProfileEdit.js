@@ -32,11 +32,6 @@ function Index(props) {
 
 
 
-
-
-
-    
-
     let randomCode 
     if(props.route.params){
         randomCode = props.route.params.randomCode

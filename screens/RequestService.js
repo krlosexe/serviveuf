@@ -263,7 +263,7 @@ function Index(props) {
 
                     <PhotoUpload containerStyle={{marginTop : -10}}   onPhotoSelect={image => {
                       if (image) {
-                          console.log(image) 
+                          //console.log(image) 
                           onChangeText(image, 'photo')
                         }}
                       }>

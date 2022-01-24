@@ -24,6 +24,7 @@ import StepOne from './screens/StepOne'
 import StepTwo from './screens/StepTwo'
 import StepThree from './screens/StepThree'
 import RequestService from './screens/RequestService'
+import RequestServiceDetail from './screens/RequestServiceDetail'
 import RequestOfferts from './screens/RequestOfferts'
 import RequestOffertsDetails from './screens/RequestOffertsDetails'
 
@@ -52,6 +53,7 @@ function App(){
          <Drawer.Screen name="StepTwo"                  component={ StepTwo } />
          <Drawer.Screen name="StepThree"                component={ StepThree } />
          <Drawer.Screen name="RequestService"           component={ RequestService } />
+         <Drawer.Screen name="RequestServiceDetail"     component={ RequestServiceDetail } />
          <Drawer.Screen name="RequestOfferts"           component={ RequestOfferts } />
          <Drawer.Screen name="RequestOffertsDetails"    component={ RequestOffertsDetails } />
        </Drawer.Navigator>
