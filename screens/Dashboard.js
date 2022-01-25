@@ -79,9 +79,6 @@ function Index(props) {
 
 
 
-
-
-
   return (
     <View style={styles.container}>
       <StatusBar translucent backgroundColor="transparent" barStyle="dark-content" />
@@ -92,7 +89,7 @@ function Index(props) {
           <DashboardServiceProvider {...props} />
         }
 
-        {(userDetails.mode_service_provider == false) &&
+        {(userDetails.mode_service_provider == false || userDetails.mode_service_provider == undefined) &&
           <Dashboard {...props} />
         }
 

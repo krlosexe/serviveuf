@@ -1,9 +1,10 @@
 import React, {useEffect, useState, useContext} from 'react';
-import { StyleSheet, Text, View,  TouchableOpacity, StatusBar, Image, TextInput, ScrollView} from 'react-native';
+import { StyleSheet, Text, View,  TouchableOpacity, StatusBar, Image, TextInput, ScrollView, ActivityIndicator, ToastAndroid} from 'react-native';
 
-import {file_server, base_url} from '../Env'    
+import {server, file_server, base_url} from '../Env'    
 
 import UserContext from '../contexts/UserContext'
+import axios from 'axios'
 
 import HeadNavigate from '../components/HeadNavigate'
 import Menu from '../components/Menu'
@@ -36,16 +37,83 @@ function Index(props) {
 
 
 
-      useEffect(()=>{
-        setDataService(props.route.params.detail_service)
+     useEffect(()=>{
+
+      setFormInfo({
+        price            : "",
+        time             : "",
+        comments         : ""
+      })
+       setDataService(props.route.params.detail_service)
     },[props.route.params.detail_service])   
 
 
     useEffect(()=>{
-        setTimeout(() => {
-        setEditable(true)
-        }, 100)
+      setTimeout(() => {
+      setEditable(true)
+      }, 100)
     },[])   
+
+
+    function onChangeText(text, key){
+      setFormInfo({
+          ...formInfo,
+          [key] : text
+      })
+    }
+
+    function sendForm(){
+      const data = {
+        ...formInfo
+      }
+
+      data.id_service  = props.route.params.detail_service.id
+      data.id_provider = userDetails.id
+     
+      setLoad(true)
+      if( data.price === '' || data.time === '' || data.comments === ''){
+        ToastAndroid.showWithGravity(
+            "Completa todos los campos",
+            ToastAndroid.SHORT,
+            ToastAndroid.CENTER
+          );
+          setLoad(false)
+        return false;
+      }
+      console.log('Enviando formulario')
+      console.log(base_url(server,`store/offert/service`))
+      console.log(data)
+
+
+      axios.post( base_url(server,`store/offert/service`), data ).then(function (response) {
+        setLoad(false)
+
+        ToastAndroid.showWithGravity(
+          "Su oferta se envio con Exito",
+          ToastAndroid.SHORT,
+          ToastAndroid.CENTER
+        );
+
+
+        goToScreen("MyOffertsServices", false)
+        setLoad(false)
+      return false;
+
+
+      })
+      .catch(function (error) {
+          console.log('Error al enviar formulario')
+        console.log(error.response.data)
+          ToastAndroid.showWithGravity(
+            error.response.data,
+            ToastAndroid.SHORT,
+            ToastAndroid.CENTER
+        );
+        setLoad(false)
+      })
+      .then(function () {});
+    }
+
 
 
     
@@ -59,12 +127,20 @@ function Index(props) {
          <ScrollView style={{marginBottom : 110}}>
             <View style={styles.Item}>
                 <Text style={styles.ItemText}>Fecha:</Text>
-                <Text style={styles.ItemText}>{DataService.date.split(" ")[0]}</Text>
+                <Text style={styles.ItemText}>
+                  {DataService && 
+                    DataService.date.split(" ")[0]
+                  }
+                </Text>
             </View>
 
             <View style={styles.Item}>
                 <Text style={styles.ItemText}>Hora:</Text>
-                <Text style={styles.ItemText}>{DataService.date.split(" ")[1]}</Text>
+                <Text style={styles.ItemText}>
+                  {DataService && 
+                    DataService.date.split(" ")[1]
+                  }
+                </Text>
             </View>
 
             <View style={styles.Item}>
@@ -109,7 +185,6 @@ function Index(props) {
                         }}>
                             {DataService.comments}
             </Text>
-
 
 
             <Image style={styles.ImageService} source={{ uri: `${file_server}/img/request_services/${DataService.photo}`}}

@@ -7,10 +7,8 @@ import UserContext from '../contexts/UserContext'
 
 import HeadNavigate from '../components/HeadNavigate'
 import Menu from '../components/Menu'
-
-import { Icon } from 'react-native-eva-icons';
 import messaging from '@react-native-firebase/messaging';
-import { Pulse } from 'react-native-animated-spinkit'
+
 function Index(props) {  
 
 
@@ -37,22 +35,25 @@ function Index(props) {
     }
   useEffect(() => {
 
-    GetOfferts(props.route.params.service, true)
+    GetMyOfferts(true)
+
+
     const unsubscribe = messaging().onMessage(async remoteMessage => {
-     GetOfferts(props.route.params.service, false)
-    });
+      GetMyOfferts(false)
+     });
+
+
 
   }, [randomCode])
 
 
-  function GetOfferts(id_service, init){
+  function GetMyOfferts(init){
     console.log('Enviando formulario')
-      console.log(base_url(server,`request/offerts/by/service/${id_service}`))
-
+      console.log(base_url(server,`requests/offerts/by/client/${userDetails.id}`))
       if(init){
         setLoad(true)
       }
-      axios.get( base_url(server,`request/offerts/by/service/${id_service}`)).then(function (response) {
+      axios.get( base_url(server,`requests/offerts/by/client/${userDetails.id}`)).then(function (response) {
         setLoad(false)
         setOfferts(response.data)
       })
@@ -81,7 +82,7 @@ function Index(props) {
     
      
       axios.post( base_url(server,`accept/offert`), data).then(function (response) {
-        goToScreen("MyRequestServices", false)
+        goToScreen("Dashboard", false)
       })
       .catch(function (error) {
           console.log('Error al enviar formulario')
@@ -98,78 +99,57 @@ function Index(props) {
 
   }
 
-
   const CardOffert = (props)=>{
 
     let photo_profile
 
-    if(props.photo == null){
+    if(props.data.photo == null){
       photo_profile = 'https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg'
     }else{
-      photo_profile = `${file_server}/img/usuarios/profile/${props.photo}`
+      photo_profile = `${file_server}/img/usuarios/profile/${props.data.photo}`
     }
-
 
     const [Load , setLoad] = useState(false)
 
 
-    return  <View style={{borderColor : "#063046",borderBottomWidth : 2, width : "95%", alignSelf : "center"}}>
+    return  <View style={{borderColor : "#063046",borderBottomWidth : 2, width : "85%", alignSelf : "center"}}>
               <View style={styles.Card}>
-                      <View>
+
+                        <View style={{marginRight : 20}}>
                           <Image
                               style={styles.profile}
                               source={{ uri: photo_profile}}
                           />
                       </View>
                       <View style={styles.TextCardName}>
-                          <Text style={styles.Name}>{props.name}</Text>
-                          <Text style={{fontSize : 10}}>102 servicios completados</Text>
-
+                          <Text style={styles.Name}>{props.data.name_category}</Text>
+                          <Text style={styles.Name}>{props.data.name_client} {props.data.last_name_client}</Text>
+                          <Text style={{fontSize : 10}}>{props.data.address}</Text>
                       </View>
                       <View style={styles.TextCardPrice}>
-                          <Text style={styles.Price}>{props.price} COP</Text>
+
+                          {props.data.status == "Pendiente" &&
+                            <Text style={{...styles.Price, color : "#FF9700"}}>{props.data.status}</Text>
+                          }
+                          
+                          {props.data.status == "Rechazada" &&
+                            <Text style={{...styles.Price, color : "#FF0202"}}>{props.data.status}</Text>
+                          }
+                         {props.data.status == "Aprobada" &&
+                            <Text style={{...styles.Price, color : "#39B54A"}}>{props.data.status}</Text>
+                          }
+
+
+                          <Text style={{...styles.Price, color : "#39B54A"}}>{props.data.price}</Text>
+
+                          
 
                           <View style={styles.Start}>
-                              <Icon name='star' width={20} height={20} fill='#FF9700' /> 
-                              <Text >4.8</Text>
+                              <Text>{props.data.name_provider} {props.data.last_name_provider}</Text>
                           </View>
                       </View>
                   </View>
-
-                  <View style={{flexDirection : "row", width : "80%", alignSelf : "center",marginTop : 1, marginBottom : 20,justifyContent : "space-around"}}>
-                    <TouchableOpacity style={{
-                          width: 100,
-                          backgroundColor:"#063046",
-                          borderRadius : 100,
-                          alignItems:"center",
-                          justifyContent:"center",
-                          marginTop: 7,
-                          padding : 5
-                      }} onPress={()=> goToScreen("RequestOffertsDetails", props.data)}>
-                      <Text style={{color : "white"}}>Detalle</Text>
-                    </TouchableOpacity>
-
-
-
-                    <TouchableOpacity style={{
-                          width: 100,
-                          backgroundColor:"#39B54A",
-                          borderRadius : 100,
-                          alignItems:"center",
-                          justifyContent:"center",
-                          marginTop: 7,
-                          padding : 5
-                      }} onPress={()=> [AcceptOffert(props.data.id, props.data.id_service), setLoad(true)]}>
-                      <Text style={{color : "white"}}>
-                        {Load &&
-                          <ActivityIndicator size="small" color="#fff" />
-                        }
-                        {!Load &&
-                            <Text>Aceptar</Text>
-                        }
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
+                 
             </View>
   }
 
@@ -178,7 +158,7 @@ function Index(props) {
     <View style={styles.container}>
         <StatusBar translucent backgroundColor="transparent" barStyle="dark-content" />
 
-         <HeadNavigate title="Ofertas" props={props} />
+         <HeadNavigate title="Mis Ofertas" props={props} />
 
 
          {Load == true &&
@@ -186,7 +166,7 @@ function Index(props) {
         }
 
 
-          <ScrollView style={{marginBottom : 200}}>
+          <ScrollView style={{marginBottom : 100}}>
             {Offerts.length > 0 &&
               Offerts.map((item, key)=>{
                   return <CardOffert
@@ -197,16 +177,6 @@ function Index(props) {
                         />
               })
             }
-
-
-          {Offerts.length == 0 &&
-              <View style={{alignItems :"center", marginTop : 100}}>
-                <Text style={{fontSize : 20}}>esperando ofertas de servicios...</Text>
-                <Pulse size={200} color="#0B4E6B" />
-              </View>
-           }
-
-
           </ScrollView>
 
           
@@ -229,7 +199,7 @@ const styles = StyleSheet.create({
       width : "85%",
       alignSelf : "center",
       flexDirection : "row",
-      justifyContent : "space-around",
+      justifyContent : "space-between",
       padding : 10,
       
       marginBottom : 1

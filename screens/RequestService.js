@@ -62,6 +62,8 @@ function Index(props) {
         setSelectType(true)
       }
 
+      setLoad(false)
+
 
     },[randomCode])
 
@@ -142,9 +144,8 @@ function Index(props) {
         ...formInfo
       }
 
-
+      data.id_category = props.route.params.id_service
       data.type = TypeService
-
     
       setLoad(true)
       setLoadOrder(true)
@@ -160,6 +161,8 @@ function Index(props) {
       console.log('Enviando formulario')
       console.log(base_url(server,`request/service`))
       console.log(data)
+
+      
 
       axios.post( base_url(server,`request/service`), data ).then(function (res) {
         //setLoad(false)

@@ -27,6 +27,8 @@ import RequestService from './screens/RequestService'
 import RequestServiceDetail from './screens/RequestServiceDetail'
 import RequestOfferts from './screens/RequestOfferts'
 import RequestOffertsDetails from './screens/RequestOffertsDetails'
+import MyRequestServices from './screens/MyRequestServices'
+import MyOffertsServices from './screens/MyOffertsServices'
 
 
 
@@ -56,6 +58,8 @@ function App(){
          <Drawer.Screen name="RequestServiceDetail"     component={ RequestServiceDetail } />
          <Drawer.Screen name="RequestOfferts"           component={ RequestOfferts } />
          <Drawer.Screen name="RequestOffertsDetails"    component={ RequestOffertsDetails } />
+         <Drawer.Screen name="MyRequestServices"        component={ MyRequestServices } />
+         <Drawer.Screen name="MyOffertsServices"        component={ MyOffertsServices } />
        </Drawer.Navigator>
       </UserProvider>
     </NavigationContainer>

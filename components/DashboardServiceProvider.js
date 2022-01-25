@@ -17,14 +17,21 @@ function Index(props) {
 
   function goToScreen(screen, detail_service)
   {     
+
     navigation.navigate(screen, {randomCode : Math.random(), detail_service})
   }
-
     const { UserDetails, setUserDetails } = useContext(UserContext)
     const userDetails                     = useContext(UserContext)
 
     const [Services , setServices] = useState([])
     const [Load , setLoad] = useState(false)
+
+    let randomCode 
+    if(props.route.params){
+        randomCode = props.route.params.randomCode
+    }else{
+        randomCode = 1
+    }
 
   useEffect(() => {
 
@@ -33,7 +40,7 @@ function Index(props) {
     const unsubscribe = messaging().onMessage(async remoteMessage => {
      GetServices(userDetails.id, false)
     });
-  }, [])
+  }, [randomCode])
 
 
   function GetServices(id, init){
@@ -59,7 +66,6 @@ function Index(props) {
       })
       .then(function () {});
   }
-
 
   const CardService = (props)=>{
 

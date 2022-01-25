@@ -41,7 +41,7 @@ function Index(props) {
 
         <View >
               <View style={styles.itemMenuActive}>
-                <TouchableOpacity onPress={()=>goToScreen('Evangelio')}>
+                <TouchableOpacity onPress={()=>goToScreen('MyOffertsServices')}>
                     <Image style={{width: 30, height: 30, resizeMode: "contain",alignItems:'center', justifyContent:'center', marginHorizontal:15}} source={require('../src/images/icon_chat.png')}/>
                     <Text  style={styles.texMenu}>Chat</Text>
                 </TouchableOpacity>

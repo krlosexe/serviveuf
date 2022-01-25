@@ -1,28 +1,27 @@
-import React, {useEffect} from 'react';
-import { StyleSheet, Text, View, ScrollView, TouchableOpacity, StatusBar, Image, ActivityIndicator, Alert} from 'react-native';
+import React, {useEffect, useContext, useState} from 'react';
+import { StyleSheet, Text, View, ScrollView, TouchableOpacity, Image, ActivityIndicator} from 'react-native';
 
 import {server, base_url} from '../Env'    
 import axios from 'axios'
 
 import UserContext from '../contexts/UserContext'
 
-import Head from '../components/Head'
-import Menu from '../components/Menu'
-
+import messaging from '@react-native-firebase/messaging';
 
 function Index(props) {  
 
   const { navigation } = props
 
-  const { UserDetails, setUserDetails } = React.useContext(UserContext)
-  const [Load, setLoad] = React.useState(false);
-  const [Request, setRequest] = React.useState(false);
-  const [RequestStatus, setRequestStatus] = React.useState(false);
-  const [RequestCategory, setRequestCategory] = React.useState(false);
-  const [RequestDate, setRequestDate] = React.useState(false);
-  const [RequestId, setRequestId] = React.useState(false);
+  const { UserDetails, setUserDetails } = useContext(UserContext)
+  const [Load, setLoad] = useState(false);
+  const [Request, setRequest] = useState(false);
+  const [RequestStatus, setRequestStatus] = useState(false);
+  const [RequestCategory, setRequestCategory] = useState(false);
+  const [RequestDate, setRequestDate] = useState(false);
+  const [RequestId, setRequestId] = useState(false);
+  const [CountOfferts, setCountOfferts] = useState(0);
 
-  const userDetails  = React.useContext(UserContext)
+  const userDetails  = useContext(UserContext)
 
   function goToScreen(screen, service, id_service)
   {   
@@ -37,12 +36,22 @@ function Index(props) {
   }
 
   useEffect(()=>{
+    setRequest(false)
+    getRequestServices(true)
 
-    getRequestServices()
+    const unsubscribe = messaging().onMessage(async remoteMessage => {
+      getRequestServices(false)
+    });
+    return unsubscribe
+
   },[randomCode])
 
-  const getRequestServices = () =>{
-    setLoad(true)
+  const getRequestServices = (init) =>{
+
+    if(init){
+      setLoad(true)
+    }
+    
     console.log(base_url(server,`request/service/by/client/${userDetails.id}`))
     axios.get( base_url(server,`request/service/by/client/${userDetails.id}`)).then(function (response) {
       if(response.data.id){
@@ -53,6 +62,7 @@ function Index(props) {
         setRequestCategory(response.data.name_category)
         setRequestDate(response.data.date)
         setRequestId(response.data.id)
+        setCountOfferts(response.data.count_offerts)
         console.log(response.data.id)
       }
     })
@@ -72,13 +82,6 @@ function Index(props) {
       goToScreen("StepOne", false)
     }
   },[])
-
-
-
-
-
-
-
 
   return (
     
@@ -201,7 +204,7 @@ function Index(props) {
                 <View>
                 <ActivityIndicator size="small" color="#0B4E6B" />
 
-                <Text style={{fontWeight : "bold", textAlign : "center", marginTop : 10}}>3</Text>
+                <Text style={{fontWeight : "bold", textAlign : "center", marginTop : 10}}>{CountOfferts}</Text>
                 </View>
             </View>
             </View>
