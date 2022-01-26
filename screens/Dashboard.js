@@ -12,6 +12,15 @@ import Dashboard from '../components/Dashboard'
 import DashboardServiceProvider from '../components/DashboardServiceProvider'
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import Geolocation from 'react-native-geolocation-service';
+import MapView,  { PROVIDER_GOOGLE } from 'react-native-maps'; 
+import { Marker } from 'react-native-maps';
+
+import MapViewDirections from 'react-native-maps-directions';
+
+const origin = {latitude: 6.203163470125818, longitude: -75.56753838434815};
+const destination = {latitude: 6.2071452, longitude: -75.5721136,};
+const GOOGLE_MAPS_APIKEY = 'AIzaSyBm_gLphZClLWDkUHnD0PrxCx1H0GCoXeM';
+
 
 // navigator.geolocation = require('@react-native-community/geolocation');
 // navigator.geolocation = require('react-native-geolocation-service');
@@ -66,10 +75,12 @@ function Index(props) {
   }
 
 
+
+
   useEffect(()=>{
-    console.log(userDetails.mode_service_provider, "mode_service_provider")
-    getRequestServices()
-      requestPermissions()
+    // console.log(userDetails.mode_service_provider, "mode_service_provider")
+    // getRequestServices()
+    //   requestPermissions()
 
   },[randomCode])
 
@@ -106,10 +117,56 @@ function Index(props) {
   },[])
 
 
+const [Region, setRegion] = React.useState({
+  latitude: 6.2071452,
+  longitude: -75.5721136,
+  latitudeDelta: 0.015,
+  longitudeDelta: 0.0121,
+});
 
+
+// const onRegionChange = (region) => {
+//   this.setState({ region });
+// }
 
 
   return (
+
+
+  //   <View style={styles.container}>
+
+
+  //   <MapView
+  //     style={styles.map} 
+  //     initialRegion={Region}
+  //     onPress={(data)=>console.log(data)}
+    
+  //   >
+  //     <MapViewDirections
+  //       origin={origin}
+  //       destination={destination}
+  //       apikey={GOOGLE_MAPS_APIKEY}
+  //       strokeWidth = { 7 } 
+  //       strokeColor = "#1a73e7" 
+  //     />
+
+
+  //     <Marker
+  //         coordinate={{ latitude : Region.latitude , longitude : Region.longitude }}
+         
+  //       />
+
+
+  //       <Marker
+  //         coordinate={origin}
+  //         onDragEnd={(e) => console.log(e, "EEEEE")}
+  //       />
+
+
+  //   </MapView>
+
+  //  </View>
+   
     <View style={styles.container}>
       <StatusBar translucent backgroundColor="transparent" barStyle="dark-content" />
 
@@ -137,6 +194,27 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
+
+
+  // container: {
+  //   position: 'absolute',
+  //   top: 0,
+  //   left: 0,
+  //   right: 0,
+  //   bottom: 0,
+  //   justifyContent: 'flex-end',
+  //   alignItems: 'center',
+  // },
+  // map: {
+  //   position: 'absolute',
+  //   top: 0,
+  //   left: 0,
+  //   right: 0,
+  //   bottom: 0,
+  // },
+
+
+
   content_services : {
     padding: 20
   },

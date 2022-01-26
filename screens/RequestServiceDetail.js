@@ -1,5 +1,5 @@
 import React, {useEffect, useState, useContext} from 'react';
-import { StyleSheet, Text, View,  TouchableOpacity, StatusBar, Image, TextInput, ScrollView, ActivityIndicator, ToastAndroid} from 'react-native';
+import { StyleSheet, Text, View,  TouchableOpacity, StatusBar, Image, TextInput, ScrollView, ActivityIndicator, ToastAndroid, Modal} from 'react-native';
 
 import {server, file_server, base_url} from '../Env'    
 
@@ -9,6 +9,14 @@ import { showLocation } from 'react-native-map-link';
 import HeadNavigate from '../components/HeadNavigate'
 import Menu from '../components/Menu'
 import { Icon } from 'react-native-eva-icons';
+
+
+
+import MapView,  { PROVIDER_GOOGLE } from 'react-native-maps'; 
+import { Marker } from 'react-native-maps';
+
+import MapViewDirections from 'react-native-maps-directions';
+
 
 function Index(props) {  
 
@@ -28,6 +36,11 @@ function Index(props) {
 
     const [Load, setLoad] = useState(false);
     const [DataService, setDataService] = useState(false);
+
+
+    const [modalVisible, setModalVisible] = useState(false);
+
+
 
     const [formInfo , setFormInfo]       = useState({
         price            : "",
@@ -125,6 +138,35 @@ function Index(props) {
 
 
 
+
+    const OpenLocation = (latitude, longitude)=>{
+      setModalVisible(true)
+      console.log(latitude, longitude, "latitude, longitude")
+      setRegion({
+        latitude: parseFloat(latitude),
+        longitude: parseFloat(longitude),
+        latitudeDelta: 0.015,
+        longitudeDelta: 0.0121,
+      })
+    }
+
+
+
+    // const origin = {latitude: 6.203163470125818, longitude: -75.56753838434815};
+    const destination = {latitude: 6.2071452, longitude: -75.5721136,};
+    const GOOGLE_MAPS_APIKEY = 'AIzaSyBm_gLphZClLWDkUHnD0PrxCx1H0GCoXeM';
+
+
+    const [RegionInitial, setRegionInitial] = React.useState({
+      latitude: 6.2071452,
+      longitude: -75.5721136,
+      latitudeDelta: 0.015,
+      longitudeDelta: 0.0121,
+    });
+
+
+    const [Region, setRegion] = React.useState({});
+    
     
   return (
     <View style={styles.container}>
@@ -177,7 +219,125 @@ function Index(props) {
 
 
 
+            {/* <TouchableOpacity style={{color : "black", 
+                            width : "50%",
+                            alignSelf : "center",
+                            paddingHorizontal : 20,
+                            textAlign : "center",
+                            fontSize : 17,
+                            borderWidth : 2,
+                            backgroundColor : "#063046",
+                            borderRadius : 17,
+                            paddingVertical : 5, 
+                            marginTop : 20,
+                            marginBottom : 20
+                        }} onPress={() => GotoMaps(DataService.latitude, DataService.longitude)}>
+                          <Text style={{color : "white", textAlign : "center"}}><View style={{flexDirection : "row"}}>
+                                  <Icon style={{alignSelf : "center"}} name='navigation-2' width={20} height={20} fill='white' /> 
+                                  <Text style={{marginLeft : 10, fontWeight : "bold", color : "white"}}>Cómo llegar</Text>
+                                </View></Text>
+            </TouchableOpacity> */}
+
+
             <TouchableOpacity style={{color : "black", 
+                            width : "50%",
+                            alignSelf : "center",
+                            paddingHorizontal : 20,
+                            textAlign : "center",
+                            fontSize : 17,
+                            borderWidth : 2,
+                            backgroundColor : "#063046",
+                            borderRadius : 17,
+                            paddingVertical : 5, 
+                            marginTop : 20,
+                            marginBottom : 20
+                        }} onPress={() => OpenLocation(DataService.latitude, DataService.longitude)}>
+                          <Text style={{color : "white", textAlign : "center"}}><View style={{flexDirection : "row"}}>
+                                  <Icon style={{alignSelf : "center"}} name='navigation-2' width={20} height={20} fill='white' /> 
+                                  <Text style={{marginLeft : 10, fontWeight : "bold", color : "white"}}>Ver ubicacion</Text>
+                                </View></Text>
+            </TouchableOpacity> 
+
+
+
+            <Modal
+              animationType="slide"
+              transparent={true}
+              visible={modalVisible}
+              onRequestClose={() => {
+                Alert.alert("Modal has been closed.");
+                setModalVisible(!modalVisible);
+              }}
+            >
+
+              
+              <View style={styles.centeredView}>
+
+                
+                <View style={styles.modalView}>
+
+
+
+                <View style={{ }}>
+                          <Image
+                                style={{resizeMode: "contain",width: 95, height: 95, position: "absolute", marginLeft: "25%", top:-20, left : -330}}
+                            source={require('../src/images/round_blue.png')}
+                        />
+                        
+                        <Image
+                                style={{width: 110, height: 110, position: "absolute",  top: -40, right : -220}}
+                            source={require('../src/images/round_top.png')}
+                        />
+
+                        <Image
+                                style={{resizeMode: "contain",width: 150, height: 150, position: "absolute", marginLeft: "24%", top: -40, left : -180}}
+                            source={require('../src/images/triple_round.png')}
+                        />
+
+  
+                    </View>
+
+
+                    
+
+                  <View style={{width:'80%', 
+                                marginTop : 100}}>
+                        <MapView
+                          style={styles.map} 
+                          initialRegion={RegionInitial}
+                          region={Region}
+                          onPress={(data)=>console.log(data)}
+                        
+                        >
+                          {/* <MapViewDirections
+                            origin={origin}
+                            destination={destination}
+                            apikey={GOOGLE_MAPS_APIKEY}
+                            strokeWidth = { 7 } 
+                            strokeColor = "#1a73e7" 
+                          /> */}
+
+
+                          <Marker
+                              coordinate={{ latitude : Region.latitude , longitude : Region.longitude }}
+                            
+                            /> 
+
+{/* 
+                            <Marker
+                              coordinate={origin}
+                              onDragEnd={(e) => console.log(e, "EEEEE")}
+                            /> */}
+
+
+                        </MapView>
+
+                      
+                  </View>  
+
+
+
+                  <TouchableOpacity style={{color : "black", 
                             width : "50%",
                             alignSelf : "center",
                             paddingHorizontal : 20,
@@ -195,6 +355,30 @@ function Index(props) {
                                   <Text style={{marginLeft : 10, fontWeight : "bold", color : "white"}}>Cómo llegar</Text>
                                 </View></Text>
             </TouchableOpacity>
+
+
+
+                  <TouchableOpacity
+                          style={{ ...styles.openButton, backgroundColor: "#8F0D0F", marginTop: 10 }}
+                          onPress={() => {
+                              setModalVisible(!modalVisible);
+                          }}
+                      >
+                          <Text style={{color: "white", textAlign: "center"}}>Cerrar</Text>
+                      </TouchableOpacity>
+
+
+
+                </View>
+              </View>
+            </Modal>
+
+
+
+
+
+
+
 
 
 
@@ -325,6 +509,14 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
 
+  map : {
+    width : "100%", 
+    height : 400,
+    borderRadius : 40,
+    position : "relative",
+    zIndex : -100,
+  },
+
   Item : {
       flexDirection : "row",
       width : "100%",
@@ -382,7 +574,19 @@ const styles = StyleSheet.create({
   
  },
 
-
+ modalView: {
+  padding: 0,
+  alignItems: "center",
+  backgroundColor : 'white',
+  height: "100%",
+  shadowOffset: {
+  width: 0,
+  height: 0
+  },
+  shadowOpacity: 0,
+  shadowRadius: 0,
+  elevation: 0
+},
 
 
 

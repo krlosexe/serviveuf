@@ -10,6 +10,7 @@ import Menu from '../components/Menu'
 import { Icon } from 'react-native-eva-icons';
 import messaging from '@react-native-firebase/messaging';
 
+
 function Index(props) {  
 
 
@@ -106,12 +107,16 @@ function Index(props) {
 
 
   return (
+
+    
+
     <View style={styles.container}>
         <StatusBar translucent backgroundColor="transparent" barStyle="dark-content" />
 
          {Load == true &&
             <ActivityIndicator size="large" color="#0B4E6B" />
          }
+
 
 
          <ScrollView>
@@ -128,7 +133,6 @@ function Index(props) {
          </ScrollView>
 
           
-          
 
          <Menu props={props}/>
     </View>
@@ -143,6 +147,10 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
+
+
+  
+
   
   Card : {
       width : "85%",
