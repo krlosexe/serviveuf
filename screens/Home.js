@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useContext}  from 'react';
-import { StyleSheet, Text, Picker, View, TextInput, TouchableOpacity, StatusBar, Image, ToastAndroid} from 'react-native';
+import { StyleSheet} from 'react-native';
 
 import UserContext from '../contexts/UserContext'
 import AsyncStorage from '@react-native-community/async-storage'
@@ -54,6 +54,7 @@ function Index(props){
 
 
 
+
       useEffect(()=>{
 
         console.log(userDetails, "userDetail123")
@@ -61,6 +62,7 @@ function Index(props){
             RequestPermission().then(_ => {
               console.log('requested!');
             });
+            
         }
         _retrieveData()
     },[])
@@ -116,9 +118,10 @@ function Index(props){
         return <Login {...props}/>
 
 
-    if(userDetails.email && !isSplashing)
-        return <Dashboard {...props}/>
-
+    // if(userDetails.email && !isSplashing)
+    //     return <Dashboard {...props}/>
+     if(userDetails.email && !isSplashing)
+         return <Dashboard {...props}/>
 
 
 

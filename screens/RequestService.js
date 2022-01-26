@@ -1,7 +1,7 @@
-import React, {useEffect, useState, useContext} from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, StatusBar, ScrollView, Image, ToastAndroid, ActivityIndicator} from 'react-native';
+import React, {useEffect, useState, useContext, useRef} from 'react';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, StatusBar, ScrollView, Image, ToastAndroid, ActivityIndicator, PermissionsAndroid, Content} from 'react-native';
 
-import {server, base_url} from '../Env'    
+import {server, base_url, tokenApiMaps} from '../Env'    
 import axios from 'axios'
 import DatePicker from 'react-native-date-picker'
 import UserContext from '../contexts/UserContext'
@@ -11,8 +11,9 @@ import PhotoUpload from 'react-native-photo-upload'
 import { Pulse } from 'react-native-animated-spinkit'
 
 import { ActionSheet } from 'react-native-cross-actionsheet'
-
-
+import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
+import Geolocation from 'react-native-geolocation-service';
+import { Icon } from 'react-native-eva-icons';
 function Index(props) {  
 
 
@@ -27,16 +28,19 @@ function Index(props) {
     const userDetails                       = useContext(UserContext)
     const [editable, setEditable]           = useState(false)
     const [Load, setLoad]                   = useState(false);
+    const [LoadCurrentLocation, setLoadCurrentLocation]   = useState(false);
     const [LoadOrder, setLoadOrder]         = useState(true);
     const [date, setDate]                   = useState(new Date)
     const [open, setOpen]                   = useState(false)
     const [DateString, setDateString]       = useState(false)
-
-    const [SelectType, setSelectType]   = useState(false)
+    const [TextLocation, setTextLocation]   = useState("")
+    const [Latitude, setLatitude]           = useState("")
+    const [Longitude, setLongitude]         = useState("")
+    const [SelectType, setSelectType]       = useState(false)
 
     const [TypeService, setTypeService]   = useState("Tipo")
 
-
+    const ref = useRef();
     let randomCode 
     if(props.route.params){
         randomCode = props.route.params.randomCode
@@ -64,9 +68,55 @@ function Index(props) {
 
       setLoad(false)
 
-
     },[randomCode])
 
+
+    async function CurrentLocation() {
+      if (Platform.OS === 'android') {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+        );
+  
+       
+        if ("granted" === PermissionsAndroid.RESULTS.GRANTED) {
+          Geolocation.getCurrentPosition(
+            (position) => {
+              console.log(position.coords);
+              GetCurrentLocationGoogle(position.coords.latitude, position.coords.longitude)
+              setLatitude(position.coords.latitude)
+              setLongitude(position.coords.longitude)
+            },
+            (error) => {
+              // See error code charts below.
+              console.log(error.code, error.message);
+            },
+            { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
+        );
+        }
+      }
+    }
+
+    const GetCurrentLocationGoogle = (latitude, longitude)=>{
+
+      setLoadCurrentLocation(true)
+      axios.get(`https://maps.googleapis.com/maps/api/geocode/json?&address=${latitude},${longitude}&key=${tokenApiMaps}`).then(function (response) {
+        setLoadCurrentLocation(false)
+        setTextLocation(response.data.results[0].formatted_address)
+       // _storeData(res.data)
+       console.log(response.data.results[0].formatted_address, "SUCCESSFUL")
+      })
+      .catch(function (error) {
+          console.log('Error al enviar formulario')
+        console.log(error.response.data)
+          ToastAndroid.showWithGravity(
+            error.response.data,
+            ToastAndroid.SHORT,
+            ToastAndroid.CENTER
+        );
+        setLoadCurrentLocation(false)
+      })
+      .then(function () {})
+    }
 
     const [formInfo , setFormInfo] = useState({
       id_client   : userDetails.id,
@@ -110,27 +160,6 @@ function Index(props) {
     }
 
 
-//   useEffect(() => {
-//     const unsubscribe = messaging().onMessage(async remoteMessage => {
-//       console.log("notificación en primer plano")
-//       console.log("noti---->", remoteMessage)
-//       //setremoteMessage(remoteMessage)
-//     });
-
-// //     //const unsubscribe = messaging().setBackgroundMessageHandler(async remoteMessage => {
-// //     messaging().setBackgroundMessageHandler(async remoteMessage => {
-// //       console.log("notificación en segundo plano")
-// // //      console.log("noti---->", remoteMessage)
-// //   //    console.log()
-// //       setremoteMessage(remoteMessage)
-// //     });
-
-//     return unsubscribe;
-//   }, [])
-
-
-
-
 
     function onChangeText(text, key){
       setFormInfo({
@@ -145,7 +174,12 @@ function Index(props) {
       }
 
       data.id_category = props.route.params.id_service
-      data.type = TypeService
+      data.type        = TypeService
+      data.address     = TextLocation
+      data.latitude    = Latitude
+      data.longitude   = Longitude
+
+     
     
       setLoad(true)
       setLoadOrder(true)
@@ -194,7 +228,8 @@ function Index(props) {
 
           {!Load && 
 
-            <ScrollView>
+            <ScrollView keyboardShouldPersistTaps='always'>
+             
                 <View>
                   <DatePicker
                     modal
@@ -214,6 +249,11 @@ function Index(props) {
                       setOpen(false)
                     }}
                   />
+
+
+                    
+
+
                   <View style={{width : "100%",alignItems: 'center'}}>
                     <TouchableOpacity onPress={() => setOpen(true)} style={{width : "100%",alignItems: 'center', marginTop : 40}}>
                       <View style={{...styles.inputView, height:60}} >
@@ -228,16 +268,89 @@ function Index(props) {
                         
                       </View>
                     </TouchableOpacity>
-                  
-                    <View style={styles.inputView} >
-                        
-                      <TextInput  
-                        style={styles.inputText}
-                        placeholder="Dirección" 
-                        placeholderTextColor="#777"
-                        editable={editable}
-                        onChangeText={text => onChangeText(text, 'address')}/>
-                    </View>
+
+
+                      <GooglePlacesAutocomplete
+                          placeholder='Direccion'
+                          onPress={(data, details = null) => {
+                            // 'details' is provided when fetchDetails = true
+                            setTextLocation(details.formatted_address)
+                            console.log(details.geometry.location);
+                            setLatitude(details.geometry.location.lat)
+                            setLongitude(details.geometry.location.lng)
+                          }}
+                          fetchDetails={true}
+                          ref={ref => {
+                            ref?.setAddressText(TextLocation)
+                          }}
+                          textInputProps={{
+                              onChangeText: (text) => { setTextLocation(text) }
+                          }}
+
+
+                          query={{
+                            key: 'AIzaSyBm_gLphZClLWDkUHnD0PrxCx1H0GCoXeM',
+                            language: 'es',
+                            components: 'country:col',
+                          }}
+
+                          styles={{
+                            textInputContainer: {
+                              width : "80%",
+                              alignSelf : "center"
+                            },
+                            textInput: {
+                              alignSelf : "center",
+                              marginBottom : 20,
+                              fontSize: 16,
+                              borderColor : "#063046",
+                              borderWidth : 1,
+                              padding : 0,
+                              width : 100,
+                              borderRadius: 100,
+                              height : 52  ,
+                              textAlign : "center",
+                              fontSize : 14,       
+                            },
+                            row : {
+                              width : "80%",
+                              textAlign : "center",
+                              alignSelf : "center"
+                            }
+                          }}
+
+                        />
+
+
+
+
+                    <TouchableOpacity style={{marginBottom : 20, width:"70%",
+                        backgroundColor:"#0B4E6B",
+                        borderRadius: 40,
+                        height:50,
+                        alignItems:"center",
+                        justifyContent:"center",
+                        alignSelf : "center"}} onPress={()=>CurrentLocation() }>
+
+                            {LoadCurrentLocation &&
+                                <ActivityIndicator size="large" color="#fff" />
+                            }
+                            {!LoadCurrentLocation &&
+                                <View style={{flexDirection : "row"}}>
+                                  <Icon style={{alignSelf : "center"}} name='navigation-2' width={20} height={20} fill='white' /> 
+                                  <Text style={{marginLeft : 10, fontWeight : "bold", color : "white"}}>Ubicación actual</Text>
+                                </View>
+                            }
+                      
+                     
+                    </TouchableOpacity>
+
+
+                    
+                      
+                    
+
+
 
 
                     <View style={styles.inputView} >

@@ -11,6 +11,9 @@ import Menu from '../components/Menu'
 import { Icon } from 'react-native-eva-icons';
 import messaging from '@react-native-firebase/messaging';
 import { Pulse } from 'react-native-animated-spinkit'
+
+
+
 function Index(props) {  
 
 
@@ -42,7 +45,14 @@ function Index(props) {
      GetOfferts(props.route.params.service, false)
     });
 
+    
+
   }, [randomCode])
+
+
+
+
+  
 
 
   function GetOfferts(id_service, init){

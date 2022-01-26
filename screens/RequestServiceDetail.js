@@ -5,10 +5,10 @@ import {server, file_server, base_url} from '../Env'
 
 import UserContext from '../contexts/UserContext'
 import axios from 'axios'
-
+import { showLocation } from 'react-native-map-link';
 import HeadNavigate from '../components/HeadNavigate'
 import Menu from '../components/Menu'
-
+import { Icon } from 'react-native-eva-icons';
 
 function Index(props) {  
 
@@ -54,6 +54,15 @@ function Index(props) {
       }, 100)
     },[])   
 
+    function GotoMaps(lat, lon) {
+      showLocation({
+        latitude: lat,
+        longitude: lon,
+        googleForceLatLon: false,
+      })
+    }
+
+    
 
     function onChangeText(text, key){
       setFormInfo({
@@ -168,6 +177,30 @@ function Index(props) {
 
 
 
+            <TouchableOpacity style={{color : "black", 
+                            width : "50%",
+                            alignSelf : "center",
+                            paddingHorizontal : 20,
+                            textAlign : "center",
+                            fontSize : 17,
+                            borderWidth : 2,
+                            backgroundColor : "#063046",
+                            borderRadius : 17,
+                            paddingVertical : 5, 
+                            marginTop : 20,
+                            marginBottom : 20
+                        }} onPress={() => GotoMaps(DataService.latitude, DataService.longitude)}>
+                          <Text style={{color : "white", textAlign : "center"}}><View style={{flexDirection : "row"}}>
+                                  <Icon style={{alignSelf : "center"}} name='navigation-2' width={20} height={20} fill='white' /> 
+                                  <Text style={{marginLeft : 10, fontWeight : "bold", color : "white"}}>Cómo llegar</Text>
+                                </View></Text>
+            </TouchableOpacity>
+
+
+
+
+
+
 
             <Text style={{...styles.ItemText, marginTop : 20, textAlign : "center", alignSelf :"center"}}>Comentarios</Text>
 
@@ -185,6 +218,10 @@ function Index(props) {
                         }}>
                             {DataService.comments}
             </Text>
+
+
+            
+            
 
 
             <Image style={styles.ImageService} source={{ uri: `${file_server}/img/request_services/${DataService.photo}`}}

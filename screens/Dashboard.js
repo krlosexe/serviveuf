@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import { StyleSheet, Text, View, ScrollView, TouchableOpacity, StatusBar, Image, ActivityIndicator, Alert} from 'react-native';
+import { Platform, PermissionsAndroid, StyleSheet, Text, View, ScrollView, TouchableOpacity, StatusBar, Image, ActivityIndicator, Alert} from 'react-native';
 
 import {server, base_url} from '../Env'    
 import axios from 'axios'
@@ -10,7 +10,11 @@ import Head from '../components/Head'
 import Menu from '../components/Menu'
 import Dashboard from '../components/Dashboard'
 import DashboardServiceProvider from '../components/DashboardServiceProvider'
+import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
+import Geolocation from 'react-native-geolocation-service';
 
+// navigator.geolocation = require('@react-native-community/geolocation');
+// navigator.geolocation = require('react-native-geolocation-service');
 
 function Index(props) {  
 
@@ -38,9 +42,35 @@ function Index(props) {
       randomCode = 1
   }
 
+
+  async function requestPermissions() {
+    if (Platform.OS === 'android') {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+      );
+
+     
+      if ("granted" === PermissionsAndroid.RESULTS.GRANTED) {
+        Geolocation.getCurrentPosition(
+          (position) => {
+            console.log(position);
+          },
+          (error) => {
+            // See error code charts below.
+            console.log(error.code, error.message);
+          },
+          { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
+      );
+      }
+    }
+  }
+
+
   useEffect(()=>{
     console.log(userDetails.mode_service_provider, "mode_service_provider")
     getRequestServices()
+      requestPermissions()
+
   },[randomCode])
 
   const getRequestServices = () =>{
@@ -85,13 +115,13 @@ function Index(props) {
 
         <Head/>
         
-        {userDetails.mode_service_provider == true &&
+         {userDetails.mode_service_provider == true &&
           <DashboardServiceProvider {...props} />
         }
 
         {(userDetails.mode_service_provider == false || userDetails.mode_service_provider == undefined) &&
           <Dashboard {...props} />
-        }
+        } 
 
         <Menu props={props}/>
         
