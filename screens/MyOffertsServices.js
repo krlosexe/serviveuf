@@ -14,11 +14,11 @@ function Index(props) {
 
   const { navigation } = props
 
-  function goToScreen(screen, detail_offert)
+  function goToScreen(screen, detail_service)
   {     
-
-    console.log(detail_offert, "detail_offert")
-    navigation.navigate(screen, {randomCode : Math.random(), detail_offert})
+    console.log(detail_service, "detail_offert")
+    detail_service.lock = true
+    navigation.navigate(screen, {randomCode : Math.random(), detail_service})
   }
 
     const { UserDetails, setUserDetails } = useContext(UserContext)
@@ -106,51 +106,53 @@ function Index(props) {
     if(props.data.photo == null){
       photo_profile = 'https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg'
     }else{
-      photo_profile = `${file_server}/img/usuarios/profile/${props.data.photo}`
+      photo_profile = `${file_server}/img/request_services/${props.data.photo}`
     }
 
     const [Load , setLoad] = useState(false)
 
 
-    return  <View style={{borderColor : "#063046",borderBottomWidth : 2, width : "85%", alignSelf : "center"}}>
-              <View style={styles.Card}>
+    return  <TouchableOpacity  onPress={() => goToScreen("RequestServiceDetail", props.data)}>
+              <View style={{borderColor : "#063046",borderBottomWidth : 2, width : "85%", alignSelf : "center"}}>
+                <View style={styles.Card}>
 
-                        <View style={{marginRight : 20}}>
-                          <Image
-                              style={styles.profile}
-                              source={{ uri: photo_profile}}
-                          />
-                      </View>
-                      <View style={styles.TextCardName}>
-                          <Text style={styles.Name}>{props.data.name_category}</Text>
-                          <Text style={styles.Name}>{props.data.name_client} {props.data.last_name_client}</Text>
-                          <Text style={{fontSize : 10}}>{props.data.address}</Text>
-                      </View>
-                      <View style={styles.TextCardPrice}>
+                          <View style={{marginRight : 20}}>
+                            <Image
+                                style={styles.profile}
+                                source={{ uri: photo_profile}}
+                            />
+                        </View>
+                        <View style={styles.TextCardName}>
+                            <Text style={styles.Name}>{props.data.name_category}</Text>
+                            <Text style={styles.Name}>{props.data.name_client} {props.data.last_name_client}</Text>
+                            <Text style={{fontSize : 10}}>{props.data.address.replace(", Medellín, Antioquia, Colombia", "")}</Text>
+                            <Text style={{fontSize : 10}}>{props.data.date}</Text>
+                        </View>
+                        <View style={styles.TextCardPrice}>
 
-                          {props.data.status == "Pendiente" &&
-                            <Text style={{...styles.Price, color : "#FF9700"}}>{props.data.status}</Text>
-                          }
-                          
-                          {props.data.status == "Rechazada" &&
-                            <Text style={{...styles.Price, color : "#FF0202"}}>{props.data.status}</Text>
-                          }
-                         {props.data.status == "Aprobada" &&
-                            <Text style={{...styles.Price, color : "#39B54A"}}>{props.data.status}</Text>
-                          }
+                            {props.data.status == "Pendiente" &&
+                              <Text style={{...styles.Price, color : "#FF9700"}}>{props.data.status}</Text>
+                            }
+                            
+                            {props.data.status == "Rechazada" &&
+                              <Text style={{...styles.Price, color : "#FF0202"}}>{props.data.status}</Text>
+                            }
+                          {props.data.status == "Aprobada" &&
+                              <Text style={{...styles.Price, color : "#39B54A"}}>{props.data.status}</Text>
+                            }
 
 
-                          <Text style={{...styles.Price, color : "#39B54A"}}>{props.data.price}</Text>
+                            <Text style={{...styles.Price, color : "#39B54A"}}>{props.data.price}</Text>
 
-                          
+                            
 
-                          <View style={styles.Start}>
-                              <Text>{props.data.name_provider} {props.data.last_name_provider}</Text>
-                          </View>
-                      </View>
-                  </View>
-                 
-            </View>
+                            <View style={styles.Start}>
+                                <Text>{props.data.name_provider} {props.data.last_name_provider}</Text>
+                            </View>
+                        </View>
+                    </View>
+              </View>
+            </TouchableOpacity>
   }
 
 

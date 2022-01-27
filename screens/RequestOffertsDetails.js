@@ -1,7 +1,7 @@
 import React, {useEffect, useState, useContext} from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, StatusBar, ImageBackground, Image, ToastAndroid, ActivityIndicator} from 'react-native';
 
-import {file_server} from '../Env'   
+import {file_server, server, base_url} from '../Env'   
 import axios from 'axios'
 import UserContext from '../contexts/UserContext'
 
@@ -24,6 +24,7 @@ function Index(props) {
     const { UserDetails, setUserDetails } = useContext(UserContext)
     const userDetails                     = useContext(UserContext)
     const [PhotoProfile, setPhotoProfile] = useState(false)
+    const [Load, setLoad] = useState(false);
 
     let randomCode 
     if(props.route.params){
@@ -36,12 +37,38 @@ function Index(props) {
       if(props.route.params.detail_offert.photo_profile == null){
         setPhotoProfile('https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg')
       }else{
+
+        console.log(`${file_server}/img/usuarios/profile/${props.route.params.detail_offert.photo_profile}`)
         setPhotoProfile(`${file_server}/img/usuarios/profile/${props.route.params.detail_offert.photo_profile}`)
       }
 
     },[randomCode])
 
+    const AcceptOffert = (id_offert, id_service)=>{
 
+        const data = { id_offert, id_service }
+        console.log('Enviando formulario')
+        console.log(base_url(server,`accept/offert`))
+        console.log(data, "DATA")
+      
+        setLoad(true)
+        axios.post( base_url(server,`accept/offert`), data).then(function (response) {
+          goToScreen("MyRequestServices", false)
+          setLoad(false)
+        })
+        .catch(function (error) {
+            console.log('Error al enviar formulario')
+          console.log(error.response.data)
+            ToastAndroid.showWithGravity(
+              error.response.data,
+              ToastAndroid.SHORT,
+              ToastAndroid.CENTER
+          );
+          setLoad(false)
+        })
+        .then(function () {});
+  
+    }
 
 
   return (
@@ -105,63 +132,64 @@ function Index(props) {
             </Text>
         </View>
 
-
-        <Text style={{fontSize : 20, color :"#063046", marginTop : 20, textAlign : "center"}}>Medios de pago</Text>
+        
+        {props.route.params.detail_offert.lock != true && 
+            <View>
+                <Text style={{fontSize : 20, color :"#063046", marginTop : 20, textAlign : "center"}}>Medios de pago</Text>
             
-        <View style={styles.MethodPays}>
-            <View style={styles.MethodPaysItems}>
-                <RadioButton
-                    value="first"
-                    color = "#FF9700"
-                    uncheckedColor = "#063046"
-                    status={ "unchecked"}
-                    onPress={(value) => console.log(value)}
-                />
+                    <View style={styles.MethodPays}>
+                        <View style={styles.MethodPaysItems}>
+                            <RadioButton
+                                value="first"
+                                color = "#FF9700"
+                                uncheckedColor = "#063046"
+                                status={ "unchecked"}
+                                onPress={(value) => console.log(value)}
+                            />
+            
+                            <Text style={{color: "#4D4D4D"}}>Transaccion electronica</Text>
+                        </View>
+            
+            
+                        <View style={styles.MethodPaysItems}>
+                            <RadioButton
+                                value="first"
+                                color = "#FF9700"
+                                uncheckedColor = "#063046"
+                                status={ "checked"}
+                                onPress={(value) => console.log(value)}
+                            />
+            
+                            <Text style={{color: "#4D4D4D"}}>Efectivo</Text>
+            
+                        </View>
+            
+                    </View>
+            
+            
+                    <TouchableOpacity style={{
+                        width: 150,
+                        backgroundColor:"#063046",
+                        borderRadius : 100,
+                        alignItems:"center",
+                        justifyContent:"center",
+                        marginTop: 20,
+                        padding : 15,
+                        alignSelf : "center"
+                    }} onPress={()=> [AcceptOffert(props.route.params.detail_offert.id, props.route.params.detail_offert.id_service)]}>
+                        
+                        {Load &&
+                            <ActivityIndicator size="large" color="#fff" />
+                        }
+                        {!Load &&
+                            <Text style={{color : "white"}}>Aceptar</Text>
+                        }
 
-                <Image style={styles.IconCard} source={require('../src/images/card.png')}
-                />
+                    </TouchableOpacity>
             </View>
+        }
 
-
-            <View style={styles.MethodPaysItems}>
-                <RadioButton
-                    value="first"
-                    color = "#FF9700"
-                    uncheckedColor = "#063046"
-                    status={ "checked"}
-                    onPress={(value) => console.log(value)}
-                />
-
-                <Text style={{color: "#4D4D4D"}}>Efectivo</Text>
-
-            </View>
-
-
-            <View style={styles.MethodPaysItems}>
-                <RadioButton
-                    value="first"
-                    color = "#FF9700"
-                    uncheckedColor = "#063046"
-                    status={ "unchecked"}
-                    onPress={(value) => console.log(value)}
-                />
-                <Text style={{color: "#4D4D4D"}}>Saldo</Text>
-            </View>
-        </View>
-
-
-        <TouchableOpacity style={{
-            width: 150,
-            backgroundColor:"#063046",
-            borderRadius : 100,
-            alignItems:"center",
-            justifyContent:"center",
-            marginTop: 20,
-            padding : 15,
-            alignSelf : "center"
-        }} onPress={()=> goToScreen("RequestOffertsDetails")}>
-            <Text style={{color : "white"}}>Pagar</Text>
-        </TouchableOpacity>
+        
 
 
 

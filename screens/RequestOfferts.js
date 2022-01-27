@@ -105,7 +105,6 @@ function Index(props) {
       })
       .then(function () {});
 
-
   }
 
 

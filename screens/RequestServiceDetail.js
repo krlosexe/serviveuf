@@ -40,6 +40,15 @@ function Index(props) {
 
     const [modalVisible, setModalVisible] = useState(false);
 
+    const GOOGLE_MAPS_APIKEY = 'AIzaSyBm_gLphZClLWDkUHnD0PrxCx1H0GCoXeM';
+    const [RegionInitial, setRegionInitial] = useState({
+      latitude: 6.2071452,
+      longitude: -75.5721136,
+      latitudeDelta: 0.015,
+      longitudeDelta: 0.0121,
+    });
+
+    const [Region, setRegion] = useState({});
 
 
     const [formInfo , setFormInfo]       = useState({
@@ -53,9 +62,9 @@ function Index(props) {
      useEffect(()=>{
 
       setFormInfo({
-        price            : "",
-        time             : "",
-        comments         : ""
+        price            : props.route.params.detail_service.price,
+        time             : props.route.params.detail_service.time,
+        comments         : "",
       })
        setDataService(props.route.params.detail_service)
     },[props.route.params.detail_service])   
@@ -74,7 +83,6 @@ function Index(props) {
         googleForceLatLon: false,
       })
     }
-
     
 
     function onChangeText(text, key){
@@ -151,21 +159,7 @@ function Index(props) {
     }
 
 
-
-    // const origin = {latitude: 6.203163470125818, longitude: -75.56753838434815};
-    const destination = {latitude: 6.2071452, longitude: -75.5721136,};
-    const GOOGLE_MAPS_APIKEY = 'AIzaSyBm_gLphZClLWDkUHnD0PrxCx1H0GCoXeM';
-
-
-    const [RegionInitial, setRegionInitial] = React.useState({
-      latitude: 6.2071452,
-      longitude: -75.5721136,
-      latitudeDelta: 0.015,
-      longitudeDelta: 0.0121,
-    });
-
-
-    const [Region, setRegion] = React.useState({});
+    
     
     
   return (
@@ -196,7 +190,7 @@ function Index(props) {
 
             <View style={styles.Item}>
                 <Text style={styles.ItemText}>Direccion:</Text>
-                <Text style={styles.ItemText}>{DataService.address}</Text>
+                <Text style={styles.ItemText}>{props.route.params.detail_service.address.replace(", Medellín, Antioquia, Colombia", "")}</Text>
             </View>
 
 
@@ -216,27 +210,6 @@ function Index(props) {
                 <Text style={styles.ItemText}>Tipo:</Text>
                 <Text style={styles.ItemText}>{DataService.type}</Text>
             </View>
-
-
-
-            {/* <TouchableOpacity style={{color : "black", 
-                            width : "50%",
-                            alignSelf : "center",
-                            paddingHorizontal : 20,
-                            textAlign : "center",
-                            fontSize : 17,
-                            borderWidth : 2,
-                            backgroundColor : "#063046",
-                            borderRadius : 17,
-                            paddingVertical : 5, 
-                            marginTop : 20,
-                            marginBottom : 20
-                        }} onPress={() => GotoMaps(DataService.latitude, DataService.longitude)}>
-                          <Text style={{color : "white", textAlign : "center"}}><View style={{flexDirection : "row"}}>
-                                  <Icon style={{alignSelf : "center"}} name='navigation-2' width={20} height={20} fill='white' /> 
-                                  <Text style={{marginLeft : 10, fontWeight : "bold", color : "white"}}>Cómo llegar</Text>
-                                </View></Text>
-            </TouchableOpacity> */}
 
 
             <TouchableOpacity style={{color : "black", 
@@ -273,67 +246,61 @@ function Index(props) {
               
               <View style={styles.centeredView}>
 
-                
                 <View style={styles.modalView}>
 
-
-
-                <View style={{ }}>
-                          <Image
+                    <View style={{ }}>
+                        <Image
                                 style={{resizeMode: "contain",width: 95, height: 95, position: "absolute", marginLeft: "25%", top:-20, left : -330}}
                             source={require('../src/images/round_blue.png')}
                         />
-                        
                         <Image
                                 style={{width: 110, height: 110, position: "absolute",  top: -40, right : -220}}
                             source={require('../src/images/round_top.png')}
                         />
-
                         <Image
                                 style={{resizeMode: "contain",width: 150, height: 150, position: "absolute", marginLeft: "24%", top: -40, left : -180}}
                             source={require('../src/images/triple_round.png')}
                         />
-
-  
                     </View>
 
 
-                    
+                    <View style={{width:'90%', 
+                                  marginTop : 80}}>
 
-                  <View style={{width:'80%', 
-                                marginTop : 100}}>
-                        <MapView
-                          style={styles.map} 
-                          initialRegion={RegionInitial}
-                          region={Region}
-                          onPress={(data)=>console.log(data)}
-                        
-                        >
-                          {/* <MapViewDirections
-                            origin={origin}
-                            destination={destination}
-                            apikey={GOOGLE_MAPS_APIKEY}
-                            strokeWidth = { 7 } 
-                            strokeColor = "#1a73e7" 
-                          /> */}
+                          <View style = {{marginBottom : 20, width : "100%", flexDirection : "row"}}>
+                            <View style = {{width : "10%"}}>
+                              <TouchableOpacity  onPress={()=>setModalVisible(!modalVisible) }>
+                                  <Image
+                                    style={styles.btn_back}
+                                    source={require('../src/images/btn_back.png')}
+                                  />
+                              </TouchableOpacity>
+                            </View>
+                            <View style = {{width : "85%"}}>
+                              <Text style={{textAlign : "center", fontSize : 20, color : "#063046"}}>{props.route.params.detail_service.address.replace(", Medellín, Antioquia, Colombia", "")}</Text>
+                            </View>
+                          </View>
 
-
-                          <Marker
-                              coordinate={{ latitude : Region.latitude , longitude : Region.longitude }}
-                            
-                            /> 
-
-{/* 
-                            <Marker
-                              coordinate={origin}
-                              onDragEnd={(e) => console.log(e, "EEEEE")}
+                          <MapView
+                            style={styles.map} 
+                            initialRegion={RegionInitial}
+                            region={Region}
+                            onPress={(data)=>console.log(data)}
+                          >
+                            {/* <MapViewDirections
+                              origin={origin}
+                              destination={destination}
+                              apikey={GOOGLE_MAPS_APIKEY}
+                              strokeWidth = { 7 } 
+                              strokeColor = "#1a73e7" 
                             /> */}
 
-
-                        </MapView>
-
-                      
-                  </View>  
+                              <Marker
+                                coordinate={{ latitude : Region.latitude , longitude : Region.longitude }}
+                                image={require('../src/images/marker.png')}
+                              /> 
+                          </MapView>
+                    </View>  
 
 
 
@@ -354,19 +321,7 @@ function Index(props) {
                                   <Icon style={{alignSelf : "center"}} name='navigation-2' width={20} height={20} fill='white' /> 
                                   <Text style={{marginLeft : 10, fontWeight : "bold", color : "white"}}>Cómo llegar</Text>
                                 </View></Text>
-            </TouchableOpacity>
-
-
-
-                  <TouchableOpacity
-                          style={{ ...styles.openButton, backgroundColor: "#8F0D0F", marginTop: 10 }}
-                          onPress={() => {
-                              setModalVisible(!modalVisible);
-                          }}
-                      >
-                          <Text style={{color: "white", textAlign: "center"}}>Cerrar</Text>
-                      </TouchableOpacity>
-
+                    </TouchableOpacity>
 
 
                 </View>
@@ -469,9 +424,8 @@ function Index(props) {
                         onChangeText={text => onChangeText(text, 'comments')}/>
                 </View>
 
-
-
-                <TouchableOpacity style={styles.loginBtn} onPress={()=>sendForm()}>
+                {props.route.params.detail_service.lock != true && 
+                  <TouchableOpacity style={styles.loginBtn} onPress={()=>sendForm()}>
                     <Text style={styles.loginText}>
                             {Load &&
                                 <ActivityIndicator size="large" color="#fff" />
@@ -480,7 +434,8 @@ function Index(props) {
                                 <Text style={{fontSize : 20}}>Guardar</Text>
                             }
                     </Text>
-                 </TouchableOpacity>
+                  </TouchableOpacity>
+                }
                 
 
             </View>
@@ -511,7 +466,7 @@ const styles = StyleSheet.create({
 
   map : {
     width : "100%", 
-    height : 400,
+    height : 500,
     borderRadius : 40,
     position : "relative",
     zIndex : -100,
@@ -587,6 +542,14 @@ const styles = StyleSheet.create({
   shadowRadius: 0,
   elevation: 0
 },
+
+btn_back: {
+  width: 35,
+  height: 35,
+  resizeMode: "contain",
+}
+
+
 
 
 

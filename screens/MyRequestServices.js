@@ -14,11 +14,12 @@ function Index(props) {
 
   const { navigation } = props
 
-  function goToScreen(screen, detail_offert)
+  function goToScreen(screen, detail_offert, status)
   {     
-
-    console.log(detail_offert, "detail_offert")
-    navigation.navigate(screen, {randomCode : Math.random(), detail_offert})
+    if(status == "En proceso" || status == "Procesado"){
+      detail_offert.lock = true
+      navigation.navigate(screen, {randomCode : Math.random(), detail_offert})
+    }
   }
 
     const { UserDetails, setUserDetails } = useContext(UserContext)
@@ -33,11 +34,9 @@ function Index(props) {
     }else{
         randomCode = 1
     }
-  useEffect(() => {
-
-    GetMyServices()
-
-  }, [randomCode])
+    useEffect(() => {
+      GetMyServices()
+    }, [randomCode])
 
 
   function GetMyServices(){
@@ -98,51 +97,53 @@ function Index(props) {
     if(props.data.photo == null){
       photo_profile = 'https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg'
     }else{
-      photo_profile = `${file_server}/img/request_services/${props.data.photo}`
+      photo_profile = `${file_server}/img/request_services/${props.data.photo_service}`
     }
 
     const [Load , setLoad] = useState(false)
 
-    return  <View style={{borderColor : "#063046",borderBottomWidth : 2, width : "85%", alignSelf : "center"}}>
-              <View style={styles.Card}>
+    return  <TouchableOpacity  onPress={() => goToScreen("RequestOffertsDetails", props.data, props.data.status)}>
+              <View style={{borderColor : "#063046",borderBottomWidth : 2, width : "85%", alignSelf : "center"}}>
+                <View style={styles.Card}>
 
                         <View style={{marginRight : 20}}>
-                          <Image
-                              style={styles.profile}
-                              source={{ uri: photo_profile}}
-                          />
-                      </View>
-                      <View style={styles.TextCardName}>
-                          <Text style={styles.Name}>{props.data.name_category}</Text>
-                          <Text style={{fontSize : 10}}>{props.data.address}</Text>
-                      </View>
-                      <View style={styles.TextCardPrice}>
+                            <Image
+                                style={styles.profile}
+                                source={{ uri: photo_profile}}
+                            />
+                        </View>
+                        <View style={styles.TextCardName}>
+                            <Text style={styles.Name}>{props.data.name_category}</Text>
+                            <Text style={{fontSize : 10}}>{props.data.address.replace(", Medellín, Antioquia, Colombia", "")}</Text>
+                            <Text style={{fontSize : 10}}>{props.data.date}</Text>
+                        </View>
+                        <View style={styles.TextCardPrice}>
 
-                          {props.data.status == "Pendiente" &&
-                            <Text style={{...styles.Price, color : "#FF9700"}}>{props.data.status}</Text>
-                          }
+                            {props.data.status == "Pendiente" &&
+                              <Text style={{...styles.Price, color : "#FF9700"}}>{props.data.status}</Text>
+                            }
 
-                          {props.data.status == "En proceso" &&
-                            <Text style={{...styles.Price, color : "#0B4E6B"}}>{props.data.status}</Text>
-                          }
+                            {props.data.status == "En proceso" &&
+                              <Text style={{...styles.Price, color : "#0B4E6B"}}>{props.data.status}</Text>
+                            }
 
 
-                          {props.data.status == "Cancelado" &&
-                            <Text style={{...styles.Price, color : "#FF0202"}}>{props.data.status}</Text>
-                          }
+                            {props.data.status == "Cancelado" &&
+                              <Text style={{...styles.Price, color : "#FF0202"}}>{props.data.status}</Text>
+                            }
 
-                         {props.data.status == "Procesado" &&
-                            <Text style={{...styles.Price, color : "#39B54A"}}>{props.data.status}</Text>
-                          }
-                          
+                          {props.data.status == "Procesado" &&
+                              <Text style={{...styles.Price, color : "#39B54A"}}>{props.data.status}</Text>
+                            }
+                            
 
-                          <View style={styles.Start}>
-                              <Text>{props.data.name_provider} {props.data.last_name_provider}</Text>
-                          </View>
-                      </View>
-                  </View>
-                 
-            </View>
+                            <View style={styles.Start}>
+                                <Text>{props.data.name_client} {props.data.last_name_client}</Text>
+                            </View>
+                        </View>
+                    </View>
+              </View>
+            </TouchableOpacity>
   }
 
 
