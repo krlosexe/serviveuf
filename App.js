@@ -29,7 +29,8 @@ import RequestOfferts from './screens/RequestOfferts'
 import RequestOffertsDetails from './screens/RequestOffertsDetails'
 import MyRequestServices from './screens/MyRequestServices'
 import MyOffertsServices from './screens/MyOffertsServices'
-
+import Faq from './screens/Faq'
+import Chat from './screens/Chat'
 
 
 
@@ -60,6 +61,8 @@ function App(){
          <Drawer.Screen name="RequestOffertsDetails"    component={ RequestOffertsDetails } />
          <Drawer.Screen name="MyRequestServices"        component={ MyRequestServices } />
          <Drawer.Screen name="MyOffertsServices"        component={ MyOffertsServices } />
+         <Drawer.Screen name="Faq"                      component={ Faq } />
+         <Drawer.Screen name="Chat"                     component={ Chat } />
        </Drawer.Navigator>
       </UserProvider>
     </NavigationContainer>

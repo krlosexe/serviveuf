@@ -16,42 +16,24 @@ function Index(props) {
 
 
   return (
-   
     <View style={styles.menu}>
         <View>
-
             <TouchableOpacity onPress={ ()=> goToScreen("Dashboard") } >
                 <View style={styles.itemMenu}>
                     <Image style={{width: 30, height: 30, resizeMode: "contain"}} source={require('../src/images/icon_search.png')}/>
                     <Text  style={styles.texMenu}>Inicio</Text>
                 </View>
             </TouchableOpacity>
-            
         </View>
-
-        {/* <View >
-            
-            <TouchableOpacity onPress={ ()=> goToScreen("Oraciones") } >
-                <View style={styles.itemMenu}>
-                    <Image style={{width: 30, height: 30, resizeMode: "contain"}} source={require('../src/images/icon_promos.png')}/>
-                    <Text  style={styles.texMenu}>Promos</Text>
-                </View>
-            </TouchableOpacity>
-        </View> */}
-
-        <View >
+        <View>
               <View style={styles.itemMenuActive}>
-                <TouchableOpacity onPress={()=>goToScreen('MyOffertsServices')}>
+                <TouchableOpacity onPress={()=>goToScreen('Chat')}>
                     <Image style={{width: 30, height: 30, resizeMode: "contain",alignItems:'center', justifyContent:'center', marginHorizontal:15}} source={require('../src/images/icon_chat.png')}/>
                     <Text  style={styles.texMenu}>Chat</Text>
                 </TouchableOpacity>
-                
             </View>
         </View>
-
-
-
-        <View >
+        <View>
             <TouchableOpacity style={styles.itemMenu} onPress={()=>goToScreen('Profile')}>
                 <Image style={{width: 24, height: 30, resizeMode: "contain"}} source={require('../src/images/icon_profile.png')}/>
                 <Text  style={styles.texMenu}>Tú perfil</Text>

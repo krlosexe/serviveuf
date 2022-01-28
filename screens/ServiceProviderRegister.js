@@ -122,7 +122,12 @@ function Index(props) {
       .then(function () { setLoad(false)});
      
     }
-
+function onChangeText(text, key){
+      setFormInfo({
+          ...formInfo,
+          [key] : text
+      })
+    }
 
   return (
     <View style={styles.container}>

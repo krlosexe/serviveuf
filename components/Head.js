@@ -4,17 +4,34 @@ import {
   Text,
   Image,
   StyleSheet,
-  Dimensions
+  Dimensions,
+  TouchableOpacity
 } from 'react-native';
+import { Icon } from 'react-native-eva-icons';
 
 const windowWidth = Dimensions.get('window').width;
 function App(props) {
   return (
     <View style={styles.wrapper}>
-        <Image
+        {/* <Image
           style={styles.icon}
           source={require('../src/images/logo.png')}
-        />
+        /> */}
+
+
+        <TouchableOpacity onPress={() => props.OpenMenu()} style={{
+                backgroundColor:"#eee",
+                borderRadius : 7,
+                padding : 14,
+                alignItems:"center",
+                justifyContent:"center",
+                marginTop:25,
+                marginLeft : "10%",
+                marginBottom:20
+            }}>
+            
+            <Icon name='menu' fill={"#0B4E6B"} width={25} height={25} />
+        </TouchableOpacity>
 
         <View style={styles.balance_content}>
             <Text style={styles.balance_text}>Tú saldo</Text>

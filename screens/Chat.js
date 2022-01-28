@@ -1,15 +1,15 @@
 import React, {useEffect} from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, StatusBar, Image, ToastAndroid, ActivityIndicator} from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, StatusBar, Image, ToastAndroid, ImageBackground} from 'react-native';
 
-import {server, base_url} from '../Env'    
+import {serverQa, base_url} from '../Env'    
 import axios from 'axios'
 
 
 import messaging from '@react-native-firebase/messaging';
 import AsyncStorage from '@react-native-community/async-storage'
 import UserContext from '../contexts/UserContext'
-
-
+import CheckBox from '@react-native-community/checkbox';
+import HeadNavigate from '../components/HeadNavigate'
 function Index(props) {  
 
 
@@ -18,13 +18,20 @@ function Index(props) {
   function goToScreen(screen)
   {   
 
-    navigation.navigate(screen, {randomCode : Math.random()})
+      ToastAndroid.showWithGravity(
+           screen,
+            ToastAndroid.SHORT,
+            ToastAndroid.CENTER
+          );
+   return false
   }
+
+
     
     const [notificationToken , setNotificationToken] = React.useState('')
     const { UserDetails, setUserDetails } = React.useContext(UserContext)
     const [editable, setEditable] = React.useState(false)
-    const [Load, setLoad] = React.useState(false);
+    const [isSelected, setSelection] = React.useState(false);
 
     
     React.useEffect(()=>{
@@ -58,14 +65,12 @@ function Index(props) {
 
 
     const _storeData = async (data) => {
-
-      data.register = false
-      data.mode_service_provider = false
       try {
           await AsyncStorage.setItem('@Passport', JSON.stringify(data) );
           //console.log(data)
           console.log('Authentication successfully')
           setUserDetails({...data})
+      
       }
       catch (error) {
         // Error saving data
@@ -91,8 +96,14 @@ function Index(props) {
       const data = {
         ...formInfo
       }
-      setLoad(true)
-     
+
+        ToastAndroid.showWithGravity(
+            "LOGIN",
+            ToastAndroid.SHORT,
+            ToastAndroid.CENTER
+          );
+      
+  return false
       data.fcmToken = notificationToken
 
       if( data.email === '' || data.password === ''){
@@ -102,19 +113,20 @@ function Index(props) {
             ToastAndroid.SHORT,
             ToastAndroid.CENTER
           );
-          setLoad(false)
+           
         return false;
       }
 
 
       console.log('Enviando formulario')
-      console.log(base_url(server,`authApp`))
+      console.log(base_url(serverQa,`auth/app/financing`))
       console.log(data)
 
-      axios.post( base_url(server,`authApp`), data ).then(function (res) {
+
+      axios.post( base_url(serverQa,`auth/app/financing`), data ).then(function (res) {
 
         _storeData(res.data)
-        setLoad(false)
+    
       })
       .catch(function (error) {
           console.log('Error al enviar formulario')
@@ -125,7 +137,7 @@ function Index(props) {
             ToastAndroid.CENTER
         );
 
-        setLoad(false)
+
 
       })
       .then(function () {
@@ -142,72 +154,23 @@ function Index(props) {
           <View style={{
             //  flexDirection  : "row",
            }}>
+
               <Image
-                      style={{resizeMode: "contain",width: 95, height: 95, position: "absolute", marginLeft: "25%", top:30, left: -100}}
-                  source={require('../src/images/doble_roun.png')}
+                      style={{resizeMode: "contain",width: 95, height: 95, position: "absolute", marginLeft: "25%", top: 20, left: -40}}
+                  source={require('../src/images/logo.png')}
               />
+              
               <Image
-                      style={{resizeMode: "contain",width: 150, height: 150, position: "absolute", marginLeft: "25%", top: -70}}
-                  source={require('../src/images/round_top_center.png')}
-              />
-              <Image
-                      style={{width: 140, height: 140, position: "absolute", right: -60, top: -20}}
+                      style={{width: 110, height: 110, position: "absolute", right: -50, top: -20}}
                   source={require('../src/images/round_top.png')}
               />
-
           </View>
-
-
-
-          <View style={{width : "100%",alignItems: 'center', marginTop: 230}}>
-
-            
-            <View style={styles.inputView} >
-              <TextInput  
-                style={styles.inputText}
-                placeholder="Correo electrónico" 
-                placeholderTextColor="#777"
-                keyboardType={'email-address'}
-
-                editable={editable}
-                onChangeText={text => onChangeText(text, 'email')}/>
-            </View>
-            <View style={styles.inputView} >
-              <TextInput  
-                secureTextEntry
-                style={styles.inputText}
-                placeholder="Contraseña" 
-                placeholderTextColor="#777"
-                onChangeText={text => onChangeText(text, 'password')}/>
-            </View>
-
-             <TouchableOpacity style={styles.loginBtn} onPress={()=>sendForm()}>
-              <Text style={styles.loginText}>
-                    {Load &&
-                        <ActivityIndicator size="large" color="#fff" />
-                    }
-                    {!Load &&
-                        <Text>Iniciar sesión</Text>
-                    }
-              </Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity onPress={()=>goToScreen('Forgout') }>
-              <Text style={styles.forgot}>¿Olvidaste tu contraseña?</Text>
-            </TouchableOpacity>
            
-            <TouchableOpacity style={{
-               width:"70%",
-                backgroundColor:"#0B4E6B",
-                borderRadius : 40,
-                height:60,
-                alignItems:"center",
-                justifyContent:"center",
-                marginTop:25,
-                marginBottom:20
-            }} onPress={()=>goToScreen('Register') }>
-              <Text style={styles.register}>Quiero registrarme</Text>
-            </TouchableOpacity>
+          <View style={{width : "100%",alignItems: 'center', marginTop: 70}}>
+            <HeadNavigate title="Chats" props={props} />
+              
+        
+
           </View>
 
 
@@ -233,22 +196,22 @@ const styles = StyleSheet.create({
   },
   inputView:{
     width:"80%",
-    backgroundColor:"#E6E6E6",
-    
     height:50,
     marginBottom:20,
     justifyContent:"center",
     padding:20,
     textAlign: "center",
-    borderRadius: 100
+    borderRadius: 100,
+    backgroundColor:"#E6E6E6",
   },
   inputText:{
     height:50,
-    color:"#777"
+    color:"#777",
+    textAlign : "center"
   },
   forgot:{
     color:"#000000",
-    fontSize:12
+    fontSize:14
   },
   loginBtn:{
     width:"55%",
@@ -265,7 +228,8 @@ const styles = StyleSheet.create({
   },
 
   register:{
-    color:"#fff"
+    color:"#fff",
+    fontSize: 20
   },
 
   icon: {
@@ -273,6 +237,20 @@ const styles = StyleSheet.create({
     height: 100,
     resizeMode: "contain",
   }
-
+  ,
+  checkboxContainer: {
+    flexDirection: "row",
+    marginBottom: 20,
+    marginTop : 20,
+  },
+  checkbox: {
+    alignSelf: "center",
+  },
+  label: {
+    margin: 8,
+    color : "#000",
+    lineHeight : 20,
+    textAlign : "justify"
+  }
 
 });

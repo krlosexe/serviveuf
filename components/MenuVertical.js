@@ -1,14 +1,14 @@
 import React, { useState, useRef, useContext, useEffect } from 'react';
-import { View, Modal, Text, TouchableWithoutFeedback, Image, TouchableOpacity, StyleSheet, Button, Dimensions, Animated } from 'react-native';
+import { View, Modal, Text, TouchableWithoutFeedback, Image, TouchableOpacity, StyleSheet, Button, Dimensions, Animated, ActivityIndicator, Switch, Platform} from 'react-native';
 import { Icon } from 'react-native-eva-icons';
 import AsyncStorage from '@react-native-community/async-storage'
 import UserContext from '../contexts/UserContext'
 import Toast from 'react-native-simple-toast';
 import LinearGradient from 'react-native-linear-gradient';
-import { file_server } from '../Env.js';
-
+import { base_url, server, file_server } from '../Env.js';
+import Share from 'react-native-share';
 import { ScrollView } from 'react-native-gesture-handler';
-
+import axios from 'axios'
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
@@ -18,6 +18,12 @@ function Menu(props) {
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const fadeWidth = useRef(new Animated.Value(WIDTH)).current;
   const [AboutModal, setAboutModal] = useState(false);
+  const [PhotoProfile, setPhotoProfile] = useState(false)
+  const [Load, setLoad]                 = useState(false)
+  const [LabelBtnServiceProvider, setLabelBtnServiceProvider] = useState("Modo prestador de servicios")
+
+  const [isEnabled, setIsEnabled] = useState(false);
+  const toggleSwitch = () => setIsEnabled(previousState => !previousState);
 
   function closet() {
     fadeOut()
@@ -52,11 +58,19 @@ function Menu(props) {
 
   useEffect(() => {
 
-    console.log(userDetails, "userDatiel")
     if (props.show === true) {
       fadeIn();
       big();
     }
+
+
+    if(props.userDetails.photo_profile == null){
+      setPhotoProfile('https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg')
+    }else{
+      setPhotoProfile(`${file_server}/img/usuarios/profile/${props.userDetails.photo_profile}`)
+    }
+
+    GetStatusServiceProvider()
   }, [props.show]);
 
   const fadeIn = () => {
@@ -95,9 +109,158 @@ function Menu(props) {
   function Go(screen) {
     closet()
     setTimeout(() => {
-      props.goToScreen(screen)
+      props.goToScreen(screen, { randomCode: Math.random() })
     }, 500);
   }
+
+  function GetStatusServiceProvider(){
+        setLoad(true)
+        console.log('Enviando formulario')
+        console.log(base_url(server,`get/status/service/provider/${props.userDetails.id}`))
+  
+        axios.get( base_url(server,`get/status/service/provider/${props.userDetails.id}`) ).then(function (response) {
+          setLoad(false)
+
+          if(response.data.service_provider){
+
+            if(response.data.service_provider == "Reviewing"){
+              setLabelBtnServiceProvider("En revisión")
+            }
+
+            if(response.data.service_provider == "Approved"){
+                if(response.data.service_provider_status == "Inactive"){
+                  setLabelBtnServiceProvider("Modo prestador de servicios")
+                  _storeData({"mode_service_provider" : false})
+                }
+                if(response.data.service_provider_status == "Active"){
+                  setLabelBtnServiceProvider("Desactivar")
+                  _storeData({"mode_service_provider" : true})
+                }
+            }
+
+            
+          }
+          console.log(response.data)
+        })
+        .catch(function (error) {
+            console.log('Error al enviar formulario')
+          console.log(error)
+            ToastAndroid.showWithGravity(
+              "ha ocurrido un error",
+              ToastAndroid.SHORT,
+              ToastAndroid.CENTER
+          );
+          setLoad(false)
+  
+        })
+        .then(function () { setLoad(false)});
+    }
+
+
+  const ServiceProvider = () =>{
+      setLoad(true)
+      console.log(base_url(server,`get/status/service/provider/${props.userDetails.id}`))
+      axios.get( base_url(server,`get/status/service/provider/${props.userDetails.id}`)).then(function (response) {
+        setLoad(false)
+        if(response.data.service_provider == null){
+          goToScreen("ServiceProviderRegister")
+        }
+
+        if(response.data.service_provider == "Approved" && response.data.service_provider_status == "Inactive"){
+          ModeActiveProvider("Active")
+        }
+
+        if(response.data.service_provider == "Approved" && response.data.service_provider_status == "Active"){
+          ModeActiveProvider("Inactive")
+        }
+      })
+      .catch(function (error) {
+          console.log(error.response.data.message)
+          console.log('Error al enviar formularioss')
+          setLoad(false)
+      })
+      .then(function (response) {setLoad(false)});
+
+    }
+
+    const ModeActiveProvider = (status) =>{
+      setLoad(true)
+      console.log(base_url(server,`update/status/service/provider/${props.userDetails.id}/${status}`))
+      axios.get( base_url(server,`update/status/service/provider/${props.userDetails.id}/${status}`)).then(function (response) {
+        setLoad(false)
+        GetStatusServiceProvider()
+
+        if(status == "Active"){
+          _storeData({"mode_service_provider" : true})
+        }
+        if(status == "Inactive"){
+          _storeData({"mode_service_provider" : false})
+        }
+       
+      })
+      .catch(function (error) {
+          console.log(error.response.data.message)
+          console.log('Error al enviar formularioss')
+          setLoad(false)
+      })
+      .then(function (response) {setLoad(false)});
+    }
+
+
+
+    const _storeData = async (data) => {
+        console.log({...props.userDetails,...data}, "SUCCESS")
+        data.register = false
+      try {
+          await AsyncStorage.setItem('@Passport', JSON.stringify({...props.userDetails,...data}) );
+          //console.log(data)
+          console.log('Authentication successfully')
+          setUserDetails({...props.userDetails,...data})
+          goToScreen("Profile")
+      }
+      catch (error) {
+          console.log(error)
+        // Error saving data
+      }
+    }
+
+
+
+  const ShareApp = () => {
+    console.log("SHARE")
+
+    const options = Platform.select({
+      default: {
+        title: 'Compartir App',
+        message: "https://play.google.com/store/apps/details?id=com.pielis&hl=es-419"
+      },
+    });
+
+
+    if(Platform.OS === "android"){
+      Share.open(options).catch(err => console.log(err));
+    }else{
+      Share.open({
+        title: 'Share',
+          url: "https://play.google.com/store/apps/details?id=com.pielis&hl=es-419"
+      }).catch(err => console.log(err));
+
+    }
+
+  }
+
+
+  const logout = async () => {
+    try {
+      await AsyncStorage.removeItem('@Passport');
+      console.log('logout')
+      setUserDetails({})
+      goToScreen("Home")
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
+
 
   return (
     <View style={[styles.wrapper, { display: props.show === true ? "flex" : "none" }]}>
@@ -110,12 +273,18 @@ function Menu(props) {
             <View style={[styles.avatar, { width: WIDTH / 2.8, height: WIDTH / 2.8, borderRadius: WIDTH / 2 }]}>
                 <Image
                   style={styles.img}
-                  source={{ uri: `https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg` }}
+                  source={{ uri: PhotoProfile}}
                 />
             </View>
-            <Text style={styles.name}>Carlos Cardenas</Text>
+            <Text style={styles.name}>{props.userDetails.names} {props.userDetails.last_names}</Text>
             <View style={{ flexDirection: "row" }}>
-              <Text style={styles.email}>cardenascarlos18@gmail.com</Text>
+              <View style={styles.Starts}>
+                    <Icon name='star' width={20} height={20} fill='#FF9700' /> 
+                    <Icon name='star' width={20} height={20} fill='#FF9700' /> 
+                    <Icon name='star' width={20} height={20} fill='#FF9700' /> 
+                    <Icon name='star' width={20} height={20} fill='#FF9700' /> 
+                    <Icon name='star' width={20} height={20} fill='#fff' /> 
+                </View>
             </View>
           </LinearGradient>
 
@@ -123,7 +292,12 @@ function Menu(props) {
           <TouchableOpacity style={styles.BtnMode} onPress={()=>ServiceProvider()}>
                 <Text style={styles.loginText}>
 
-                    Modo Prestador de Servicio
+                    {Load &&
+                        <ActivityIndicator size="small" color="#fff" />
+                    }
+                    {!Load &&
+                        <Text>{LabelBtnServiceProvider}</Text>
+                    }
                     
                 </Text>
             </TouchableOpacity>
@@ -131,23 +305,44 @@ function Menu(props) {
 
           <View style={{ paddingBottom: 40 }}>
 
+              {props.userDetails.mode_service_provider &&
+                <TouchableOpacity
+                  onPress={() => Go("MyOffertsServices")}
+                  style={styles.opt}>
+                  <Icon name='briefcase-outline' fill={"#777"} width={20} height={20} />
+                  <Text style={styles.optText}>Mis Ofertas</Text>
+                </TouchableOpacity>
+              }
+
+              {!props.userDetails.mode_service_provider &&
+                <TouchableOpacity
+                  onPress={() => Go("MyRequestServices")}
+                  style={styles.opt}>
+                  <Icon name='briefcase-outline' fill={"#777"} width={20} height={20} />
+                  <Text style={styles.optText}>Mis Servicios</Text>
+                </TouchableOpacity>
+              }
+
+
+            
+
+
             <TouchableOpacity
-              onPress={() => Go("Profile")}
               style={styles.opt}>
-              <Icon name='briefcase-outline' fill={"#777"} width={20} height={20} />
-              <Text style={styles.optText}>Mis Servicios</Text>
+              <Icon name='moon-outline' fill={"#777"} width={20} height={20} />
+              <Text style={{...styles.optText, marginRight : "25%"}}>Modo Oscuro</Text>
+
+              <Switch
+                trackColor={{ false: "#999", true: "#999" }}
+                thumbColor={isEnabled ? "#0B4E6B" : "#eee"}
+                ios_backgroundColor="#3e3e3e"
+                onValueChange={toggleSwitch}
+                value={isEnabled}
+              />
             </TouchableOpacity>
 
-
             <TouchableOpacity
-              onPress={() => Go("ClinicList")}
-              style={styles.opt}>
-              <Icon name='settings' fill={"#777"} width={20} height={20} />
-              <Text style={styles.optText}>Configuración</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              onPress={() => Go("Sala")}
+              onPress={() => Go("Faq")}
               style={styles.opt}>
               <Icon name='alert-circle' fill={"#777"} width={20} height={20} />
               <Text style={styles.optText}>Ayuda</Text>
@@ -155,10 +350,14 @@ function Menu(props) {
 
 
             <TouchableOpacity
-              onPress={() => Go("MedicsList")}
+              onPress={() => Go("Profile")}
               style={styles.opt}>
               <Icon name='message-square' fill={"#777"} width={20} height={20} />
               <Text style={styles.optText}>Soporte</Text>
+
+              
+
+
             </TouchableOpacity>
 
             <TouchableOpacity
@@ -167,24 +366,17 @@ function Menu(props) {
               <Icon name='shield' fill={"#777"} width={20} height={20} />
               <Text style={styles.optText}>Seguridad</Text>
             </TouchableOpacity>
-
-            {/* <TouchableOpacity
-              onPress={() => Go("text")}
-              style={styles.opt}>
-              <Icon name='calendar-outline' fill={"#777"} width={20} height={20} />
-              <Text style={styles.optText}>Mis recervaciones</Text>
-            </TouchableOpacity> */}
-
+{/* 
             <TouchableOpacity
               onPress={() => Go("DashboardServices")}
               style={styles.opt}>
               <Icon name='people' fill={"#777"} width={20} height={20} />
               <Text style={styles.optText}>Proteccion</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
 
 
             <TouchableOpacity
-              onPress={() => Go("DashboardServices")}
+              onPress={() => ShareApp()}
               style={styles.opt}>
               <Icon name='share' fill={"#777"} width={20} height={20} />
               <Text style={styles.optText}>Compartir</Text>
@@ -196,6 +388,30 @@ function Menu(props) {
               <Icon name='power-outline' fill={"#777"} width={20} height={20} />
               <Text style={styles.optText}>Cerrar Sesión</Text>
             </TouchableOpacity>
+
+
+            <View style={{flexDirection : "row", justifyContent : "center", marginTop : 50}}>
+               <Image
+                  style={{
+                    width  : 30, 
+                    height : 30,
+                    marginHorizontal : 20
+                  }}
+                  source={require('../src/images/icon_facebook.png')}
+                />
+
+
+                <Image
+                  style={{
+                    width  : 30, 
+                    height : 30,
+                    marginHorizontal : 20
+                  }}
+                  source={require('../src/images/icon_instagram.png')}
+                />
+
+
+            </View>
 
 
           </View>
@@ -219,6 +435,7 @@ const styles = StyleSheet.create({
     flex: 1,
     top: 0,
     right: 0,
+    
   },
   wrap: {
     backgroundColor: "white",
@@ -291,6 +508,14 @@ const styles = StyleSheet.create({
     color:"white",
     textAlign : "center",
     fontSize : 12
+  },
+
+  Starts : {
+    flexDirection : "row",
+    justifyContent : "space-between",
+    width : "50%",
+    marginTop: 4,
+    marginBottom: 8
   }
 });
 export default Menu;

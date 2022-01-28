@@ -18,7 +18,7 @@ function Index(props) {
 
   const { navigation } = props
 
-  const [vertical , setvertical] = useState(true)
+  const [vertical , setvertical] = useState(false)
   const userDetails  = useContext(UserContext)
 
   function goToScreen(screen, service, id_service)
@@ -41,6 +41,11 @@ function Index(props) {
   },[])
 
 
+  const OpenMenu = ()=>{
+    setvertical(true)
+  }
+
+
   return (
    
     <View style={styles.container}>
@@ -52,10 +57,11 @@ function Index(props) {
                 show={vertical}
                 action={setvertical}
                 goToScreen={goToScreen}
+                userDetails = {{...userDetails}}
               />
             }
 
-        <Head/>
+        <Head OpenMenu={OpenMenu}/>
         
          {userDetails.mode_service_provider == true &&
           <DashboardServiceProvider {...props} />
