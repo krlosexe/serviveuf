@@ -9,6 +9,12 @@ import { base_url, server, file_server } from '../Env.js';
 import Share from 'react-native-share';
 import { ScrollView } from 'react-native-gesture-handler';
 import axios from 'axios'
+
+
+
+import StarRating from 'react-native-star-rating';
+
+
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
@@ -21,7 +27,8 @@ function Menu(props) {
   const [PhotoProfile, setPhotoProfile] = useState(false)
   const [Load, setLoad]                 = useState(false)
   const [LabelBtnServiceProvider, setLabelBtnServiceProvider] = useState("Modo prestador de servicios")
-
+  const [Rating, setRating]   = useState(0)
+  
   const [isEnabled, setIsEnabled] = useState(false);
   const toggleSwitch = () => setIsEnabled(previousState => !previousState);
 
@@ -71,6 +78,7 @@ function Menu(props) {
     }
 
     GetStatusServiceProvider()
+    GetRating()
   }, [props.show]);
 
   const fadeIn = () => {
@@ -111,6 +119,17 @@ function Menu(props) {
     setTimeout(() => {
       props.goToScreen(screen, { randomCode: Math.random() })
     }, 500);
+  }
+
+
+  const GetRating = ()=>{
+    console.log('Enviando formulario')
+    console.log(base_url(server,`get/rating/service/provider/${props.userDetails.id}`))
+
+    axios.get( base_url(server,`get/rating/service/provider/${props.userDetails.id}`) ).then(function (response) {
+      console.log(response.data)
+      setRating(response.data)
+    })
   }
 
   function GetStatusServiceProvider(){
@@ -182,6 +201,8 @@ function Menu(props) {
       .then(function (response) {setLoad(false)});
 
     }
+
+    
 
     const ModeActiveProvider = (status) =>{
       setLoad(true)
@@ -276,16 +297,17 @@ function Menu(props) {
                   source={{ uri: PhotoProfile}}
                 />
             </View>
-            <Text style={styles.name}>{props.userDetails.names} {props.userDetails.last_names}</Text>
-            <View style={{ flexDirection: "row" }}>
-              <View style={styles.Starts}>
-                    <Icon name='star' width={20} height={20} fill='#FF9700' /> 
-                    <Icon name='star' width={20} height={20} fill='#FF9700' /> 
-                    <Icon name='star' width={20} height={20} fill='#FF9700' /> 
-                    <Icon name='star' width={20} height={20} fill='#FF9700' /> 
-                    <Icon name='star' width={20} height={20} fill='#fff' /> 
-                </View>
-            </View>
+            <Text style={{...styles.name, marginBottom : 10}}>{props.userDetails.names} {props.userDetails.last_names}</Text>
+
+            <StarRating
+              disabled={false}
+              maxStars={5}
+              rating={Rating}
+              fullStarColor={'#FF9700'}
+              emptyStarColor = {"#fff"}
+              starSize = {23}
+            />
+
           </LinearGradient>
 
 

@@ -9,6 +9,7 @@ import HeadNavigate from '../components/HeadNavigate'
 import Menu from '../components/Menu'
 import messaging from '@react-native-firebase/messaging';
 
+import { Icon } from 'react-native-eva-icons';
 function Index(props) {  
 
 
@@ -142,13 +143,26 @@ function Index(props) {
                             }
 
 
+                            {props.data.status == "Pendiente por calificar" &&
+                              <Text style={{...styles.Price, color : "#063046"}}>Por calificar</Text>
+                            }
+
+                            {props.data.status == "Finalizada" &&
+                              <Text style={{...styles.Price, color : "#39B54A"}}>{props.data.status}</Text>
+                            }
+
+
                             <Text style={{...styles.Price, color : "#39B54A"}}>{props.data.price}</Text>
+                            {props.data.status == "Finalizada" &&
+                               <View style={styles.Start}>
+                                  <Icon name='star' width={20} height={20} fill='#FF9700' /> 
+                                  <Text>{props.data.rating}</Text>
+                              </View>
+                            }
 
-                            
+                           
 
-                            <View style={styles.Start}>
-                                <Text>{props.data.name_provider} {props.data.last_name_provider}</Text>
-                            </View>
+                           
                         </View>
                     </View>
               </View>

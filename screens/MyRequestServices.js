@@ -7,7 +7,7 @@ import UserContext from '../contexts/UserContext'
 
 import HeadNavigate from '../components/HeadNavigate'
 import Menu from '../components/Menu'
-
+import { Icon } from 'react-native-eva-icons';
 
 function Index(props) {  
 
@@ -20,6 +20,14 @@ function Index(props) {
       detail_offert.lock = true
       navigation.navigate(screen, {randomCode : Math.random(), detail_offert})
     }
+
+
+    if(status == "Pendiente por calificar"){
+      navigation.navigate("CalificationServiceProvider", {randomCode : Math.random(), detail_offert})
+    }
+
+
+    console.log(status)
   }
 
     const { UserDetails, setUserDetails } = useContext(UserContext)
@@ -111,6 +119,15 @@ function Index(props) {
                                 style={styles.profile}
                                 source={{ uri: photo_profile}}
                             />
+
+                            {props.data.status == "Finalizada" &&
+                               <View style={styles.Start}>
+                                  <Icon name='star' width={20} height={20} fill='#FF9700' /> 
+                                  <Text>{props.data.rating}</Text>
+                              </View>
+                            }
+
+
                         </View>
                         <View style={styles.TextCardName}>
                             <Text style={styles.Name}>{props.data.name_category}</Text>
@@ -135,11 +152,27 @@ function Index(props) {
                           {props.data.status == "Procesado" &&
                               <Text style={{...styles.Price, color : "#39B54A"}}>{props.data.status}</Text>
                             }
+
+                            {props.data.status == "Pendiente por calificar" &&
+                              <Text style={{...styles.Price, color : "#063046"}}>Por calificar</Text>
+                            }
+
+
+                            {props.data.status == "Finalizada" &&
+                              <Text style={{...styles.Price, color : "#39B54A"}}>{props.data.status}</Text>
+                            }
+
+
+
                             
 
                             <View style={styles.Start}>
                                 <Text>{props.data.name_client} {props.data.last_name_client}</Text>
                             </View>
+
+                            
+
+
                         </View>
                     </View>
               </View>

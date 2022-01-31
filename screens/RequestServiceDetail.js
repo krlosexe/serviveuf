@@ -10,7 +10,7 @@ import HeadNavigate from '../components/HeadNavigate'
 import Menu from '../components/Menu'
 import { Icon } from 'react-native-eva-icons';
 
-
+import StarRating from 'react-native-star-rating';
 
 import MapView,  { PROVIDER_GOOGLE } from 'react-native-maps'; 
 import { Marker } from 'react-native-maps';
@@ -67,6 +67,8 @@ function Index(props) {
         comments         : "",
       })
        setDataService(props.route.params.detail_service)
+
+       console.log(props.route.params.detail_service.status)
     },[props.route.params.detail_service])   
 
 
@@ -127,7 +129,7 @@ function Index(props) {
 
         goToScreen("MyOffertsServices", false)
         setLoad(false)
-      return false;
+        return false;
 
 
       })
@@ -159,7 +161,36 @@ function Index(props) {
     }
 
 
-    
+    const ProcessService  = (id) => {
+      setLoad(true)
+
+      console.log(base_url(server,`process/service/${id}`))
+      axios.get( base_url(server,`process/service/${id}`)).then(function (response) {
+        setLoad(false)
+      
+        ToastAndroid.showWithGravity(
+          "El servico finalizo",
+          ToastAndroid.SHORT,
+          ToastAndroid.CENTER
+        );
+
+        goToScreen("MyOffertsServices", false)
+
+      })
+      .catch(function (error) {
+          console.log('Error al enviar formulario')
+        console.log(error.response.data)
+          ToastAndroid.showWithGravity(
+            error.response.data,
+            ToastAndroid.SHORT,
+            ToastAndroid.CENTER
+        );
+        setLoad(false)
+      })
+      .then(function () {});
+
+
+    }
     
     
   return (
@@ -436,6 +467,70 @@ function Index(props) {
                     </Text>
                   </TouchableOpacity>
                 }
+
+
+                {props.route.params.detail_service.status == "Aprobada" && 
+                  <TouchableOpacity style={styles.loginBtn} onPress={()=>ProcessService(props.route.params.detail_service.id_service )}>
+                    <Text style={styles.loginText}>
+                            {Load &&
+                                <ActivityIndicator size="large" color="#fff" />
+                            }
+                            {!Load &&
+                                <Text style={{fontSize : 20}}>Procesar</Text>
+                            }
+                    </Text>
+                  </TouchableOpacity>
+                }
+
+
+            {props.route.params.detail_service.status == "Finalizada" && 
+                <View>
+                    <View style={{justifyContent : "center", marginTop : 20, marginBottom : 20}}>
+                      <View style={{
+                          width: 210,
+                          backgroundColor:"#063046",
+                          borderRadius : 100,
+                          alignItems:"center",
+                          justifyContent:"center",
+                          padding : 8,
+                          alignSelf : "center",
+                          zIndex : 999
+                      }}>
+                          <Text style={{color : "white", fontSize : 18}}>Calificacion:</Text>
+                      </View>
+
+                      <View style={{
+                          width : "90%",
+                          height : 1,
+                          backgroundColor : "#ED6306",
+                          position : "absolute",
+                          zIndex : 10,
+                          alignSelf : "center"
+                      }}></View>
+                  </View>
+
+
+                  <StarRating
+                    disabled={false}
+                    maxStars={5}
+                    rating={props.route.params.detail_service.rating}
+                    fullStarColor={'#FF9700'}
+                  />
+
+                  <Text style={{marginTop : 10, textAlign :"center"}}>{props.route.params.detail_service.comment_rating}</Text>
+                </View>
+
+            } 
+            
+
+
+
+
+
+
+
+
+                
                 
 
             </View>

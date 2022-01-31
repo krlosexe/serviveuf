@@ -135,7 +135,6 @@ function Index(props) {
     let optionsSelect = []
     if(props.route.params.service == "Trenzas"){
        optionsSelect = [
-        { text: 'Cabello',   onPress:() => setTypeService('Cabello') },
         { text: 'Kanekalon', onPress:() => setTypeService('Kanekalon') },
         { text: 'Sintético', onPress:() => setTypeService('Sintético') },
         { text: 'Kinky',     onPress:() => setTypeService('Kinky') },
@@ -346,13 +345,6 @@ function Index(props) {
                     </TouchableOpacity>
 
 
-                    
-                      
-                    
-
-
-
-
                     <View style={styles.inputView} >
                       <TextInput  
                         style={styles.inputText}
@@ -364,7 +356,16 @@ function Index(props) {
                     {SelectType &&
                       <TouchableOpacity style={styles.inputView} onPress={()=>typeSelect()}>
                           <View style={styles.inputText}>
-                              <Text style={{marginTop : 14, textAlign : "center"}}>{TypeService}</Text>
+                              <Text style={{marginTop : 14, textAlign : "center"}}>
+                                {props.route.params.service == "Trenzas" && 
+                                  <Text>Cabello</Text>
+                                }
+
+                              {props.route.params.service != "Trenzas" && 
+                                  <Text>Tipo</Text>
+                                }
+
+                              </Text>
                           </View>
                       </TouchableOpacity>
                     }

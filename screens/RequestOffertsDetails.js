@@ -11,6 +11,8 @@ import Menu from '../components/Menu'
 import { Icon } from 'react-native-eva-icons';
 import { RadioButton } from 'react-native-paper';
 
+import StarRating from 'react-native-star-rating';
+
 function Index(props) {  
 
 
@@ -25,7 +27,9 @@ function Index(props) {
     const userDetails                     = useContext(UserContext)
     const [PhotoProfile, setPhotoProfile] = useState(false)
     const [Load, setLoad] = useState(false);
-
+    const [LoadRating, setLoadRating] = useState(false);
+    const [Raiting, setRating] = useState(0);
+    
     let randomCode 
     if(props.route.params){
         randomCode = props.route.params.randomCode
@@ -42,7 +46,34 @@ function Index(props) {
         setPhotoProfile(`${file_server}/img/usuarios/profile/${props.route.params.detail_offert.photo_profile}`)
       }
 
+      GetRating(props.route.params.detail_offert.id_client)
+      props.route.params.detail_offert.status
     },[randomCode])
+
+
+    const GetRating = (id_client)=>{
+        setLoadRating(true)
+        console.log('Enviando formulario')
+        console.log(base_url(server,`get/rating/service/provider/${id_client}`))
+    
+        axios.get( base_url(server,`get/rating/service/provider/${id_client}`) ).then(function (response) {
+          console.log(response.data)
+          setRating(response.data)
+          setLoadRating(false)
+        }).catch(function (error) {
+            console.log('Error al enviar formulario')
+          console.log(error.response.data)
+            ToastAndroid.showWithGravity(
+              error.response.data,
+              ToastAndroid.SHORT,
+              ToastAndroid.CENTER
+          );
+          setLoadRating(false)
+        })
+      }
+    
+
+
 
     const AcceptOffert = (id_offert, id_service)=>{
 
@@ -88,13 +119,24 @@ function Index(props) {
 
             <View style={{alignItems : "center"}}>
                 <Text style={styles.Name}>{props.route.params.detail_offert.name_client} {props.route.params.detail_offert.last_name_client}</Text>
-                <View style={styles.Starts}>
-                    <Icon name='star' width={20} height={20} fill='#FF9700' /> 
-                    <Icon name='star' width={20} height={20} fill='#FF9700' /> 
-                    <Icon name='star' width={20} height={20} fill='#FF9700' /> 
-                    <Icon name='star' width={20} height={20} fill='#FF9700' /> 
-                    <Icon name='star' width={20} height={20} fill='#fff' /> 
-                </View>
+                
+
+                {LoadRating &&
+                    <ActivityIndicator size="large" color="#fff" />
+                }
+                {!LoadRating &&
+                   <StarRating
+                        disabled={false}
+                        maxStars={5}
+                        rating={Raiting}
+                        starSize = {23}
+                        fullStarColor={'#FF9700'}
+                        emptyStarColor = {"#fff"}
+                        animation = "zoomInUp"
+                    />
+                }
+
+
                 <Text style={styles.Price}>Tiempo : {props.route.params.detail_offert.time} </Text>
                 <Text style={styles.Price}>Precio : {props.route.params.detail_offert.price} </Text>
             </View>
