@@ -32,6 +32,11 @@ import MyOffertsServices from './screens/MyOffertsServices'
 import Faq from './screens/Faq'
 import Chat from './screens/Chat'
 import CalificationServiceProvider from './screens/CalificationServiceProvider'
+import CreditAccount from './screens/CreditAccount'
+import MethodPay from './screens/MethodPay'
+import PayToCard from './screens/PayToCard'
+import PayToNequi from './screens/PayToNequi'
+import PaymentSummary from './screens/PaymentSummary'
 
 
 const Drawer = createDrawerNavigator();
@@ -64,6 +69,11 @@ function App(){
          <Drawer.Screen name="Faq"                         component={ Faq } />
          <Drawer.Screen name="Chat"                        component={ Chat } />
          <Drawer.Screen name="CalificationServiceProvider" component={ CalificationServiceProvider } />
+         <Drawer.Screen name="CreditAccount"               component={ CreditAccount } />
+         <Drawer.Screen name="MethodPay"                   component={ MethodPay } />
+         <Drawer.Screen name="PayToCard"                   component={ PayToCard } />
+         <Drawer.Screen name="PayToNequi"                  component={ PayToNequi } />
+         <Drawer.Screen name="PaymentSummary"              component={ PaymentSummary } />
        </Drawer.Navigator>
       </UserProvider>
     </NavigationContainer>

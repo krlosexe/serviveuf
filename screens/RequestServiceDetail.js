@@ -116,6 +116,8 @@ function Index(props) {
       console.log(base_url(server,`store/offert/service`))
       console.log(data)
 
+      return false
+
 
       axios.post( base_url(server,`store/offert/service`), data ).then(function (response) {
         setLoad(false)

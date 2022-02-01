@@ -61,7 +61,7 @@ function Index(props) {
               />
             }
 
-        <Head OpenMenu={OpenMenu}/>
+        <Head OpenMenu={OpenMenu} {...props}/>
         
          {userDetails.mode_service_provider == true &&
           <DashboardServiceProvider {...props} />

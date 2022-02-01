@@ -6,7 +6,6 @@ import AsyncStorage from '@react-native-community/async-storage'
 import UserContext from '../contexts/UserContext'
 import Menu from '../components/Menu'
 import axios from 'axios'
-import { stat } from 'react-native-fs';
 
 
 function Index(props) {  
