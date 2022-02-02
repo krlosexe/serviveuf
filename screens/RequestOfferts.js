@@ -88,7 +88,6 @@ function Index(props) {
       console.log('Enviando formulario')
       console.log(base_url(server,`accept/offert`))
       console.log(data, "DATA")
-    
      
       axios.post( base_url(server,`accept/offert`), data).then(function (response) {
         goToScreen("MyRequestServices", false)

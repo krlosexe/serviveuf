@@ -1,5 +1,5 @@
 import React, {useEffect, useState, useContext} from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, StatusBar, Button, Image, ToastAndroid, ActivityIndicator} from 'react-native';
+import { StyleSheet, Text, View,  StatusBar, ToastAndroid, ActivityIndicator, ScrollView} from 'react-native';
 
 import {server, base_url} from '../Env'    
 import axios from 'axios'
@@ -23,86 +23,96 @@ function Index(props) {
 
     const { UserDetails, setUserDetails } = useContext(UserContext)
     const userDetails                     = useContext(UserContext)
-    const [editable, setEditable]         = useState(false)
     const [Load, setLoad]                 = useState(false);
-    const [LoadOrder, setLoadOrder]       = useState(true);
-    const [date, setDate]                 = useState(new Date)
-    const [open, setOpen]                 = useState(false)
-    const [DateString, setDateString]     = useState(false)
+    const [Data, setData]                 = useState([]);
     
-    useEffect(()=>{
-      setTimeout(() => {
-        setEditable(true)
-      }, 100)
-    },[])
 
-
-    const [formInfo , setFormInfo] = useState({
-      id_client   : userDetails.id,
-      id_category : props.route.params.id_service,
-      date        : '',
-      phone       : '',
-      address     : '',
-      comments    : '',
-      photo       : ''
-  })
-
-
-    React.useEffect(()=>{
-      
-    },[])
-
-
-
-    function onChangeText(text, key){
-      setFormInfo({
-          ...formInfo,
-          [key] : text
-      })
+    let randomCode 
+    if(props.route.params){
+        randomCode = props.route.params.randomCode
+    }else{
+        randomCode = 1
     }
 
-    function sendForm(){
-      const data = {
-        ...formInfo
-      }
+    useEffect(()=>{
+      GetAccountStatus()
+    },[randomCode])
 
+
+    function GetAccountStatus(){
     
       setLoad(true)
-      setLoadOrder(true)
-      if(data.id_client === '' || data.id_category === '' || data.date === '' || data.phone === '' || data.address === '' || data.comments === '' || data.photo === ''){
-        ToastAndroid.showWithGravity(
-            "Completa todos los campos",
-            ToastAndroid.SHORT,
-            ToastAndroid.CENTER
-        );
-        setLoad(false)
-        return false;
-      }
+      
       console.log('Enviando formulario')
-      console.log(base_url(server,`request/service`))
-      console.log(data)
+      console.log(base_url(server,`get/account/status/client/${userDetails.id}`))
 
-      axios.post( base_url(server,`request/service`), data ).then(function (res) {
-        //setLoad(false)
-        setLoadOrder(false)
-       // _storeData(res.data)
-       console.log("SUCCESSFUL")
+      axios.get( base_url(server,`get/account/status/client/${userDetails.id}`)).then(function (response) {
+        setData(response.data)
+        setLoad(false)
       })
       .catch(function (error) {
           console.log('Error al enviar formulario')
         console.log(error.response.data)
           ToastAndroid.showWithGravity(
-            error.response.data,
+            error.response.data.message,
             ToastAndroid.SHORT,
             ToastAndroid.CENTER
         );
         setLoad(false)
       })
       .then(function () {});
-     
     }
 
 
+
+    const numberForMonth = (number) =>{
+      let month
+
+      if(number == "01"){
+        month = "ENE"
+      }
+
+      if(number == "02"){
+        month = "FEB"
+      }
+      if(number == "03"){
+        month = "MAR"
+      }
+      if(number == "04"){
+        month = "ABR"
+      }
+      if(number == "05"){
+        month = "MAY"
+      }
+      if(number == "06"){
+        month = "JUN"
+      }
+      if(number == "07"){
+        month = "JUL"
+      }
+      if(number == "08"){
+        month = "AGO"
+      }
+      if(number == "09"){
+        month = "SEP"
+      }
+      if(number == "10"){
+        month = "OCT"
+      }
+      if(number == "11"){
+        month = "NOV"
+      }
+      if(number == "12"){
+        month = "DIC"
+      }
+    
+
+
+      return month
+    }
+    function currencyFormat(num) {
+        return '$' + num.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+    }
   return (
     <View style={styles.container}>
         <StatusBar translucent backgroundColor="transparent" barStyle="dark-content" />
@@ -111,92 +121,61 @@ function Index(props) {
 
          <Text style={styles.titleService}>{props.route.params.service}</Text>
 
+         {Load &&
+          <ActivityIndicator size="large" color="#063046" />
+         }
+        <ScrollView style={{marginBottom : 100}}>
+          {Data.length > 0 && !Load &&
+              Data.map((item, key)=>{
+                  return <View style={styles.Card}>
+                            <View style={styles.TextDate}>
+                                  <Text style={styles.Day}>{item.created_at.split("-")[2].split(" ")[0]}</Text>
+                                  <Text style={styles.Month}>{numberForMonth(item.created_at.split("-")[1])}</Text>
+                            </View>
+                            <View style={styles.TextConcept}>
+
+                                {item.payment != null &&
+                                  <View>
+                                    <Text style={styles.TextConceptName}>Abono</Text>
+                                    <Text style={{fontSize : 12}}>a la cuenta</Text>
+                                  </View>
+                                }
 
 
-         <View style={styles.Card}>
-            <View style={styles.TextDate}>
-                  <Text style={styles.Day}>22</Text>
-                  <Text style={styles.Month}>Mayo</Text>
-            </View>
-            <View style={styles.TextConcept}>
-                <Text style={styles.TextConceptName}>Abono</Text>
-                <Text style={{fontSize : 12}}>a la cuenta</Text>
-            </View>
-            <View style={styles.TextCardPrice}>
-                <Text style={styles.Price}>$ 100.000</Text>
-            </View>
-
-            <View style={styles.View}>
-                <Icon style={{alignSelf : "center"}} name='eye' width={20} height={20} fill='#063046' /> 
-                <Text style={styles.ViewText}>Ver más</Text>
-            </View>
-
-         </View>
+                                {item.discharge != null &&
+                                  <View>
+                                    <Text style={{...styles.TextConceptName, color : "red"}}>Descuento</Text>
+                                    <Text style={{fontSize : 12}}>por comision</Text>
+                                  </View>
+                                }
 
 
-         <View style={styles.Card}>
-            <View style={styles.TextDate}>
-                  <Text style={styles.Day}>22</Text>
-                  <Text style={styles.Month}>Mayo</Text>
-            </View>
-            <View style={styles.TextConcept}>
-                <Text style={styles.TextConceptName}>Abono</Text>
-                <Text style={{fontSize : 12}}>a la cuenta</Text>
-            </View>
-            <View style={styles.TextCardPrice}>
-                <Text style={styles.Price}>$ 100.000</Text>
-            </View>
+                                
+                            </View>
+                            <View style={styles.TextCardPrice}>
+                                
 
-            <View style={styles.View}>
-                <Icon style={{alignSelf : "center"}} name='eye' width={20} height={20} fill='#063046' /> 
-                <Text style={styles.ViewText}>Ver más</Text>
-            </View>
-
-         </View>
+                                {item.payment != null &&
+                                  <Text style={styles.Price}>{currencyFormat(item.payment)}</Text>
+                                }
 
 
+                                {item.discharge != null &&
+                                  <Text style={styles.Price}>{currencyFormat(item.discharge)}</Text>
+                                }
 
 
-         <View style={styles.Card}>
-            <View style={styles.TextDate}>
-                  <Text style={styles.Day}>22</Text>
-                  <Text style={styles.Month}>Mayo</Text>
-            </View>
-            <View style={styles.TextConcept}>
-                <Text style={styles.TextConceptName}>Abono</Text>
-                <Text style={{fontSize : 12}}>a la cuenta</Text>
-            </View>
-            <View style={styles.TextCardPrice}>
-                <Text style={styles.Price}>$ 100.000</Text>
-            </View>
-
-            <View style={styles.View}>
-                <Icon style={{alignSelf : "center"}} name='eye' width={20} height={20} fill='#063046' /> 
-                <Text style={styles.ViewText}>Ver más</Text>
-            </View>
-
-         </View>
-
-         <View style={styles.Card}>
-            <View style={styles.TextDate}>
-                  <Text style={styles.Day}>22</Text>
-                  <Text style={styles.Month}>Mayo</Text>
-            </View>
-            <View style={styles.TextConcept}>
-                <Text style={styles.TextConceptName}>Abono</Text>
-                <Text style={{fontSize : 12}}>a la cuenta</Text>
-            </View>
-            <View style={styles.TextCardPrice}>
-                <Text style={styles.Price}>$ 100.000</Text>
-            </View>
-
-            <View style={styles.View}>
-                <Icon style={{alignSelf : "center"}} name='eye' width={20} height={20} fill='#063046' /> 
-                <Text style={styles.ViewText}>Ver más</Text>
-            </View>
-
-         </View>
-
+                            </View>
+{/*               
+                            <View style={styles.View}>
+                                <Icon style={{alignSelf : "center"}} name='eye' width={20} height={20} fill='#063046' /> 
+                                <Text style={styles.ViewText}>Ver más</Text>
+                            </View> */}
+              
+                        </View>
+              })
+            }
+          </ScrollView>
 
          <Menu props={props}/>
     </View>

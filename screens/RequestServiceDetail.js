@@ -116,9 +116,6 @@ function Index(props) {
       console.log(base_url(server,`store/offert/service`))
       console.log(data)
 
-      return false
-
-
       axios.post( base_url(server,`store/offert/service`), data ).then(function (response) {
         setLoad(false)
 
@@ -139,7 +136,7 @@ function Index(props) {
           console.log('Error al enviar formulario')
         console.log(error.response.data)
           ToastAndroid.showWithGravity(
-            error.response.data,
+            error.response.data.mensagge,
             ToastAndroid.SHORT,
             ToastAndroid.CENTER
         );

@@ -20,8 +20,9 @@ function Index(props) {
 
     const [PhotoProfile, setPhotoProfile] = useState(false)
     const [Load, setLoad]                 = useState(false)
+    const [LoadBalance, setLoadBalance]    = useState(false)
     const [LabelBtnServiceProvider, setLabelBtnServiceProvider] = useState("Modo prestador de servicios")
-
+    const [Balance, setBalance] = useState(0)
 
     let randomCode 
     if(props.route.params){
@@ -38,10 +39,28 @@ function Index(props) {
       }
 
       GetStatusServiceProvider()
+      getBalance()
 
     },[randomCode])
 
 
+    const getBalance = () =>{
+      setLoadBalance(true)
+      console.log(base_url(server,`get/balance/client/${userDetails.id}`))
+      axios.get( base_url(server,`get/balance/client/${userDetails.id}`)).then(function (response) {
+        setLoadBalance(false)
+        setBalance(currencyFormat(response.data.balance))
+      })
+      .catch(function (error) {
+          console.log(error.response.data.message)
+          console.log('Error al enviar formularioss')
+          setLoadBalance(false)
+      })
+      .then(function (response) {setLoadBalance(false)});
+    }
+    function currencyFormat(num) {
+        return '$' + num.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+    }
 
     function GetStatusServiceProvider(){
         setLoad(true)
@@ -201,7 +220,14 @@ function Index(props) {
                 </View>
                 <View style={{marginTop : 10}}>
                     <Text style={{...styles.HeadProfileText, fontWeight : "bold"}}>{userDetails.nombres}</Text>
-                    <Text style={{...styles.HeadProfileText, fontSize : 20}}>Saldo $000.000</Text>
+                    <Text style={{...styles.HeadProfileText, fontSize : 20}}>
+                        {LoadBalance &&
+                          <ActivityIndicator size="small" color="#063046" />
+                        }
+                        {!LoadBalance &&
+                          Balance
+                        }
+                    </Text>
 
                     <TouchableOpacity style={styles.BtnMode} onPress={()=>ServiceProvider()}>
                         <Text style={styles.loginText}>
@@ -232,13 +258,13 @@ function Index(props) {
                     <Text>Historial de movimientos</Text>
                 </Text>
             </TouchableOpacity>
-
+{/* 
 
             <TouchableOpacity style={styles.BtnOptions} onPress={()=>sendForm()}>
                 <Text style={{fontSize: 18}}>
                     <Text>Compras y pedidos</Text>
                 </Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
 
             <TouchableOpacity style={styles.BtnOptions} onPress={()=>logout()}>
                 <Text style={{fontSize: 18}}>
@@ -314,7 +340,7 @@ const styles = StyleSheet.create({
     fontSize:14
   },
   BtnMode:{
-    width:"80%",
+    width: 100,
     backgroundColor:"#0B4E6B",
     borderRadius:25,
     height:35,

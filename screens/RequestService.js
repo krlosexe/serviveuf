@@ -234,6 +234,8 @@ function Index(props) {
                     modal
                     open={open}
                     date={date}
+                     minimumDate = {new Date()}
+                     maximumDate = {new Date(new Date().setMonth(new Date().getMonth() + 1))}
                     onConfirm={(date) => {
                       setOpen(false)
                       setDate(date)
