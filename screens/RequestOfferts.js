@@ -208,7 +208,7 @@ function Index(props) {
                       </View>
                       <View style={styles.TextCardName}>
                           <Text style={styles.Name}>{props.name}</Text>
-                          <Text style={{fontSize : 10}}>102 servicios completados</Text>
+                          <Text style={{fontSize : 10}}>{props.data.offerts_ready} servicios completados</Text>
 
                       </View>
                       <View style={styles.TextCardPrice}>
