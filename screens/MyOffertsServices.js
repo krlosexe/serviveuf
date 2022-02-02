@@ -151,6 +151,10 @@ function Index(props) {
                               <Text style={{...styles.Price, color : "#39B54A"}}>{props.data.status}</Text>
                             }
 
+                            {props.data.status == "Cancelado" &&
+                              <Text style={{...styles.Price, color : "#FF0202"}}>{props.data.status}</Text>
+                            }
+
 
                             <Text style={{...styles.Price, color : "#39B54A"}}>{props.data.price}</Text>
                             {props.data.status == "Finalizada" &&
@@ -159,8 +163,6 @@ function Index(props) {
                                   <Text>{props.data.rating}</Text>
                               </View>
                             }
-
-                           
 
                            
                         </View>

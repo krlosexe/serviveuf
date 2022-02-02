@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, StatusBar, ImageBackground, Image, ToastAndroid, ActivityIndicator} from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, StatusBar, ImageBackground, Image, ToastAndroid, ActivityIndicator, ScrollView} from 'react-native';
 
 import {file_server, server, base_url} from '../Env'   
 import axios from 'axios'
@@ -95,70 +95,73 @@ function Index(props) {
         <StatusBar translucent backgroundColor="transparent" barStyle="dark-content" />
         <HeadNavigate title="Calificación" props={props} />
         
-        <View style={styles.Banner}>
-            <View>
-                <ImageBackground  resizeMode="contain" source={require('../src/images/back_profile2.png')}
-                        style={styles.HeadProfileImageBackgroud}>
-                    <Image style={styles.HeadProfileImage} source={{ uri: PhotoProfile}} />
-                </ImageBackground>
-                
+
+        <ScrollView style={{marginBottom : 90}}>
+            <View style={styles.Banner}>
+                <View>
+                    <ImageBackground  resizeMode="contain" source={require('../src/images/back_profile2.png')}
+                            style={styles.HeadProfileImageBackgroud}>
+                        <Image style={styles.HeadProfileImage} source={{ uri: PhotoProfile}} />
+                    </ImageBackground>
+                    
+                </View>
+
+                <View style={{alignItems : "center", marginTop : -20}}>
+
+                    <StarRating
+                      disabled={false}
+                      maxStars={5}
+                      rating={Raiting}
+
+                      fullStarColor={'#FF9700'}
+                      animation = "zoomInUp"
+                      selectedStar={setRaiting}
+                    />
+
+                    
+                </View>
             </View>
 
-            <View style={{alignItems : "center", marginTop : -20}}>
 
-                <StarRating
-                  disabled={false}
-                  maxStars={5}
-                  rating={Raiting}
+            <Text style={{textAlign : "center", color :"#063046", fontSize : 25, marginTop : -10}}>Comentarios</Text>
 
-                  fullStarColor={'#FF9700'}
-                  animation = "zoomInUp"
-                  selectedStar={setRaiting}
-                />
-
-                
+            <View style={styles.Comments}>
+                <View style={styles.inputView} >
+                  <TextInput  
+                    style={styles.inputText}
+                    placeholder="Comentarios" 
+                    placeholderTextColor="#777"
+                    multiline={true}
+                    numberOfLines={4}
+                    onChangeText={text => onChangeText(text, 'comments')}/>
+                </View>
             </View>
-        </View>
-
-
-        <Text style={{textAlign : "center", color :"#063046", fontSize : 25, marginTop : -10}}>Comentarios</Text>
-
-        <View style={styles.Comments}>
-            <View style={styles.inputView} >
-              <TextInput  
-                style={styles.inputText}
-                placeholder="Comentarios" 
-                placeholderTextColor="#777"
-                multiline={true}
-                numberOfLines={4}
-                onChangeText={text => onChangeText(text, 'comments')}/>
-            </View>
-        </View>
 
 
 
-        <TouchableOpacity style={{
-               width:"70%",
-                backgroundColor:"#0B4E6B",
-                borderRadius : 40,
-                height:60,
-                alignItems:"center",
-                justifyContent:"center",
-                marginTop:5,
-                marginBottom:20,
-                alignSelf : "center",
-                marginTop : 20
-            }} onPress={()=>sendForm() }>
-              <Text style={styles.register}>
-                
-                    {Load &&
-                        <ActivityIndicator size="large" color="#fff" />
-                    }
-                    {!Load &&
-                        <Text style={{color : "white"}}>Calificar</Text>
-                    }
-                  </Text>
-            </TouchableOpacity>
+            <TouchableOpacity style={{
+                  width:"70%",
+                    backgroundColor:"#0B4E6B",
+                    borderRadius : 40,
+                    height:60,
+                    alignItems:"center",
+                    justifyContent:"center",
+                    marginTop:5,
+                    marginBottom:20,
+                    alignSelf : "center",
+                    marginTop : 20
+                }} onPress={()=>sendForm() }>
+                  <Text style={styles.register}>
+                    
+                        {Load &&
+                            <ActivityIndicator size="large" color="#fff" />
+                        }
+                        {!Load &&
+                            <Text style={{color : "white"}}>Calificar</Text>
+                        }
+                      </Text>
+                </TouchableOpacity>
+          </ScrollView>
 
 
 

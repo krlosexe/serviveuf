@@ -1,5 +1,5 @@
 import React, {useEffect, useState, useContext} from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, StatusBar, ImageBackground, Image, ToastAndroid, ActivityIndicator} from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, StatusBar, ImageBackground, Image, ToastAndroid, ActivityIndicator, Alert} from 'react-native';
 
 import {file_server, server, base_url} from '../Env'   
 import axios from 'axios'
@@ -102,6 +102,43 @@ function Index(props) {
     }
 
 
+    const RefuseOffert = (id, id_service)=>{
+
+      Alert.alert(
+        "Alerta",
+        "¿Esta seguro de rechazar la oferta?",
+        [
+          {
+            text: "No",
+            onPress: () => console.log("Cancel Pressed"),
+            style: "cancel"
+          },
+          { text: "Si", onPress: () => CancelOffert(id, id_service) }
+        ]
+      );
+    }
+
+    const CancelOffert = (id, id_service) =>{
+      setLoad(true)
+      console.log(base_url(server,`refuse/request/offert/${id}`))
+      axios.get( base_url(server,`refuse/request/offert/${id}`)).then(function (response) {
+        setLoad(false)
+        goToScreen("RequestOfferts")
+      })
+      .catch(function (error) {
+          console.log('Error al enviar formulariosssss')
+        console.log(error)
+          ToastAndroid.showWithGravity(
+            error.response.data.message,
+            ToastAndroid.SHORT,
+            ToastAndroid.CENTER
+        );
+        setLoad(false)
+      })
+      .then(function () {});
+    } 
+
+
   return (
     <View style={styles.container}>
         <StatusBar translucent backgroundColor="transparent" barStyle="dark-content" />
@@ -111,10 +148,9 @@ function Index(props) {
             <View>
                 <ImageBackground source={require('../src/images/back_profile.png')}
                         style={styles.HeadProfileImageBackgroud}>
-
+                          <Image style={styles.HeadProfileImage} source={{ uri: PhotoProfile}}/>
                 </ImageBackground>
-                <Image style={styles.HeadProfileImage} source={{ uri: PhotoProfile}}
-                />
+                
             </View>
 
             <View style={{alignItems : "center"}}>
@@ -209,25 +245,53 @@ function Index(props) {
                     </View>
             
             
-                    <TouchableOpacity style={{
-                        width: 150,
-                        backgroundColor:"#063046",
-                        borderRadius : 100,
-                        alignItems:"center",
-                        justifyContent:"center",
-                        marginTop: 20,
-                        padding : 15,
-                        alignSelf : "center"
-                    }} onPress={()=> [AcceptOffert(props.route.params.detail_offert.id, props.route.params.detail_offert.id_service)]}>
-                        
-                        {Load &&
-                            <ActivityIndicator size="large" color="#fff" />
-                        }
-                        {!Load &&
-                            <Text style={{color : "white"}}>Aceptar</Text>
-                        }
+                    <View style={{flexDirection : "row", justifyContent : "space-between", width : "90%", alignSelf : "center", marginTop : 20}}>
 
-                    </TouchableOpacity>
+                      <TouchableOpacity style={{
+                          width: 150,
+                          backgroundColor:"#063046",
+                          borderRadius : 100,
+                          alignItems:"center",
+                          justifyContent:"center",
+                          marginTop: 20,
+                          padding : 15,
+                          alignSelf : "center"
+                      }} onPress={()=> [AcceptOffert(props.route.params.detail_offert.id, props.route.params.detail_offert.id_service)]}>
+                          
+                          {Load &&
+                              <ActivityIndicator size="large" color="#fff" />
+                          }
+                          {!Load &&
+                              <Text style={{color : "white"}}>Aceptar</Text>
+                          }
+
+                      </TouchableOpacity>
+
+
+
+                      <TouchableOpacity style={{
+                          width: 150,
+                          backgroundColor:"#FF0202",
+                          borderRadius : 100,
+                          alignItems:"center",
+                          justifyContent:"center",
+                          marginTop: 20,
+                          padding : 15,
+                          alignSelf : "center"
+                      }} onPress={()=> RefuseOffert(props.route.params.detail_offert.id)}>
+                          
+                          {Load &&
+                              <ActivityIndicator size="large" color="#fff" />
+                          }
+                          {!Load &&
+                              <Text style={{color : "white"}}>Rechazar</Text>
+                          }
+
+                      </TouchableOpacity>
+                    </View>
+
+
+
             </View>
         }
 
@@ -285,17 +349,16 @@ const styles = StyleSheet.create({
       color : "#fff",
       marginBottom: 5
   },
- 
 
   HeadProfileImage:{
     width: 90, height: 90, 
     alignSelf : "center",
     justifyContent : "center",
-    position: "relative",
-    top : -6,
     borderRadius : 500
  },
-    HeadProfileImageBackgroud : {flex: 1,
+    HeadProfileImageBackgroud : {
+        alignItems : "center",
+        justifyContent : "center",
         width : 110,
         height : 110
     },

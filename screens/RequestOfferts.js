@@ -1,5 +1,5 @@
 import React, {useEffect, useState, useContext} from 'react';
-import { StyleSheet, Text, View,  TouchableOpacity, StatusBar, Image, ToastAndroid, ActivityIndicator, ScrollView} from 'react-native';
+import { StyleSheet, Text, View,  TouchableOpacity, StatusBar, Image, ToastAndroid, ActivityIndicator, ScrollView, Alert} from 'react-native';
 
 import {server, file_server, base_url} from '../Env'    
 import axios from 'axios'
@@ -107,6 +107,44 @@ function Index(props) {
   }
 
 
+  const AlertCancelService = () =>{
+    Alert.alert(
+      "Alerta",
+      "¿Esta seguro de cancelar su pedido?",
+      [
+        {
+          text: "No",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel"
+        },
+        { text: "Si", onPress: () => CancelService() }
+      ]
+    );
+  }
+
+
+  
+  const CancelService = () =>{
+    setLoad(true)
+    console.log(base_url(server,`cancel/request/service/${props.route.params.service}`))
+    axios.get( base_url(server,`cancel/request/service/${props.route.params.service}`)).then(function (response) {
+      setLoad(false)
+      goToScreen("Dashboard")
+    })
+    .catch(function (error) {
+        console.log('Error al enviar formulario')
+      console.log(error.response.data)
+        ToastAndroid.showWithGravity(
+          error.response.data.message,
+          ToastAndroid.SHORT,
+          ToastAndroid.CENTER
+      );
+      setLoad(false)
+    })
+    .then(function () {});
+  } 
+
+
   const CardOffert = (props)=>{
 
     let photo_profile
@@ -118,12 +156,51 @@ function Index(props) {
     }
 
 
+
+    const RefuseOffert = (id, id_service)=>{
+
+      Alert.alert(
+        "Alerta",
+        "¿Esta seguro de rechazar la oferta?",
+        [
+          {
+            text: "No",
+            onPress: () => console.log("Cancel Pressed"),
+            style: "cancel"
+          },
+          { text: "Si", onPress: () => CancelOffert(id, id_service) }
+        ]
+      );
+    }
+
+    const CancelOffert = (id, id_service) =>{
+      setLoad(true)
+      console.log(base_url(server,`refuse/request/offert/${id}`))
+      axios.get( base_url(server,`refuse/request/offert/${id}`)).then(function (response) {
+        setLoad(false)
+        GetOfferts(id_service, true)
+      })
+      .catch(function (error) {
+          console.log('Error al enviar formulariosssss')
+        console.log(error)
+          ToastAndroid.showWithGravity(
+            error.response.data.message,
+            ToastAndroid.SHORT,
+            ToastAndroid.CENTER
+        );
+        setLoad(false)
+      })
+      .then(function () {});
+    } 
+
+
+
     const [Load , setLoad] = useState(false)
 
 
-    return  <View style={{borderColor : "#063046",borderBottomWidth : 2, width : "95%", alignSelf : "center"}}>
+    return  <View style={{borderColor : "#063046",borderBottomWidth : 2, width : "100%", alignSelf : "center"}}>
               <View style={styles.Card}>
-                      <View>
+                      <View style={{marginRight : 20}}>
                           <Image
                               style={styles.profile}
                               source={{ uri: photo_profile}}
@@ -135,7 +212,12 @@ function Index(props) {
 
                       </View>
                       <View style={styles.TextCardPrice}>
-                          <Text style={styles.Price}>{props.price} COP</Text>
+                          <View style={{flexDirection : "row"}}>
+                            <Text style={{...styles.Price, marginRight : 20}}>{props.price} COP</Text>
+                            <TouchableOpacity onPress={()=> RefuseOffert(props.data.id, props.data.id_service)}>
+                              <Icon name='close-square' width={30} height={30} fill='#FF0202' /> 
+                            </TouchableOpacity>
+                          </View>
 
                           <View style={styles.Start}>
                               <Icon name='star' width={20} height={20} fill='#FF9700' /> 
@@ -215,6 +297,31 @@ function Index(props) {
            }
 
 
+            <TouchableOpacity style={{
+               width:"70%",
+                backgroundColor:"#0B4E6B",
+                borderRadius : 40,
+                height:60,
+                alignItems:"center",
+                justifyContent:"center",
+                alignSelf : "center",
+                marginTop:50,
+                marginBottom:20
+            }} onPress={()=>AlertCancelService() }>
+              <Text style={styles.register}>
+                
+                    {Load &&
+                        <ActivityIndicator size="large" color="#fff" />
+                    }
+                    {!Load &&
+                        <Text style={{color : "white"}}>Cancelar Pedido</Text>
+                    }
+                  </Text>
+            </TouchableOpacity>
+
+
+
+
           </ScrollView>
 
           
@@ -234,7 +341,7 @@ const styles = StyleSheet.create({
   },
   
   Card : {
-      width : "85%",
+      width : "90%",
       alignSelf : "center",
       flexDirection : "row",
       justifyContent : "space-around",
