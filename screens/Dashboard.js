@@ -4,21 +4,23 @@ import { StyleSheet,  View, StatusBar} from 'react-native';
 
 
 import UserContext from '../contexts/UserContext'
-
+import axios from 'axios'
 import Head from '../components/Head'
+import Banner from '../components/Banner'
 import Menu from '../components/Menu'
 import Dashboard from '../components/Dashboard'
 import DashboardServiceProvider from '../components/DashboardServiceProvider'
 
 import MenuVertical from '../components/MenuVertical'
-
+import {server, base_url} from '../Env'   
 
 
 function Index(props) {  
 
   const { navigation } = props
 
-  const [vertical , setvertical] = useState(false)
+  const [vertical , setvertical]                           = useState(false)
+  const [BannerServiceProvider , setBannerServiceProvider] = useState(false)
   const userDetails  = useContext(UserContext)
 
   function goToScreen(screen, service, id_service)
@@ -38,7 +40,27 @@ function Index(props) {
     if(userDetails.register){
       goToScreen("StepOne", false)
     }
-  },[])
+    GetStatusClint()
+  },[randomCode])
+
+
+  const GetStatusClint = () =>{
+    console.log(base_url(server,`clients/${userDetails.id}`))
+    axios.get( base_url(server,`clients/${userDetails.id}`)).then(function (response) {
+      if(response.data.service_provider == null){
+        setBannerServiceProvider(true)
+      }else{
+        setBannerServiceProvider(false)
+      }
+    })
+    .catch(function (error) {
+        console.log(error)
+        console.log('Error al enviar formularioss')
+        setLoad(false)
+    })
+    .then(function (response) { });
+  }
+
 
 
   const OpenMenu = ()=>{
@@ -49,7 +71,14 @@ function Index(props) {
   return (
    
     <View style={styles.container}>
-      <StatusBar translucent backgroundColor="transparent" barStyle="dark-content" />
+      
+        {BannerServiceProvider &&
+          <StatusBar  backgroundColor="#24aafc" barStyle="dark-content" />
+        }
+
+        {!BannerServiceProvider &&
+          <StatusBar  backgroundColor="#fff" barStyle="dark-content" />
+        }
 
         {vertical === true &&
               <MenuVertical
@@ -58,9 +87,14 @@ function Index(props) {
                 action={setvertical}
                 goToScreen={goToScreen}
                 userDetails = {{...userDetails}}
+                {...props}
               />
             }
 
+        {BannerServiceProvider &&
+          <Banner {...props}/>
+        }
+        
         <Head OpenMenu={OpenMenu} {...props}/>
         
          {userDetails.mode_service_provider == true &&

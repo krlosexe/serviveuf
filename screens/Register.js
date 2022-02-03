@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState, useContext} from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, StatusBar, Image, ToastAndroid, ActivityIndicator} from 'react-native';
 
 import {server, base_url} from '../Env'    
@@ -9,7 +9,7 @@ import messaging from '@react-native-firebase/messaging';
 import AsyncStorage from '@react-native-community/async-storage'
 import UserContext from '../contexts/UserContext'
 import CheckBox from '@react-native-community/checkbox';
-
+import ImagePicker from 'react-native-image-picker';
 function Index(props) {  
 
 
@@ -28,21 +28,22 @@ function Index(props) {
 
 
     
-    const [notificationToken , setNotificationToken] = React.useState('')
-    const { UserDetails, setUserDetails } = React.useContext(UserContext)
-    const [editable, setEditable] = React.useState(false)
-    const [isSelected, setSelection] = React.useState(false);
-    const [Load, setLoad] = React.useState(false);
-
+    const [notificationToken , setNotificationToken] = useState('')
+    const { UserDetails, setUserDetails } = useContext(UserContext)
+    const [editable, setEditable] = useState(false)
+    const [isSelected, setSelection] = useState(false);
+    const [Load, setLoad] = useState(false);
+    const [PhotoProfile, setPhotoProfile] = useState("https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg")
+    const [PhotoUpload, setPhotoUpload] = useState(false)
     
-    React.useEffect(()=>{
+    useEffect(()=>{
       setTimeout(() => {
         setEditable(true)
       }, 100)
     },[])
 
 
-    const [formInfo , setFormInfo]       = React.useState({
+    const [formInfo , setFormInfo]       = useState({
       names            : '',
       last_names       : '',
       email            : '',
@@ -51,7 +52,7 @@ function Index(props) {
     })
 
 
-    React.useEffect(()=>{
+    useEffect(()=>{
       async function getToken(){
           const fcmToken = await messaging().getToken();
         
@@ -103,6 +104,7 @@ function Index(props) {
         ...formInfo
       }
       data.fcmToken = notificationToken
+      data.photoProfile = PhotoProfile
       setLoad(true)
       if( data.names === '' || data.last_names === '' || data.email === '' || data.password === '' || data.repeat_password === ''){
         ToastAndroid.showWithGravity(
@@ -124,7 +126,15 @@ function Index(props) {
         return false;
       }
 
-
+      if(!PhotoUpload){
+        ToastAndroid.showWithGravity(
+            "Debe subir una foto",
+            ToastAndroid.SHORT,
+            ToastAndroid.CENTER
+          );
+          setLoad(false)
+        return false;
+      }
 
       if(!isSelected){
         ToastAndroid.showWithGravity(
@@ -135,6 +145,11 @@ function Index(props) {
           setLoad(false)
         return false;
       }
+
+      
+
+
+      
       console.log('Enviando formulario')
       console.log(base_url(server,`clients`))
       console.log(data)
@@ -160,6 +175,27 @@ function Index(props) {
       });
      
     }
+
+
+    const launchImageLibrary = () => {
+      let options = {
+        storageOptions: {
+          skipBackup: true,
+          path: 'images',
+        },
+      };
+      ImagePicker.launchImageLibrary(options, (response) => {
+        console.log('Response = ', response);
+
+        if(response.data){
+          setPhotoProfile(`data:image/png;base64,${response.data}`)
+          setPhotoUpload(true)
+        }
+          
+      });
+  
+    }
+
 
 
   return (
@@ -260,6 +296,17 @@ function Index(props) {
                 placeholderTextColor="#777"
                 onChangeText={text => onChangeText(text, 'repeat_password')}/>
             </View>
+
+
+              <View style={styles.HeadProfile}>
+                <TouchableOpacity onPress={() =>launchImageLibrary()}   >
+                    <View>
+                        <Image style={styles.HeadProfileImage} source={{ uri: PhotoProfile}}
+                        />
+                    </View>
+                </TouchableOpacity>
+                </View>
+
 
 
 
@@ -375,6 +422,18 @@ const styles = StyleSheet.create({
     color : "#000",
     lineHeight : 20,
     textAlign : "justify"
-  }
+  },
+
+  HeadProfile : {
+    flexDirection : "row",
+    justifyContent: "space-around"
+  },
+
+  HeadProfileImage:{
+      width: 120, height: 120, 
+      alignSelf : "center",
+      justifyContent : "center",
+      borderRadius : 100
+   }
 
 });

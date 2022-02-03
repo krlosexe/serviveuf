@@ -1,155 +1,98 @@
-import React, {useEffect} from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, StatusBar, Image, ToastAndroid, ImageBackground} from 'react-native';
-
-import {serverQa, base_url} from '../Env'    
+import React, {useEffect, useState, useContext} from 'react';
+import { StyleSheet,  View, TextInput, TouchableOpacity, StatusBar, Image, SafeAreaView, ActivityIndicator} from 'react-native';
+ 
 import axios from 'axios'
 
-
-import messaging from '@react-native-firebase/messaging';
-import AsyncStorage from '@react-native-community/async-storage'
+import { Icon } from 'react-native-eva-icons';
 import UserContext from '../contexts/UserContext'
-import CheckBox from '@react-native-community/checkbox';
 import HeadNavigate from '../components/HeadNavigate'
+
+import ScrollChat from '../components/ScrollChat/Index'
+import {server, base_url} from '../Env' 
+import messaging from '@react-native-firebase/messaging';
 function Index(props) {  
 
 
   const { navigation } = props
-
+  
   function goToScreen(screen)
   {   
 
-      ToastAndroid.showWithGravity(
-           screen,
-            ToastAndroid.SHORT,
-            ToastAndroid.CENTER
-          );
-   return false
+  }
+    const userDetails                                = useContext(UserContext)
+    const { UserDetails, setUserDetails }            = useContext(UserContext)
+    const [ message , setMessage ]                   = useState('')
+    const [conversation, setConversation]            = useState([])
+    const [Load, setLoad]                            = useState(false)
+
+
+
+    let randomCode 
+    if(props.route.params){
+        randomCode = props.route.params.randomCode
+    }else{
+        randomCode = 1
+    }
+
+
+    useEffect(()=>{
+      GetChats(true)
+      const unsubscribe = messaging().onMessage(async remoteMessage => {
+        GetChats(false)
+      });
+
+    },[randomCode])
+
+
+    const GetChats = (init)=>{
+
+      if(init){
+        setLoad(true)
+      }
+      axios.get( base_url(server,`chat/souport/by/client/${userDetails.id}`)).then(function (response) {
+        console.log(response.data, "CHATS")
+        setConversation(response.data)
+        setLoad(false)
+      })
+      .catch(function (error) {
+          console.log(error)
+          console.log('Error al enviar formularioss')
+          setLoad(false)
+      })
+      .then(function (response) { });
+    }
+
+    function sendMessage(){
+      
+      const newMessage = {
+        "sender" : userDetails.id,
+        "message" :message.text
+      }
+      setConversation([...conversation, newMessage])
+
+      const data = {
+        "sender"   : userDetails.id,
+        "receiver" : null,
+        "message"  : message.text
+      }
+      setMessage('')
+      console.log(base_url(server,`chat/souport`))
+      axios.post( base_url(server,`chat/souport`), data).then(function (response) {})
+      .catch(function (error) {
+          console.log(error)
+          console.log('Error al enviar formularioss')
+      })
+      .then(function (response) { });
+
+
+
   }
 
 
-    
-    const [notificationToken , setNotificationToken] = React.useState('')
-    const { UserDetails, setUserDetails } = React.useContext(UserContext)
-    const [editable, setEditable] = React.useState(false)
-    const [isSelected, setSelection] = React.useState(false);
-
-    
-    React.useEffect(()=>{
-      setTimeout(() => {
-        setEditable(true)
-      }, 100)
-    },[])
-
-
-    const [formInfo , setFormInfo]       = React.useState({
-      email     : '',
-      password  : ''
-  })
-
-
-
-    React.useEffect(()=>{
-      async function getToken(){
-          const fcmToken = await messaging().getToken();
-        
-          if (fcmToken)
-              {setNotificationToken(fcmToken)} 
-          else
-          {console.log('user doesnt have a device token yet')}
-
-          console.log(fcmToken, "TOKEN")
-        }
-        getToken()
-    },[])
-
-
-
-    const _storeData = async (data) => {
-      try {
-          await AsyncStorage.setItem('@Passport', JSON.stringify(data) );
-          //console.log(data)
-          console.log('Authentication successfully')
-          setUserDetails({...data})
-      
-      }
-      catch (error) {
-        // Error saving data
-      }
-    }
-
-
-
-
-
-
-
-    function onChangeText(text, key){
-      setFormInfo({
-          ...formInfo,
-          [key] : text
-      })
-    }
-
-
-
-    function sendForm(){
-      const data = {
-        ...formInfo
-      }
-
-        ToastAndroid.showWithGravity(
-            "LOGIN",
-            ToastAndroid.SHORT,
-            ToastAndroid.CENTER
-          );
-      
-  return false
-      data.fcmToken = notificationToken
-
-      if( data.email === '' || data.password === ''){
-
-        ToastAndroid.showWithGravity(
-            "Introduce tus datos de acceso",
-            ToastAndroid.SHORT,
-            ToastAndroid.CENTER
-          );
-           
-        return false;
-      }
-
-
-      console.log('Enviando formulario')
-      console.log(base_url(serverQa,`auth/app/financing`))
-      console.log(data)
-
-
-      axios.post( base_url(serverQa,`auth/app/financing`), data ).then(function (res) {
-
-        _storeData(res.data)
-    
-      })
-      .catch(function (error) {
-          console.log('Error al enviar formulario')
-        console.log(error)
-          ToastAndroid.showWithGravity(
-            "Correo o clave invalida",
-            ToastAndroid.SHORT,
-            ToastAndroid.CENTER
-        );
-
-
-
-      })
-      .then(function () {
-
-
-      });
-     
-    }
 
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
         <StatusBar translucent backgroundColor="transparent" barStyle="dark-content" />
           <View style={{
             //  flexDirection  : "row",
@@ -172,11 +115,35 @@ function Index(props) {
         
 
           </View>
+          
+          {Load &&
+            <ActivityIndicator size="large" color="#063046" />
+          }
+         {!Load &&
+          <ScrollChat conversation={conversation} userDetails={userDetails}/>
+         }
+          
+
+          <View style={{ width:'100%', paddingVertical : 10, bottom : 0, justifyContent : 'center', borderWidth : 1, borderColor : '#f1f3f2'}}>
+              <View style={{ position : 'relative', width:'100%', paddingVertical : 10, bottom : 0, justifyContent : 'center', width : '75%'}}>
+                  <TextInput
+                      multiline={true}
+                      onChangeText={(text) => setMessage({text})}
+                      value={message}
+                      style={{  marginLeft : 10,borderRadius : 15, backgroundColor : '#f1f0f0',paddingLeft : 10 }}
+                      placeholder={'Tu mensaje aqui'} />
+                  
+                    <TouchableOpacity onPress={()=>sendMessage()} style={styles.buttonTab}>
+                      <Icon name={'navigation-2-outline'} width={25} height={25} fill='white'/>
+                    </TouchableOpacity>
+                  </View>
+              </View>
+
 
 
       
 
-    </View>
+    </SafeAreaView>
   );
 
 }
@@ -184,73 +151,42 @@ function Index(props) {
 export default Index;
 
 const styles = StyleSheet.create({
-  container: {
+  container : {
+    flex : 1,
+    flexDirection : "column",
+    backgroundColor : 'white',
+    paddingTop : 0,
+},
+  scroll : {
+    flex : 1,
+    flexDirection : 'column',
+  },
+
+  content : {
     flex: 1,
-    backgroundColor: '#fff',
-  },
-  logo:{
-    fontWeight:"bold",
-    fontSize:50,
-    color:"#fb5b5a",
-    marginBottom:40
-  },
-  inputView:{
-    width:"80%",
-    height:50,
-    marginBottom:20,
-    justifyContent:"center",
-    padding:20,
-    textAlign: "center",
-    borderRadius: 100,
-    backgroundColor:"#E6E6E6",
-  },
-  inputText:{
-    height:50,
-    color:"#777",
-    textAlign : "center"
-  },
-  forgot:{
-    color:"#000000",
-    fontSize:14
-  },
-  loginBtn:{
-    width:"55%",
-    backgroundColor:"#063046",
-    borderRadius:25,
-    height:50,
-    alignItems:"center",
-    justifyContent:"center",
-    marginTop:10,
-    marginBottom:20
-  },
-  loginText:{
-    color:"white"
-  },
+    backgroundColor : 'white',
+    flexDirection: 'column',
 
-  register:{
-    color:"#fff",
-    fontSize: 20
   },
-
-  icon: {
-    width: 200,
-    height: 100,
-    resizeMode: "contain",
-  }
-  ,
-  checkboxContainer: {
-    flexDirection: "row",
-    marginBottom: 20,
-    marginTop : 20,
+  buttonsTabsContainer : {
+    position : 'absolute',
+    flexDirection : 'row'
   },
-  checkbox: {
-    alignSelf: "center",
+  buttonTab : {
+    backgroundColor : "#0B4E6B",
+    height :45,
+    width : 45,
+    justifyContent : 'center',
+    borderRadius : 50,
+    justifyContent : 'center',
+    alignItems : 'center',
+    position : 'absolute',
+    right : -65,
+    
   },
-  label: {
-    margin: 8,
-    color : "#000",
-    lineHeight : 20,
-    textAlign : "justify"
+  buttonText: {
+    textAlign : 'center',
+    color :'white'
   }
 
 });

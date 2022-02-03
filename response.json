@@ -1,0 +1,221 @@
+{
+    "infoResponse": {
+        "estado": {
+            "codigoEstado": "0",
+            "codigoEstadoServidor": "9000774",
+            "descripcionEstado": "Se ha guardado correctamente la simulación con número 64637658",
+            "severidad": "Info"
+        },
+        "requestID": "WWEE44"
+    },
+    "simulacion": {
+        "codigo": "64637658",
+        "nombre": null
+    },
+    "datosGestion": {
+        "agente": {
+            "codigo": "4093599",
+            "nombre": null
+        },
+        "duracion": {
+            "codigo": "0",
+            "nombre": null
+        },
+        "coaseguro": null,
+        "fechaEfecto": null,
+        "formaPago": {
+            "codigo": "1",
+            "nombre": null
+        },
+        "tipcc": null,
+        "cbanco": null,
+        "cbancar": null,
+        "fvencim": null,
+        "producto": {
+            "codigo": "6031",
+            "nombre": null
+        }
+    },
+    "amparo": [
+        {
+            "codigo": "9220",
+            "nombre": "Responsabilidad Civil Extracontractual ",
+            "capital": 4400000000,
+            "obligatorio": true,
+            "primaTarifa": "90281",
+            "primaAnual": "90281",
+            "deducible": null,
+            "preguntaAmparo": null,
+            "respuestaAmparo": null,
+            "tdeducible": " $0"
+        },
+        {
+            "codigo": "9036",
+            "nombre": "Lesión o Muerte a 1 persona ",
+            "capital": 4400000000,
+            "obligatorio": true,
+            "primaTarifa": "31156",
+            "primaAnual": "31156",
+            "deducible": null,
+            "preguntaAmparo": null,
+            "respuestaAmparo": null,
+            "tdeducible": " $0"
+        },
+        {
+            "codigo": "9037",
+            "nombre": "Lesión o Muerte a más de una persona ",
+            "capital": 4400000000,
+            "obligatorio": true,
+            "primaTarifa": "13352",
+            "primaAnual": "13352",
+            "deducible": null,
+            "preguntaAmparo": null,
+            "respuestaAmparo": null,
+            "tdeducible": " $0"
+        },
+        {
+            "codigo": "758",
+            "nombre": "Pérdida Total por Hurto",
+            "capital": 15700000,
+            "obligatorio": true,
+            "primaTarifa": "31001",
+            "primaAnual": "31001",
+            "deducible": null,
+            "preguntaAmparo": null,
+            "respuestaAmparo": null,
+            "tdeducible": " $0"
+        },
+        {
+            "codigo": "759",
+            "nombre": "Pérdida Total por Daños",
+            "capital": 15700000,
+            "obligatorio": true,
+            "primaTarifa": "105645",
+            "primaAnual": "105645",
+            "deducible": null,
+            "preguntaAmparo": null,
+            "respuestaAmparo": null,
+            "tdeducible": " $0"
+        },
+        {
+            "codigo": "760",
+            "nombre": "Pérdida Parcial por Daños",
+            "capital": 15700000,
+            "obligatorio": true,
+            "primaTarifa": "255341",
+            "primaAnual": "255341",
+            "deducible": null,
+            "preguntaAmparo": null,
+            "respuestaAmparo": null,
+            "tdeducible": " $950.000"
+        },
+        {
+            "codigo": "761",
+            "nombre": "Pérdida Parcial por Hurto ",
+            "capital": 15700000,
+            "obligatorio": true,
+            "primaTarifa": "14406",
+            "primaAnual": "14406",
+            "deducible": null,
+            "preguntaAmparo": null,
+            "respuestaAmparo": null,
+            "tdeducible": " $950.000"
+        },
+        {
+            "codigo": "762",
+            "nombre": "Temblor, Terremoto o erupción Volcánica",
+            "capital": 15700000,
+            "obligatorio": true,
+            "primaTarifa": "31629",
+            "primaAnual": "31629",
+            "deducible": null,
+            "preguntaAmparo": null,
+            "respuestaAmparo": null,
+            "tdeducible": " $950.000"
+        },
+        {
+            "codigo": "763",
+            "nombre": "Amparo Patrimonial ",
+            "capital": 0,
+            "obligatorio": true,
+            "primaTarifa": "0",
+            "primaAnual": "0",
+            "deducible": null,
+            "preguntaAmparo": null,
+            "respuestaAmparo": null,
+            "tdeducible": null
+        },
+        {
+            "codigo": "764",
+            "nombre": "Gastos de transporte por Pérdida Total Hurto",
+            "capital": 1200000,
+            "obligatorio": true,
+            "primaTarifa": "7524",
+            "primaAnual": "7524",
+            "deducible": null,
+            "preguntaAmparo": null,
+            "respuestaAmparo": null,
+            "tdeducible": null
+        },
+        {
+            "codigo": "765",
+            "nombre": "Gastos de transporte por Pérdida Total Daños",
+            "capital": 1200000,
+            "obligatorio": true,
+            "primaTarifa": "12791",
+            "primaAnual": "12791",
+            "deducible": null,
+            "preguntaAmparo": null,
+            "respuestaAmparo": null,
+            "tdeducible": null
+        },
+        {
+            "codigo": "766",
+            "nombre": "Asistencia Jurídica Penal",
+            "capital": 13385074,
+            "obligatorio": true,
+            "primaTarifa": "21318",
+            "primaAnual": "21318",
+            "deducible": null,
+            "preguntaAmparo": null,
+            "respuestaAmparo": null,
+            "tdeducible": null
+        },
+        {
+            "codigo": "767",
+            "nombre": "Asistencia Jurídica Civil",
+            "capital": 6770660,
+            "obligatorio": true,
+            "primaTarifa": "3553",
+            "primaAnual": "3553",
+            "deducible": null,
+            "preguntaAmparo": null,
+            "respuestaAmparo": null,
+            "tdeducible": null
+        },
+        {
+            "codigo": "768",
+            "nombre": "Asistencia en viaje",
+            "capital": 0,
+            "obligatorio": true,
+            "primaTarifa": "182004",
+            "primaAnual": "182004",
+            "deducible": null,
+            "preguntaAmparo": null,
+            "respuestaAmparo": null,
+            "tdeducible": null
+        }
+    ],
+    "datosEconomicos": {
+        "descuento": "0",
+        "gastosExpedicion": "5877",
+        "impuestos": "153118",
+        "primaAnual": "800001",
+        "primerRecibo": "958996",
+        "sobreprima": "0",
+        "tarifa": "800001",
+        "total": "958996",
+        "vigencia": "800001"
+    },
+    "psu": null
+}

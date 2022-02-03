@@ -3,7 +3,7 @@ import { Image, View, TouchableOpacity, Text, StyleSheet, Touchable, Alert } fro
 
 import AsyncStorage from '@react-native-community/async-storage'
 import UserContext from '../contexts/UserContext'
-
+import { Icon } from 'react-native-eva-icons';
 
 function Index(props) {
  
@@ -20,7 +20,7 @@ function Index(props) {
         <View>
             <TouchableOpacity onPress={ ()=> goToScreen("Dashboard") } >
                 <View style={styles.itemMenu}>
-                    <Image style={{width: 30, height: 30, resizeMode: "contain"}} source={require('../src/images/icon_search.png')}/>
+                    <Icon name={'home-outline'} width={30} height={30} fill='white'/>
                     <Text  style={styles.texMenu}>Inicio</Text>
                 </View>
             </TouchableOpacity>

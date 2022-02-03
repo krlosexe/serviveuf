@@ -3,7 +3,6 @@ import { View, Modal, Text, TouchableWithoutFeedback, Image, TouchableOpacity, S
 import { Icon } from 'react-native-eva-icons';
 import AsyncStorage from '@react-native-community/async-storage'
 import UserContext from '../contexts/UserContext'
-import Toast from 'react-native-simple-toast';
 import LinearGradient from 'react-native-linear-gradient';
 import { base_url, server, file_server } from '../Env.js';
 import Share from 'react-native-share';
@@ -19,11 +18,18 @@ const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
 function Menu(props) {
+
+
+  function goToScreen(screen) {
+    props.navigation.navigate(screen, { randomCode: Math.random() })
+  }
+
+
+
   const WIDTH = props.width;
   const { userDetails, setUserDetails } = useContext(UserContext)
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const fadeWidth = useRef(new Animated.Value(WIDTH)).current;
-  const [AboutModal, setAboutModal] = useState(false);
   const [PhotoProfile, setPhotoProfile] = useState(false)
   const [Load, setLoad]                 = useState(false)
   const [LabelBtnServiceProvider, setLabelBtnServiceProvider] = useState("Modo prestador de servicios")
@@ -194,7 +200,7 @@ function Menu(props) {
         }
       })
       .catch(function (error) {
-          console.log(error.response.data.message)
+          console.log(error)
           console.log('Error al enviar formularioss')
           setLoad(false)
       })
