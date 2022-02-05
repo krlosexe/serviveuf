@@ -29,7 +29,12 @@ function Index(props) {
     const [Load, setLoad] = useState(false);
     const [LoadRating, setLoadRating] = useState(false);
     const [Raiting, setRating] = useState(0);
-    
+    const [ReportService, setReportService] = useState(false);
+    const [ClientReportService, setClientReportService] = useState(false);
+    const [CommentsReportService, setCommentsReportService] = useState(false);
+    const [PhotoReportService, setPhotoReportService] = useState(false);
+
+
     let randomCode 
     if(props.route.params){
         randomCode = props.route.params.randomCode
@@ -38,6 +43,7 @@ function Index(props) {
     }
     
     useEffect(()=>{
+
       if(props.route.params.detail_offert.photo_profile == null){
         setPhotoProfile('https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg')
       }else{
@@ -48,7 +54,39 @@ function Index(props) {
 
       GetRating(props.route.params.detail_offert.id_client)
       props.route.params.detail_offert.status
+
+
+      if (props.route.params.detail_offert.status == "Reportado") {
+        GetReportService()
+      }
+
+
     },[randomCode])
+
+
+
+    const GetReportService = () => {
+      axios.get(base_url(server, `report/services/${props.route.params.detail_offert.id}`)).then(function (response) {
+        setLoad(false)
+        console.log(response.data, "DAta")
+        setReportService(true)
+        setCommentsReportService(response.data.comments)
+        setClientReportService(`${response.data.names} ${response.data.last_names}`)
+        if(response.data.photo_profile == null){
+          setPhotoReportService('https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg')
+        }else{
+          setPhotoReportService(`${file_server}/img/usuarios/profile/${response.data.photo_profile}`)
+        }
+  
+  
+      })
+        .catch(function (error) {
+          console.log('Error al enviar formulario')
+          console.log(error.response.data)
+        })
+        .then(function () { });
+    }
+
 
 
     const GetRating = (id_client)=>{
@@ -294,6 +332,54 @@ function Index(props) {
 
             </View>
         }
+
+
+
+        {ReportService &&
+            <View>
+              <View style={{ justifyContent: "center", marginTop: 20, marginBottom: 20 }}>
+                <View style={{
+                  width: 210,
+                  backgroundColor: "#063046",
+                  borderRadius: 100,
+                  alignItems: "center",
+                  justifyContent: "center",
+                  padding: 8,
+                  alignSelf: "center",
+                  zIndex: 999
+                }}>
+                  <Text style={{ color: "white", fontSize: 18 }}>Reporte:</Text>
+                </View>
+
+                <View style={{
+                  width: "90%",
+                  height: 1,
+                  backgroundColor: "#ED6306",
+                  position: "absolute",
+                  zIndex: 10,
+                  alignSelf: "center"
+                }}></View>
+              </View>
+              <Image style={{
+                width: 60, height: 60, 
+                alignSelf : "center",
+                justifyContent : "center",
+                position: "relative",
+                borderRadius : 100
+              }} source={{ uri: PhotoReportService}}/>
+
+
+                <Text style={{ fontSize: 15,textAlign: "center", color : "#777", marginTop : 10, marginBottom : 5,fontWeight : "bold"}}>{ClientReportService}</Text>
+                <View style={{backgroundColor : "#eee", borderRadius : 14, padding : 20, width : "80%", alignSelf : "center"}}>
+                  <Text style={{ textAlign: "center", color : "#777"}}>{CommentsReportService}</Text>
+                </View>
+              
+            </View>
+          }
+
+
+
+
 
         
 

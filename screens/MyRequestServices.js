@@ -16,7 +16,7 @@ function Index(props) {
 
   function goToScreen(screen, detail_offert, status)
   {     
-    if(status == "En proceso" || status == "Procesado"){
+    if(status == "En proceso" || status == "Procesado" || status == "Reportado"){
       detail_offert.lock = true
       navigation.navigate(screen, {randomCode : Math.random(), detail_offert})
     }
@@ -149,6 +149,9 @@ function Index(props) {
                               <Text style={{...styles.Price, color : "#FF0202"}}>{props.data.status}</Text>
                             }
 
+                            {props.data.status == "Reportado" &&
+                              <Text style={{...styles.Price, color : "#FF0202"}}>{props.data.status}</Text>
+                            }
                           {props.data.status == "Procesado" &&
                               <Text style={{...styles.Price, color : "#39B54A"}}>{props.data.status}</Text>
                             }

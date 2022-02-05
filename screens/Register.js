@@ -1,5 +1,5 @@
-import React, {useEffect, useState, useContext} from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, StatusBar, Image, ToastAndroid, ActivityIndicator} from 'react-native';
+import React, {useEffect, useState, useContext, useCallback} from 'react';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, StatusBar, Image, ToastAndroid, ActivityIndicator, Linking} from 'react-native';
 
 import {server, base_url} from '../Env'    
 import axios from 'axios'
@@ -35,7 +35,8 @@ function Index(props) {
     const [Load, setLoad] = useState(false);
     const [PhotoProfile, setPhotoProfile] = useState("https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg")
     const [PhotoUpload, setPhotoUpload] = useState(false)
-    
+    const [Terminos, setTerminos]  = useState("https://cirucredito.com/assets/descargables/POLITICA%20DE%20TRATAMIENTO%20PERSONAL.pdf")
+
     useEffect(()=>{
       setTimeout(() => {
         setEditable(true)
@@ -197,6 +198,26 @@ function Index(props) {
     }
 
 
+    const OpenURLButton = ({ url, children }) => {
+      const handlePress = useCallback(async () => {
+        // Checking if the link is supported for links with custom URL scheme.
+        const link = await Linking.canOpenURL(url);
+    
+        if (link) {
+          // Opening the link with some app, if the URL scheme is "http" the web link should be opened
+          // by some browser in the mobile
+          await Linking.openURL(url);
+        } else {
+          Alert.alert(`Don't know how to open this URL: ${url}`);
+        }
+      }, [url]);
+    
+      return <Text style={styles.bold}  onPress={handlePress}>{children}</Text>;
+    };
+
+
+
+
 
   return (
     <View style={styles.container}>
@@ -317,7 +338,7 @@ function Index(props) {
                     onValueChange={setSelection}
                     style={styles.checkbox}
                 />
-                <Text style={styles.label}>Acepto términos y condiciones.*</Text>
+                <Text style={styles.label}>Acepto <OpenURLButton url={Terminos}><Text style={{fontWeight : "bold"}}>términos y condiciones.*</Text></OpenURLButton></Text>
             </View>
 
            

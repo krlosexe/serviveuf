@@ -243,7 +243,7 @@ function Menu(props) {
           //console.log(data)
           console.log('Authentication successfully')
           setUserDetails({...props.userDetails,...data})
-          goToScreen("Profile")
+         // goToScreen("Profile")
       }
       catch (error) {
           console.log(error)

@@ -37,6 +37,7 @@ import MethodPay from './screens/MethodPay'
 import PayToCard from './screens/PayToCard'
 import PayToNequi from './screens/PayToNequi'
 import PaymentSummary from './screens/PaymentSummary'
+import ReportProblem from './screens/ReportProblem'
 
 
 const Drawer = createDrawerNavigator();
@@ -74,6 +75,7 @@ function App(){
          <Drawer.Screen name="PayToCard"                   component={ PayToCard } />
          <Drawer.Screen name="PayToNequi"                  component={ PayToNequi } />
          <Drawer.Screen name="PaymentSummary"              component={ PaymentSummary } />
+         <Drawer.Screen name="ReportProblem"               component={ ReportProblem } />
        </Drawer.Navigator>
       </UserProvider>
     </NavigationContainer>

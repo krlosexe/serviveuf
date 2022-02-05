@@ -33,12 +33,12 @@ function Index(props) {
                 </TouchableOpacity>
             </View>
             <View>
-                <TouchableOpacity  onPress={()=>navigation.goBack() }>
+                {/* <TouchableOpacity  onPress={()=>navigation.goBack() }>
                      <Image
                       style={styles.btn_back}
                       source={require('../src/images/btn_cancel.png')}
                     />
-                </TouchableOpacity>
+                </TouchableOpacity> */}
             </View>
           </View>
   );
@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
   Head : {
       marginTop : 50,
       flexDirection : "row",
-      justifyContent: "space-between",
+      justifyContent: "space-around",
       width : "100%",
       padding : 10
   },
