@@ -99,8 +99,8 @@ function Index(props) {
            }}>
 
               <Image
-                      style={{resizeMode: "contain",width: 95, height: 95, position: "absolute", marginLeft: "25%", top: 20, left: -40}}
-                  source={require('../src/images/logo.png')}
+                      style={{resizeMode: "contain",width: 95, height: 95, position: "absolute", marginLeft: "25%", top: 20, left: -150}}
+                  source={require('../src/images/round_blue.png')}
               />
               
               <Image
@@ -109,7 +109,7 @@ function Index(props) {
               />
           </View>
            
-          <View style={{width : "100%",alignItems: 'center', marginTop: 70}}>
+          <View style={{width : "100%",alignItems: 'center', marginTop: 10}}>
             <HeadNavigate title="Chats" props={props} />
               
         

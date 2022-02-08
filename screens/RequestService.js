@@ -148,7 +148,8 @@ function Index(props) {
         { text: 'Semipermanente', onPress:()  => setTypeService('Semipermanente') },
         { text: 'Acrílicas',      onPress:()  => setTypeService('Acrílicas') },
         { text: 'Esculpidas',     onPress:()  => setTypeService('Esculpidas') },
-        { text: 'Retoque',         onPress:() => setTypeService('Retoque') }
+        { text: 'Retoque',         onPress:() => setTypeService('Retoque') },
+        { text: 'Retiro',         onPress:() => setTypeService('Retiro') }
       ]
     }
 
@@ -352,6 +353,7 @@ function Index(props) {
                         style={styles.inputText}
                         placeholder="Teléfono / Celular" 
                         placeholderTextColor="#777"
+                        keyboardType='numeric'
                         onChangeText={text => onChangeText(text, 'phone')}/>
                     </View>
 
@@ -380,7 +382,11 @@ function Index(props) {
                         onChangeText={text => onChangeText(text, 'comments')}/>
                     </View>
 
-                    <PhotoUpload containerStyle={{marginTop : -10}}   onPhotoSelect={image => {
+                    <PhotoUpload 
+
+                      photoPickerTitle = "Seleccione una Foto"
+                      containerStyle={{marginTop : -10}}  
+                     onPhotoSelect={image => {
                       if (image) {
                           //console.log(image) 
                           onChangeText(image, 'photo')

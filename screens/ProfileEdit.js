@@ -266,7 +266,7 @@ r          })
                 <View style={styles.inputView} >
                     <TextInput  
                         style={styles.inputText}
-                        placeholder="Cédula / NIT" 
+                        placeholder="Telefono" 
                         placeholderTextColor="#777"
                         editable={editable}
                         value={formInfo.identification}

@@ -89,6 +89,9 @@ function Index(props) {
       latitude: lat,
       longitude: lon,
       googleForceLatLon: false,
+      dialogTitle: 'Como llegar',
+      dialogMessage: '¿Cual aplicacion deseas usar?',
+      cancelText: 'CANCELAR',
     })
   }
 
@@ -465,6 +468,7 @@ function Index(props) {
               placeholderTextColor="#777"
               editable={editable}
               value={formInfo.price}
+              keyboardType='numeric'
               onChangeText={text => onChangeText(text, 'price')} />
           </View>
 
@@ -516,7 +520,7 @@ function Index(props) {
                 </Text>
               </TouchableOpacity>
 
-              <TouchableOpacity style={{ ...styles.loginBtn, width: 120, backgroundColor: "#FF0202" }} onPress={() => goToScreen("ReportProblem", props.route.params.detail_service)}>
+              <TouchableOpacity style={{ ...styles.loginBtn, width: 120, backgroundColor: "#ED6306" }} onPress={() => goToScreen("ReportProblem", props.route.params.detail_service)}>
                 <Text style={styles.loginText}>
                   {Load &&
                     <ActivityIndicator size="large" color="#fff" />

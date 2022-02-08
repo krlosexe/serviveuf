@@ -148,12 +148,66 @@ function Index(props) {
 
 
 
+            <View style={{flexDirection:"column", marginBottom: 20,}}>
+
+                <View style={{ width: "100%", height: 110,  backgroundColor: "pink", alignSelf: "center", borderRadius: 14, flexDirection: "row", overflow: "hidden", justifyContent: "space-around" }}>
+                  
+                <View style={{
+                    height: 110,
+                    width: 145
+                  }}>
+                    <Image
+                      style={{
+                        width: null,
+                        height: null,
+                        flex: 1,
+                        resizeMode: "cover"
+                      }}
+                      source={require('../src/images/trenzas.jpg')}
+                    />
+                  </View>
+                  
 
 
+                  <LinearGradient style={{
+                    width: "70%",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    zIndex: 999,
+                    //opacity: 0.5,
+                    position: "relative"
+                  }}
+                    start={{ x: 0, y: 0 }}
+                    end={{ x: 1, y: 0 }}
+                    colors={["transparent","#FF9700", "#FF9700", "#FF9700", "#FF9700", "#FF9700", "#FF9700", "#FF9700"]}
+                  >
+                    <Text style={styles.services_item_text_small}>Servicio de</Text>
+                    <Text style={styles.services_item_text_long}>Trenzas</Text>
+                  </LinearGradient>
+                  
+                </View>
 
+                  <TouchableOpacity style={{
+                        width:90,
+                        padding : 5,
+                        backgroundColor:"#ED6306",
+                        borderRadius : 100,
+                        alignItems:"center",
+                        justifyContent:"center",
+                        alignSelf : "center",
+                        marginTop : -14
+                    }} onPress={()=>goToScreen("RequestService", "Trenzas", 2)}>
+                        <Text style={{color : "white"}}>
+                        Ordenar
+                        </Text>
+                    </TouchableOpacity>
+                </View>
 
+            
+{/* 
 
-        <View style={{ marginBottom: 20 }}>
+        <View style={{ marginBottom: 30, height: 110}}>
           <View style={styles.services_item}>
             <View style={styles.services_image_left}>
               <Image
@@ -174,14 +228,15 @@ function Index(props) {
             alignItems: "center",
             justifyContent: "center",
             alignSelf: "center",
-            marginTop: -14
+            marginTop: -14,
+            zIndex: 1000
           }} onPress={() => goToScreen("RequestService", "Trenzas", 2)}>
             <Text style={{ color: "white" }}>
               Ordenar
             </Text>
           </TouchableOpacity>
         </View>
-
+ */}
 
 
 
@@ -286,16 +341,16 @@ const styles = StyleSheet.create({
   },
 
   services_item: {
-    backgroundColor: "orange",
     flexDirection: "row",
     alignContent: 'space-around',
     borderRadius: 14,
-    width: "100%"
+    width: "100%",
+    height : 110
   },
 
   services_left: {
     width: "100%",
-    height: 100,
+    height: 110,
     borderTopLeftRadius: 14,
     borderBottomLeftRadius: 14,
     position: "relative",
@@ -312,7 +367,8 @@ const styles = StyleSheet.create({
 
 
   services_image_left: {
-    width: "40%"
+    width: "40%",
+    height : 110
   },
 
 

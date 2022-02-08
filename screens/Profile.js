@@ -208,9 +208,9 @@ function Index(props) {
           </View>
 
 
-          <View style={{width : "100%",alignItems: 'center', marginTop: 130}}>
+          <View style={{width : "100%",alignItems: 'center', marginTop: 100}}>
             
-            <View style={styles.HeadProfile}>
+            <View style={{...styles.HeadProfile, marginBottom : 30}}>
                 <View>
                     <ImageBackground source={require('../src/images/back_profile.png')}
                             style={styles.HeadProfileImageBackgroud}>
@@ -218,9 +218,10 @@ function Index(props) {
                     </ImageBackground>
                     
                 </View>
-                <View style={{marginTop : 10}}>
-                    <Text style={{...styles.HeadProfileText, fontWeight : "bold"}}>{userDetails.nombres}</Text>
+                <View style={{marginTop : 0}}>
+                    <Text style={{...styles.HeadProfileText, fontWeight : "bold"}}>{userDetails.names} {userDetails.last_names}</Text>
                     <Text style={{...styles.HeadProfileText, fontSize : 20}}>
+                    
                         {LoadBalance &&
                           <ActivityIndicator size="small" color="#063046" />
                         }
@@ -274,7 +275,7 @@ function Index(props) {
 
 
 
-            <Text style={{marginTop : 20, fontSize : 23, color : "#063046"}}>Soporte</Text>
+            <Text style={{marginTop : 40, fontSize : 23, color : "#063046"}}>Soporte</Text>
 
             <View style={styles.ContentSuport}>
                 <TouchableOpacity style={{...styles.BtnOptions, width : "35%", backgroundColor : "#808080"}} onPress={()=>logout()}>
@@ -357,7 +358,8 @@ const styles = StyleSheet.create({
     alignItems:"center",
     justifyContent:"center",
     marginTop:20,
-    alignSelf : "center"
+    alignSelf : "center",
+    marginBottom : 10
   },
 
   
@@ -394,13 +396,15 @@ const styles = StyleSheet.create({
       width: 90, height: 90, 
       alignSelf : "center",
       justifyContent : "center",
-      position: "relative",
-      borderRadius : 100
+      alignItems : "center",
+      borderRadius : 100,
+      marginTop: 10
    },
   HeadProfileImageBackgroud : {flex: 1,
     width : 110,
     height : 110,
-    justifyContent : "center"
+    justifyContent : "center",
+    alignItems : "center"
    },
 
    HeadProfileText : {

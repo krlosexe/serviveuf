@@ -221,7 +221,7 @@ function Index(props) {
 
                           <View style={styles.Start}>
                               <Icon name='star' width={20} height={20} fill='#FF9700' /> 
-                              <Text>{parseInt(props.data.total_rating) / parseInt(props.data.count_rating)}</Text>
+                              <Text>{(parseInt(props.data.total_rating) / parseInt(props.data.count_rating)).toFixed(2)}</Text>
                           </View>
                       </View>
                   </View>

@@ -10,6 +10,7 @@ import AsyncStorage from '@react-native-community/async-storage'
 import UserContext from '../contexts/UserContext'
 import CheckBox from '@react-native-community/checkbox';
 import ImagePicker from 'react-native-image-picker';
+import { ScrollView } from 'react-native-gesture-handler';
 function Index(props) {  
 
 
@@ -245,124 +246,132 @@ function Index(props) {
 
 
 
-          <View style={{width : "100%",alignItems: 'center', marginTop: 130}}>
-            <View style={styles.inputView} >
-                <Image
-                      style={{resizeMode: "contain",width: 30, height: 30, position : "absolute", marginLeft: "4%"}}
-                  source={require('../src/images/icon_user.png')}
-              />
-              <TextInput  
-                style={styles.inputText}
-                placeholder="Nombres" 
-                placeholderTextColor="#777"
-                editable={editable}
-                onChangeText={text => onChangeText(text, 'names')}/>
-            </View>
+         
+              <ScrollView style={{width : "100%", alignSelf : "center"}}>
+                  <View style={{width : "100%",alignItems: 'center', marginTop: 130}}>
 
+                      <View style={styles.HeadProfile}>
+                        <TouchableOpacity onPress={() =>launchImageLibrary()}   >
+                            <View>
+                                <Image style={styles.HeadProfileImage} source={{ uri: PhotoProfile}}
+                                />
+                            </View>
+                        </TouchableOpacity>
+                      </View>
 
-            <View style={styles.inputView} >
-                <Image
-                      style={{resizeMode: "contain",width: 30, height: 30, position : "absolute", marginLeft: "4%"}}
-                  source={require('../src/images/icon_user.png')}
-              />
-              <TextInput  
-                style={styles.inputText}
-                placeholder="Apellidos" 
-                placeholderTextColor="#777"
-                editable={editable}
-                onChangeText={text => onChangeText(text, 'last_names')}/>
-            </View>
-
-
-            <View style={styles.inputView} >
-                <Image
-                      style={{resizeMode: "contain",width: 27, height: 27, position : "absolute", marginLeft: "4%"}}
-                  source={require('../src/images/icon_email.png')}
-                />
-              <TextInput  
-                style={styles.inputText}
-                placeholder="Email" 
-                placeholderTextColor="#777"
-                keyboardType={'email-address'}
-                editable={editable}
-                onChangeText={text => onChangeText(text, 'email')}/>
-            </View>
-
-
-            <View style={styles.inputView} >
-                <Image
-                      style={{resizeMode: "contain",width: 30, height: 30, position : "absolute", marginLeft: "4%"}}
-                  source={require('../src/images/icon_lock.png')}
-                />
-
-              <TextInput  
-                secureTextEntry
-                style={styles.inputText}
-                placeholder="Contraseña" 
-                placeholderTextColor="#777"
-                onChangeText={text => onChangeText(text, 'password')}/>
-            </View>
-
-
-            <View style={styles.inputView} >
-                <Image
-                      style={{resizeMode: "contain",width: 30, height: 30, position : "absolute", marginLeft: "4%"}}
-                  source={require('../src/images/icon_lock.png')}
-                />
-
-              <TextInput  
-                secureTextEntry
-                style={styles.inputText}
-                placeholder="Confirmar contraseña" 
-                placeholderTextColor="#777"
-                onChangeText={text => onChangeText(text, 'repeat_password')}/>
-            </View>
-
-
-              <View style={styles.HeadProfile}>
-                <TouchableOpacity onPress={() =>launchImageLibrary()}   >
-                    <View>
-                        <Image style={styles.HeadProfileImage} source={{ uri: PhotoProfile}}
-                        />
+                        
+                    <View style={styles.inputView} >
+                        <Image
+                              style={{resizeMode: "contain",width: 30, height: 30, position : "absolute", marginLeft: "4%"}}
+                          source={require('../src/images/icon_user.png')}
+                      />
+                      <TextInput  
+                        style={styles.inputText}
+                        placeholder="Nombres" 
+                        placeholderTextColor="#777"
+                        editable={editable}
+                        onChangeText={text => onChangeText(text, 'names')}/>
                     </View>
-                </TouchableOpacity>
+
+
+                    <View style={styles.inputView} >
+                        <Image
+                              style={{resizeMode: "contain",width: 30, height: 30, position : "absolute", marginLeft: "4%"}}
+                          source={require('../src/images/icon_user.png')}
+                      />
+                      <TextInput  
+                        style={styles.inputText}
+                        placeholder="Apellidos" 
+                        placeholderTextColor="#777"
+                        editable={editable}
+                        onChangeText={text => onChangeText(text, 'last_names')}/>
+                    </View>
+
+
+                    <View style={styles.inputView} >
+                        <Image
+                              style={{resizeMode: "contain",width: 27, height: 27, position : "absolute", marginLeft: "4%"}}
+                          source={require('../src/images/icon_email.png')}
+                        />
+                      <TextInput  
+                        style={styles.inputText}
+                        placeholder="Email" 
+                        placeholderTextColor="#777"
+                        keyboardType={'email-address'}
+                        editable={editable}
+                        onChangeText={text => onChangeText(text, 'email')}/>
+                    </View>
+
+
+                    <View style={styles.inputView} >
+                        <Image
+                              style={{resizeMode: "contain",width: 30, height: 30, position : "absolute", marginLeft: "4%"}}
+                          source={require('../src/images/icon_lock.png')}
+                        />
+
+                      <TextInput  
+                        secureTextEntry
+                        style={styles.inputText}
+                        placeholder="Contraseña" 
+                        placeholderTextColor="#777"
+                        onChangeText={text => onChangeText(text, 'password')}/>
+                    </View>
+
+
+                    <View style={styles.inputView} >
+                        <Image
+                              style={{resizeMode: "contain",width: 30, height: 30, position : "absolute", marginLeft: "4%"}}
+                          source={require('../src/images/icon_lock.png')}
+                        />
+
+                      <TextInput  
+                        secureTextEntry
+                        style={styles.inputText}
+                        placeholder="Confirmar contraseña" 
+                        placeholderTextColor="#777"
+                        onChangeText={text => onChangeText(text, 'repeat_password')}/>
+                    </View>
+
+
+                      
+
+
+
+
+
+                    <View style={styles.checkboxContainer}>
+                        <CheckBox
+                            value={isSelected}
+                            onValueChange={setSelection}
+                            style={styles.checkbox}
+                        />
+                        <Text style={styles.label}>Acepto <OpenURLButton url={Terminos}><Text style={{fontWeight : "bold"}}>términos y condiciones.*</Text></OpenURLButton></Text>
+                    </View>
+
+                  
+                    <TouchableOpacity style={{
+                      width:"70%",
+                        backgroundColor:"#0B4E6B",
+                        borderRadius : 40,
+                        height:60,
+                        alignItems:"center",
+                        justifyContent:"center",
+                        marginTop:5,
+                        marginBottom:20
+                    }} onPress={()=>sendForm() }>
+                      <Text style={styles.register}>
+                        
+                            {Load &&
+                                <ActivityIndicator size="large" color="#fff" />
+                            }
+                            {!Load &&
+                                <Text>Registrarse</Text>
+                            }
+                          </Text>
+                    </TouchableOpacity>
                 </View>
-
-
-
-
-
-            <View style={styles.checkboxContainer}>
-                <CheckBox
-                    value={isSelected}
-                    onValueChange={setSelection}
-                    style={styles.checkbox}
-                />
-                <Text style={styles.label}>Acepto <OpenURLButton url={Terminos}><Text style={{fontWeight : "bold"}}>términos y condiciones.*</Text></OpenURLButton></Text>
-            </View>
-
-           
-            <TouchableOpacity style={{
-               width:"70%",
-                backgroundColor:"#0B4E6B",
-                borderRadius : 40,
-                height:60,
-                alignItems:"center",
-                justifyContent:"center",
-                marginTop:5,
-                marginBottom:20
-            }} onPress={()=>sendForm() }>
-              <Text style={styles.register}>
-                
-                    {Load &&
-                        <ActivityIndicator size="large" color="#fff" />
-                    }
-                    {!Load &&
-                        <Text>Registrarse</Text>
-                    }
-                  </Text>
-            </TouchableOpacity>
-          </View>
+              </ScrollView>
+         
 
 
       
@@ -447,7 +456,8 @@ const styles = StyleSheet.create({
 
   HeadProfile : {
     flexDirection : "row",
-    justifyContent: "space-around"
+    justifyContent: "space-around",
+    marginBottom : 10
   },
 
   HeadProfileImage:{

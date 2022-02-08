@@ -11,6 +11,7 @@ import { Icon } from 'react-native-eva-icons';
 import UserContext from '../contexts/UserContext'
 import {server, base_url} from '../Env'   
 import axios from 'axios'
+import Banner from '../components/Banner'
 const windowWidth = Dimensions.get('window').width;
 function App(props) {
 
@@ -34,6 +35,8 @@ function App(props) {
   }
 
   useEffect(()=>{
+
+    console.log(props.status, "STATUS")
     getBalance()
   },[randomCode])
 
@@ -69,32 +72,39 @@ function App(props) {
 
 
         <TouchableOpacity onPress={() => props.OpenMenu()} style={{
-                backgroundColor:"#eee",
                 borderRadius : 7,
                 padding : 14,
                 alignItems:"center",
                 justifyContent:"center",
-                marginTop:25,
+                marginTop:40,
                 marginLeft : "10%",
                 marginBottom:20
             }}>
             
-            <Icon name='menu' fill={"#0B4E6B"} width={25} height={25} />
+            <Icon name='menu' fill={"#0B4E6B"} width={35} height={35} />
         </TouchableOpacity>
 
 
+          
+        {props.BannerServiceProvider &&
+          <Banner {...props}/>
+        }
 
-          <TouchableOpacity onPress={() => goToScreen("CreditAccount")} style={styles.balance_content}>
-              <Text style={styles.balance_text}>Tú saldo</Text>
-              <Text style={{...styles.balance_text, fontWeight : "bold"}}>
-                {Load &&
-                  <ActivityIndicator size="small" color="#fff" />
-                }
-                {!Load &&
-                  Balance
-                }
-              </Text>
-          </TouchableOpacity>
+         {props.status &&
+            <TouchableOpacity onPress={() => goToScreen("CreditAccount")} style={styles.balance_content}>
+                <Text style={styles.balance_text}>Tú saldo</Text>
+                <Text style={{...styles.balance_text, fontWeight : "bold"}}>
+                  {Load &&
+                    <ActivityIndicator size="small" color="#fff" />
+                  }
+                  {!Load &&
+                    Balance
+                  }
+                </Text>
+            </TouchableOpacity>
+         }
+
+          
       
         
 

@@ -72,13 +72,7 @@ function Index(props) {
    
     <View style={styles.container}>
       
-        {BannerServiceProvider &&
-          <StatusBar  backgroundColor="#24aafc" barStyle="dark-content" />
-        }
-
-        {!BannerServiceProvider &&
-          <StatusBar  backgroundColor="#fff" barStyle="dark-content" />
-        }
+      <StatusBar  backgroundColor="#fff" barStyle="dark-content" />
 
         {vertical === true &&
               <MenuVertical
@@ -91,11 +85,8 @@ function Index(props) {
               />
             }
 
-        {BannerServiceProvider &&
-          <Banner {...props}/>
-        }
         
-        <Head OpenMenu={OpenMenu} {...props}/>
+        <Head OpenMenu={OpenMenu} {...props} BannerServiceProvider = {BannerServiceProvider} status = {userDetails.mode_service_provider}/>
         
          {userDetails.mode_service_provider == true &&
           <DashboardServiceProvider {...props} />
