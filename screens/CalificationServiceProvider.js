@@ -1,12 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, StatusBar, ImageBackground, Image, ToastAndroid, ActivityIndicator, ScrollView} from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, StatusBar, ImageBackground, Image, ToastAndroid, ActivityIndicator, ScrollView} from 'react-native';
 
 import {file_server, server, base_url} from '../Env'   
 import axios from 'axios'
 
 import HeadNavigate from '../components/HeadNavigate'
 import Menu from '../components/Menu'
-
+import { ActionSheet } from 'react-native-cross-actionsheet'
 import StarRating from 'react-native-star-rating';
 function Index(props) {  
 
@@ -24,7 +24,7 @@ function Index(props) {
     const [Raiting, setRaiting] = useState(0);
 
     const [formInfo , setFormInfo]       = React.useState({
-        comments            : '',
+        comments            : 'Comentarios',
     })
 
 
@@ -45,6 +45,23 @@ function Index(props) {
       }
       props.route.params.detail_offert.status
     },[randomCode])
+
+    const SelectComment = ()=>{
+      let optionsSelect = [
+        { text: 'Excelente servicio ',      onPress:() => onChangeText('Excelente servicio ', 'comments') },
+        { text: 'Buena actitud ',           onPress:() => onChangeText('Buena actitud ', 'comments') },
+        { text: 'Buena conversación',       onPress:() => onChangeText('Buena conversación', 'comments') },
+        { text: 'Me encanto el resultado ', onPress:() => onChangeText('Me encanto el resultado ', 'comments') },
+        { text: 'No me gusto  ',            onPress:() => onChangeText('No me gusto  ', 'comments') }
+      ]
+  
+        ActionSheet.options({
+            options: optionsSelect,
+            cancel: { onPress: () => console.log('cancel') }
+        })
+      }
+
+
 
 
 
@@ -123,9 +140,17 @@ function Index(props) {
             </View>
 
 
-            <Text style={{textAlign : "center", color :"#063046", fontSize : 25, marginTop : -10}}>Comentarios</Text>
 
-            <View style={styles.Comments}>
+            <TouchableOpacity style={{...styles.inputView, width : "80%", alignSelf : "center"}} onPress={()=>SelectComment()}>
+                <View style={{...styles.inputText}}>
+                    <Text style={{textAlign : "center"}}>{formInfo.comments}</Text>
+                </View>
+            </TouchableOpacity>
+
+
+            {/* <Text style={{textAlign : "center", color :"#063046", fontSize : 25, marginTop : -10}}>Comentarios</Text> */}
+
+            {/* <View style={styles.Comments}>
                 <View style={styles.inputView} >
                   <TextInput  
                     style={styles.inputText}
@@ -135,7 +160,7 @@ function Index(props) {
                     numberOfLines={4}
                     onChangeText={text => onChangeText(text, 'comments')}/>
                 </View>
-            </View>
+            </View> */}
 
 
 

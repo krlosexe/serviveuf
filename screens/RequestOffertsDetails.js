@@ -23,6 +23,13 @@ function Index(props) {
     navigation.navigate(screen, {randomCode : Math.random()})
   }
 
+
+    function goToChat(screen, receiver, id_service) {
+      navigation.navigate(screen, { randomCode: Math.random(), receiver, id_service })
+    }
+
+
+
     const { UserDetails, setUserDetails } = useContext(UserContext)
     const userDetails                     = useContext(UserContext)
     const [PhotoProfile, setPhotoProfile] = useState(false)
@@ -44,6 +51,8 @@ function Index(props) {
     
     useEffect(()=>{
 
+
+      console.log(props.route.params)
       if(props.route.params.detail_offert.photo_profile == null){
         setPhotoProfile('https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg')
       }else{
@@ -247,6 +256,33 @@ function Index(props) {
               {props.route.params.detail_offert.comments}
             </Text>
         </View>
+
+
+
+        {props.route.params.detail_offert.status == "En proceso" &&
+            <TouchableOpacity style={{
+              color: "black",
+              width: "50%",
+              alignSelf: "center",
+              paddingHorizontal: 20,
+              textAlign: "center",
+              fontSize: 17,
+              borderWidth: 2,
+              backgroundColor: "#063046",
+              borderRadius: 17,
+              paddingVertical: 10,
+              marginTop: 20,
+              marginBottom: 20
+            }} onPress={() => goToChat("Chat", props.route.params.detail_offert.id_service_provider, props.route.params.detail_offert.id)}>
+              <Text style={{ color: "white", textAlign: "center" }}><View style={{ flexDirection: "row" }}>
+                <Icon style={{ alignSelf: "center" }} name='message-square-outline' width={20} height={20} fill='white' />
+                <Text style={{ marginLeft: 10, fontWeight: "bold", color: "white" }}>Chat</Text>
+              </View></Text>
+            </TouchableOpacity>
+          }
+
+
+
 
         
         {props.route.params.detail_offert.lock != true && 

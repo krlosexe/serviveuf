@@ -78,7 +78,6 @@ function App(props) {
                 justifyContent:"center",
                 marginTop:40,
                 marginLeft : "10%",
-                marginBottom:20
             }}>
             
             <Icon name='menu' fill={"#0B4E6B"} width={35} height={35} />

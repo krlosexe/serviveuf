@@ -211,15 +211,15 @@ function Index(props) {
           <View style={{width : "100%",alignItems: 'center', marginTop: 100}}>
             
             <View style={{...styles.HeadProfile, marginBottom : 30}}>
-                <View>
+                <View style={{marginTop : 0, width : "40%", alignItems : "center"}}>
                     <ImageBackground source={require('../src/images/back_profile.png')}
                             style={styles.HeadProfileImageBackgroud}>
                         <Image style={styles.HeadProfileImage} source={{ uri: PhotoProfile}}/>
                     </ImageBackground>
                     
                 </View>
-                <View style={{marginTop : 0}}>
-                    <Text style={{...styles.HeadProfileText, fontWeight : "bold"}}>{userDetails.names} {userDetails.last_names}</Text>
+                <View style={{marginTop : 0,width: "60%"}}>
+                    <Text style={{...styles.HeadProfileText, fontWeight : "bold", width:"90%", alignSelf : "center"}}>{userDetails.names} {userDetails.last_names}</Text>
                     <Text style={{...styles.HeadProfileText, fontSize : 20}}>
                     
                         {LoadBalance &&
@@ -403,8 +403,6 @@ const styles = StyleSheet.create({
   HeadProfileImageBackgroud : {flex: 1,
     width : 110,
     height : 110,
-    justifyContent : "center",
-    alignItems : "center"
    },
 
    HeadProfileText : {

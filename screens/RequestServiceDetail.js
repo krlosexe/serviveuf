@@ -29,6 +29,13 @@ function Index(props) {
     navigation.navigate(screen, { randomCode: Math.random(), detail_offert })
   }
 
+
+  function goToChat(screen, receiver, id_service) {
+    navigation.navigate(screen, { randomCode: Math.random(), receiver, id_service })
+  }
+
+
+
   const { UserDetails, setUserDetails } = useContext(UserContext)
   const userDetails = useContext(UserContext)
   const [editable, setEditable] = useState(false)
@@ -294,6 +301,31 @@ function Index(props) {
             <Text style={{ marginLeft: 10, fontWeight: "bold", color: "white" }}>Ver ubicacion</Text>
           </View></Text>
         </TouchableOpacity>
+
+
+
+        {props.route.params.detail_service.status == "Aprobada" &&
+            <TouchableOpacity style={{
+              color: "black",
+              width: "50%",
+              alignSelf: "center",
+              paddingHorizontal: 20,
+              textAlign: "center",
+              fontSize: 17,
+              borderWidth: 2,
+              backgroundColor: "#063046",
+              borderRadius: 17,
+              paddingVertical: 5,
+              marginTop: 20,
+              marginBottom: 20
+            }} onPress={() => goToChat("Chat", props.route.params.detail_service.id_client_service, props.route.params.detail_service.id_service)}>
+              <Text style={{ color: "white", textAlign: "center" }}><View style={{ flexDirection: "row" }}>
+                <Icon style={{ alignSelf: "center" }} name='message-square-outline' width={20} height={20} fill='white' />
+                <Text style={{ marginLeft: 10, fontWeight: "bold", color: "white" }}>Chat</Text>
+              </View></Text>
+            </TouchableOpacity>
+          }
+
 
 
 

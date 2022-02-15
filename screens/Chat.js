@@ -34,8 +34,9 @@ function Index(props) {
         randomCode = 1
     }
 
-
     useEffect(()=>{
+
+      console.log(props.route.params)
       GetChats(true)
       const unsubscribe = messaging().onMessage(async remoteMessage => {
         GetChats(false)
@@ -49,7 +50,7 @@ function Index(props) {
       if(init){
         setLoad(true)
       }
-      axios.get( base_url(server,`chat/souport/by/client/${userDetails.id}`)).then(function (response) {
+      axios.get( base_url(server,`chat/souport/by/client/${props.route.params.id_service}`)).then(function (response) {
         console.log(response.data, "CHATS")
         setConversation(response.data)
         setLoad(false)
@@ -71,9 +72,10 @@ function Index(props) {
       setConversation([...conversation, newMessage])
 
       const data = {
-        "sender"   : userDetails.id,
-        "receiver" : null,
-        "message"  : message.text
+        "sender"     : userDetails.id,
+        "receiver"   : props.route.params.receiver,
+        "id_service" : props.route.params.id_service,
+        "message"    : message.text
       }
       setMessage('')
       console.log(base_url(server,`chat/souport`))
