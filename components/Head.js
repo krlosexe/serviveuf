@@ -71,18 +71,24 @@ function App(props) {
         /> */}
 
 
-        <TouchableOpacity onPress={() => props.OpenMenu()} style={{
-                borderRadius : 7,
-                padding : 14,
-                alignItems:"center",
-                justifyContent:"center",
-                marginTop:40,
-                marginLeft : "10%",
-            }}>
-            
-            <Icon name='menu' fill={"#0B4E6B"} width={35} height={35} />
-        </TouchableOpacity>
+        <View style={{flexDirection : "row", justifyContent : "center", alignItems :"center", alignContent : "center"}}>
+          <TouchableOpacity onPress={() => props.OpenMenu()} style={{
+                  borderRadius : 7,
+                  padding : 14,
+                  alignItems:"center",
+                  justifyContent:"center",
+                  marginTop:40,
+                  marginLeft : "10%",
+              }}>
+              
+              <Icon name='menu' fill={"#0B4E6B"} width={35} height={35} />
+          </TouchableOpacity>
 
+          {!userDetails.mode_service_provider &&
+               <Text style={{textAlign : "center",fontSize : 30, color : "#0B4E6B", marginTop : 35, marginLeft : "10%"}}>Servicios</Text>
+            }
+          
+        </View>
 
           
         {props.BannerServiceProvider &&
@@ -117,7 +123,7 @@ export default App;
 
 const styles = StyleSheet.create({
   wrapper: {
-    flexDirection: "row"
+    flexDirection: "row",
   },
   icon: {
     width: 125,

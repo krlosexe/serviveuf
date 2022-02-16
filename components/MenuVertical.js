@@ -389,7 +389,7 @@ function Menu(props) {
             </TouchableOpacity>
 
             <TouchableOpacity
-              onPress={() => Go("DashboardFly")}
+              onPress={() => Go("Security")}
               style={styles.opt}>
               <Icon name='shield' fill={"#777"} width={20} height={20} />
               <Text style={styles.optText}>Seguridad</Text>

@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, StatusBar, Image, ToastAndroid, ActivityIndicator} from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, StatusBar, Image, ToastAndroid, ActivityIndicator, BackHandler} from 'react-native';
 
 import {server, base_url} from '../Env'    
 import axios from 'axios'
@@ -25,6 +25,24 @@ function Index(props) {
     const { UserDetails, setUserDetails } = React.useContext(UserContext)
     const [editable, setEditable] = React.useState(false)
     const [Load, setLoad] = React.useState(false);
+
+
+
+
+    useEffect(() => {
+      const backAction = () => {
+        //goToBack()
+        console.log(".1.")
+        return true;
+      };
+      const backHandler = BackHandler.addEventListener(
+        "hardwareBackPress",
+        backAction
+      );
+      return () => backHandler.remove();
+    }, []);
+
+
 
     
     React.useEffect(()=>{

@@ -39,6 +39,8 @@ import PayToNequi from './screens/PayToNequi'
 import PaymentSummary from './screens/PaymentSummary'
 import ReportProblem from './screens/ReportProblem'
 
+import Security from './screens/Security'
+
 
 const Drawer = createDrawerNavigator();
 
@@ -76,6 +78,9 @@ function App(){
          <Drawer.Screen name="PayToNequi"                  component={ PayToNequi } />
          <Drawer.Screen name="PaymentSummary"              component={ PaymentSummary } />
          <Drawer.Screen name="ReportProblem"               component={ ReportProblem } />
+         <Drawer.Screen name="Security"                    component={ Security } />
+
+         
        </Drawer.Navigator>
       </UserProvider>
     </NavigationContainer>

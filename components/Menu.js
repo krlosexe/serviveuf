@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import { Image, View, TouchableOpacity, Text, StyleSheet, Touchable, Alert } from "react-native";
 
 import AsyncStorage from '@react-native-community/async-storage'
@@ -6,7 +6,7 @@ import UserContext from '../contexts/UserContext'
 import { Icon } from 'react-native-eva-icons';
 
 function Index(props) {
- 
+  const userDetails  = useContext(UserContext)
 
   function goToScreen(screen) {
     props.props.navigation.navigate(screen, { randomCode: Math.random() })
@@ -25,20 +25,40 @@ function Index(props) {
                 </View>
             </TouchableOpacity>
         </View>
-        <View>
-              <View style={styles.itemMenuActive}>
-                <TouchableOpacity onPress={()=>goToScreen('Chat')}>
-                    <Image style={{width: 30, height: 30, resizeMode: "contain",alignItems:'center', justifyContent:'center', marginHorizontal:15}} source={require('../src/images/icon_chat.png')}/>
-                    <Text  style={styles.texMenu}>Chat</Text>
-                </TouchableOpacity>
+
+
+        {userDetails.mode_service_provider &&
+            <View>
+                <View style={styles.itemMenuActive}>
+                  <TouchableOpacity onPress={()=>goToScreen('MyOffertsServices')} style={{textAlign: "center", alignItems : "center"}}>
+                    <Icon name='briefcase-outline' fill={"#fff"} width={30} height={30} />
+                      <Text  style={styles.texMenu}>Mis Ofertas</Text>
+                  </TouchableOpacity>
+              </View>
+          </View>
+        }
+
+          {!userDetails.mode_service_provider &&
+            <View>
+                 <View style={styles.itemMenuActive}>
+                   <TouchableOpacity onPress={()=>goToScreen('MyRequestServices')} style={{textAlign: "center", alignItems : "center"}}>
+                       <Icon name='briefcase-outline' fill={"#fff"} width={30} height={30} /> 
+                       <Text  style={styles.texMenu}>Mis Servicios</Text>
+                   </TouchableOpacity>
+               </View>
             </View>
-        </View>
+          }
+
+
+
+       
         <View>
             <TouchableOpacity style={styles.itemMenu} onPress={()=>goToScreen('Profile')}>
                 <Image style={{width: 24, height: 30, resizeMode: "contain"}} source={require('../src/images/icon_profile.png')}/>
                 <Text  style={styles.texMenu}>Tú perfil</Text>
             </TouchableOpacity>
         </View>
+        
       </View>
   )
 }

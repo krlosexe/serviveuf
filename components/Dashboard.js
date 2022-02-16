@@ -87,7 +87,7 @@ function Index(props) {
     <ScrollView style={{marginBottom: 90}}>
       <View style={styles.content_services}>
 
-      <Text style={{textAlign : "center", marginBottom : 30, fontSize : 30, color : "#0B4E6B",}}>Servicios</Text>
+     
         <View style={{flexDirection:"column", marginBottom: 20}}>
         <View style={{ width: "100%", height: 110,  backgroundColor: "pink", alignSelf: "center", borderRadius: 14, flexDirection: "row", overflow: "hidden", justifyContent: "space-around" }}>
           <LinearGradient style={{
@@ -217,7 +217,7 @@ function Index(props) {
           }}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
-            colors={["#FF979A", "#FF979A", "#FF979A", "#FF979A", "#FF979A", "#FF979A", "#FF979A", "transparent"]}
+            colors={["#0B4E6B", "#0B4E6B", "#0B4E6B", "#0B4E6B", "#0B4E6B", "#0B4E6B", "#0B4E6B", "transparent"]}
           >
               <Text style={styles.services_item_text_small}>Servicio de</Text>
               <Text style={{...styles.services_item_text_long,  width : "60%", textAlign : "center"}}>Manicure y Pedicure</Text>

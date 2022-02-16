@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, StatusBar, Image, ImageBackground, ActivityIndicator, ScrollView} from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, StatusBar, Image, Linking,  ScrollView} from 'react-native';
 
 import {file_server, server, base_url} from '../Env'   
 import AsyncStorage from '@react-native-community/async-storage'
@@ -208,93 +208,24 @@ function Index(props) {
           </View>
 
 
-          <ScrollView style={{width : "100%", marginTop: 100, marginBottom : 100}}>
-            
-            <View style={{...styles.HeadProfile, marginBottom : 30}}>
-                <View style={{marginTop : 0, width : "40%", alignItems : "center"}}>
-                    <ImageBackground source={require('../src/images/back_profile.png')}
-                            style={styles.HeadProfileImageBackgroud}>
-                        <Image style={styles.HeadProfileImage} source={{ uri: PhotoProfile}}/>
-                    </ImageBackground>
-                    
-                </View>
-                <View style={{marginTop : 0,width: "60%"}}>
-                    <Text style={{...styles.HeadProfileText, fontWeight : "bold", width:"90%", alignSelf : "center"}}>{userDetails.names} {userDetails.last_names}</Text>
-                    <Text style={{...styles.HeadProfileText, fontSize : 20}}>
-                    
-                        {LoadBalance &&
-                          <ActivityIndicator size="small" color="#063046" />
-                        }
-                        {!LoadBalance &&
-                          Balance
-                        }
-                    </Text>
-
-                    <TouchableOpacity style={styles.BtnMode} onPress={()=>ServiceProvider()}>
-                        <Text style={styles.loginText}>
-
-                        {Load &&
-                            <ActivityIndicator size="small" color="#fff" />
-                        }
-                        {!Load &&
-                            <Text>{LabelBtnServiceProvider}</Text>
-                        }
-                            
-                        </Text>
-                    </TouchableOpacity>
-
-                </View>
-            </View>
-
-
-
-            <TouchableOpacity style={styles.BtnOptions} onPress={()=>goToScreen("ProfileEdit")}>
+          <ScrollView style={{width : "100%", marginTop: "50%", marginBottom : 100}}>
+            <TouchableOpacity style={styles.BtnOptions} onPress={()=>Linking.openURL(`tel:125`)}>
                 <Text style={{fontSize: 18}}>
-                    <Text>Editar perfil</Text>
+                    <Text>LLamar la Ambulancia</Text>
                 </Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.BtnOptions} onPress={()=>goToScreen("MovementHistory")}>
+            <TouchableOpacity style={styles.BtnOptions} onPress={()=>Linking.openURL(`tel:112`)}>
                 <Text style={{fontSize: 18}}>
-                    <Text>Historial de movimientos</Text>
+                    <Text>Llamar la Policia</Text>
                 </Text>
             </TouchableOpacity>
 
-            {userDetails.mode_service_provider &&
-                <TouchableOpacity style={styles.BtnOptions} onPress={()=>goToScreen("CreditAccount")}>
-                    <Text style={{fontSize: 18}}>
-                        <Text>Abonar a la cuenta</Text>
-                    </Text>
-                </TouchableOpacity>
-            }
-
-
-
-            <TouchableOpacity style={styles.BtnOptions} onPress={()=>logout()}>
+            <TouchableOpacity style={styles.BtnOptions} onPress={()=>Linking.openURL(`tel:112`)}>
                 <Text style={{fontSize: 18}}>
-                    <Text>Cerrar sesion</Text>
+                    <Text>Llamar los Bomberos</Text>
                 </Text>
             </TouchableOpacity>
-
-            <Text style={{marginTop : 40, fontSize : 23, textAlign : "center", color : "#063046"}}>Soporte</Text>
-
-            <View style={styles.ContentSuport}>
-                <TouchableOpacity style={{...styles.BtnOptions, width : "35%", backgroundColor : "#808080"}} onPress={()=>logout()}>
-                    <Image
-                        style={{width: 35, height: 35}}
-                            source={require('../src/images/icon_phone_suport.png')}
-                    />
-                </TouchableOpacity>
-
-                <TouchableOpacity style={{...styles.BtnOptions, width : "35%", backgroundColor : "#39B54A"}} onPress={()=>logout()}>
-                    <Image
-                        style={{width: 35, height: 35}}
-                            source={require('../src/images/icon_whatsap.png')}
-                    />
-                </TouchableOpacity>
-            </View>
-
-           
             
           </ScrollView>
 
