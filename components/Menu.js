@@ -20,7 +20,7 @@ function Index(props) {
         <View>
             <TouchableOpacity onPress={ ()=> goToScreen("Dashboard") } >
                 <View style={styles.itemMenu}>
-                    <Icon name={'home-outline'} width={30} height={30} fill='white'/>
+                <Image style={{width: 30, height: 30, resizeMode: "contain"}} source={require('../src/images/casa.png')}/>
                     <Text  style={styles.texMenu}>Inicio</Text>
                 </View>
             </TouchableOpacity>
@@ -31,7 +31,7 @@ function Index(props) {
             <View>
                 <View style={styles.itemMenuActive}>
                   <TouchableOpacity onPress={()=>goToScreen('MyOffertsServices')} style={{textAlign: "center", alignItems : "center"}}>
-                    <Icon name='briefcase-outline' fill={"#fff"} width={30} height={30} />
+                  <Image style={{width: 30, height: 30, resizeMode: "contain"}} source={require('../src/images/maleta.png')}/>
                       <Text  style={styles.texMenu}>Mis Ofertas</Text>
                   </TouchableOpacity>
               </View>
@@ -42,7 +42,7 @@ function Index(props) {
             <View>
                  <View style={styles.itemMenuActive}>
                    <TouchableOpacity onPress={()=>goToScreen('MyRequestServices')} style={{textAlign: "center", alignItems : "center"}}>
-                       <Icon name='briefcase-outline' fill={"#fff"} width={30} height={30} /> 
+                   <Image style={{width: 30, height: 30, resizeMode: "contain"}} source={require('../src/images/maleta.png')}/>
                        <Text  style={styles.texMenu}>Mis Servicios</Text>
                    </TouchableOpacity>
                </View>

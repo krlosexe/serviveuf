@@ -84,7 +84,6 @@ function Index(props) {
                 {...props}
               />
             }
-
         
         <Head OpenMenu={OpenMenu} {...props} BannerServiceProvider = {BannerServiceProvider} status = {userDetails.mode_service_provider}/>
         

@@ -418,7 +418,7 @@ function Menu(props) {
             </TouchableOpacity>
 
 
-            <View style={{flexDirection : "row", justifyContent : "center", marginTop : 50}}>
+            <View style={{flexDirection : "row", justifyContent : "center", marginTop : 20}}>
                <Image
                   style={{
                     width  : 30, 
@@ -440,6 +440,19 @@ function Menu(props) {
 
 
             </View>
+
+            <Image
+                    style={{
+                      width: 100,
+                      height: 100,
+                      resizeMode: "contain",
+                      marginBottom:40,
+                      alignSelf : "center",
+                      marginTop : 3
+                    }}
+                source={require('../src/images/logo.png')}
+            />
+
 
 
           </View>

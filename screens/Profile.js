@@ -220,15 +220,17 @@ function Index(props) {
                 </View>
                 <View style={{marginTop : 0,width: "60%"}}>
                     <Text style={{...styles.HeadProfileText, fontWeight : "bold", width:"90%", alignSelf : "center"}}>{userDetails.names} {userDetails.last_names}</Text>
-                    <Text style={{...styles.HeadProfileText, fontSize : 20}}>
-                    
-                        {LoadBalance &&
-                          <ActivityIndicator size="small" color="#063046" />
-                        }
-                        {!LoadBalance &&
-                          Balance
-                        }
-                    </Text>
+                   
+                    {userDetails.mode_service_provider &&
+                        <Text style={{...styles.HeadProfileText, fontSize : 20}}>
+                            {LoadBalance &&
+                              <ActivityIndicator size="small" color="#063046" />
+                            }
+                            {!LoadBalance &&
+                              Balance
+                            }
+                        </Text>
+                    }
 
                     <TouchableOpacity style={styles.BtnMode} onPress={()=>ServiceProvider()}>
                         <Text style={styles.loginText}>
