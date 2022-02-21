@@ -38,6 +38,7 @@ import PayToCard from './screens/PayToCard'
 import PayToNequi from './screens/PayToNequi'
 import PaymentSummary from './screens/PaymentSummary'
 import ReportProblem from './screens/ReportProblem'
+import ProfileEditCtagories from './screens/ProfileEditCtagories'
 
 import Security from './screens/Security'
 
@@ -79,7 +80,8 @@ function App(){
          <Drawer.Screen name="PaymentSummary"              component={ PaymentSummary } />
          <Drawer.Screen name="ReportProblem"               component={ ReportProblem } />
          <Drawer.Screen name="Security"                    component={ Security } />
-
+         <Drawer.Screen name="ProfileEditCtagories"        component={ ProfileEditCtagories } />
+         
          
        </Drawer.Navigator>
       </UserProvider>

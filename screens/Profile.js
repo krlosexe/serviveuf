@@ -248,13 +248,32 @@ function Index(props) {
                 </View>
             </View>
 
-
-
             <TouchableOpacity style={styles.BtnOptions} onPress={()=>goToScreen("ProfileEdit")}>
                 <Text style={{fontSize: 18}}>
                     <Text>Editar perfil</Text>
                 </Text>
             </TouchableOpacity>
+
+
+            {userDetails.mode_service_provider &&
+               <TouchableOpacity style={styles.BtnOptions} onPress={()=>goToScreen("ProfileEditCtagories")}>
+                <Text style={{fontSize: 18}}>
+                    <Text>Editar Categorias</Text>
+                </Text>
+              </TouchableOpacity>
+            }
+
+
+
+
+            {userDetails.mode_service_provider &&
+                <TouchableOpacity style={styles.BtnOptions} onPress={()=>goToScreen("CreditAccount")}>
+                    <Text style={{fontSize: 18}}>
+                        <Text>Abonar a la cuenta</Text>
+                    </Text>
+                </TouchableOpacity>
+            }
+            
 
             <TouchableOpacity style={styles.BtnOptions} onPress={()=>goToScreen("MovementHistory")}>
                 <Text style={{fontSize: 18}}>
