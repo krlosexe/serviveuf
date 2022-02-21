@@ -355,7 +355,7 @@ function Menu(props) {
             
 
 
-            <TouchableOpacity
+            {/* <TouchableOpacity
               style={styles.opt}>
               <Icon name='moon-outline' fill={"#777"} width={20} height={20} />
               <Text style={{...styles.optText, marginRight : "25%"}}>Modo Oscuro</Text>
@@ -367,7 +367,7 @@ function Menu(props) {
                 onValueChange={toggleSwitch}
                 value={isEnabled}
               />
-            </TouchableOpacity>
+            </TouchableOpacity> */}
 
             <TouchableOpacity
               onPress={() => Go("Faq")}
