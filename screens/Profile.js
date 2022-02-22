@@ -10,8 +10,8 @@ import axios from 'axios'
 
 function Index(props) {  
 
-  function goToScreen(screen) {
-    props.navigation.navigate(screen, { randomCode: Math.random() })
+  function goToScreen(screen, categories = false) {
+    props.navigation.navigate(screen, { randomCode: Math.random(), categories })
   }
 
     const { UserDetails, setUserDetails } = React.useContext(UserContext)
@@ -23,6 +23,7 @@ function Index(props) {
     const [LoadBalance, setLoadBalance]    = useState(false)
     const [LabelBtnServiceProvider, setLabelBtnServiceProvider] = useState("Modo prestador de servicios")
     const [Balance, setBalance] = useState(0)
+    const [Categories, setCategories] = useState([])
 
     let randomCode 
     if(props.route.params){
@@ -41,6 +42,11 @@ function Index(props) {
       GetStatusServiceProvider()
       getBalance()
 
+
+      if(userDetails.mode_service_provider){
+        getCategories()
+      }
+
     },[randomCode])
 
 
@@ -58,6 +64,21 @@ function Index(props) {
       })
       .then(function (response) {setLoadBalance(false)});
     }
+
+
+    const getCategories = () =>{
+      console.log(base_url(server,`get/categories/client/${userDetails.id}`))
+
+      axios.get( base_url(server,`get/categories/client/${userDetails.id}`)).then(function (response) {
+        setCategories(response.data)
+      })
+      .catch(function (error) {
+          console.log(error.response.data.message)
+          console.log('Error al enviar formularioss')
+      })
+    }
+
+
     function currencyFormat(num) {
         return '$' + num.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
     }
@@ -248,6 +269,17 @@ function Index(props) {
                 </View>
             </View>
 
+
+            <View style={{width : "80%", alignSelf :"center", flexDirection : "row", justifyContent : "space-around"}}>
+              {
+                Categories.length > 0 &&
+
+                Categories.map((item, key)=>{
+                  return <Text style={{backgroundColor : "#063046", borderRadius : 200, padding: 2, paddingHorizontal : 10, color : "white"}}>{item.name}</Text>
+                })
+              }
+            </View>
+
             <TouchableOpacity style={styles.BtnOptions} onPress={()=>goToScreen("ProfileEdit")}>
                 <Text style={{fontSize: 18}}>
                     <Text>Editar perfil</Text>
@@ -256,7 +288,7 @@ function Index(props) {
 
 
             {userDetails.mode_service_provider &&
-               <TouchableOpacity style={styles.BtnOptions} onPress={()=>goToScreen("ProfileEditCtagories")}>
+               <TouchableOpacity style={styles.BtnOptions} onPress={()=>goToScreen("ProfileEditCtagories", Categories)}>
                 <Text style={{fontSize: 18}}>
                     <Text>Editar Categorias</Text>
                 </Text>

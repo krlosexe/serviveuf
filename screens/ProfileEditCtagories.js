@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, StatusBar, Image, Linking,  ScrollView} from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, StatusBar, Image, ToastAndroid} from 'react-native';
 
 import {file_server, server, base_url} from '../Env'   
 import AsyncStorage from '@react-native-community/async-storage'
@@ -19,9 +19,10 @@ function Index(props) {
 
 
     const [CheckBarber, setCheckBarber]       = useState(false)
-    const [CheckTrenzas, setCheckTrenzas]   = useState(false)
+    const [CheckTrenzas, setCheckTrenzas]     = useState(false)
     const [CheckPedicure, setCheckPedicure]   = useState(false)
-
+    const [Load, setLoad]                     = useState(false)
+   
     let randomCode 
     if(props.route.params){
         randomCode = props.route.params.randomCode
@@ -30,28 +31,51 @@ function Index(props) {
     }
     useEffect(()=>{
 
+        props.route.params.categories.map((item, key)=>{
+            if(item.name == "Barberia"){
+                setCheckBarber(true)
+            }
+            if(item.name == "Trenzas"){
+                setCheckTrenzas(true)
+            }
+            if(item.name == "Manicure y Pedicure"){
+                setCheckPedicure(true)
+            }
+        })
 
     },[randomCode])
 
 
-    const getBalance = () =>{
-      
-    }
-   
 
-    function GetStatusServiceProvider(){
+    function sendForm(){
         setLoad(true)
-        console.log('Enviando formulario')
-        console.log(base_url(server,`get/status/service/provider/${userDetails.id}`))
-  
-        axios.get( base_url(server,`get/status/service/provider/${userDetails.id}`) ).then(function (response) {
-          setLoad(false)
 
-          console.log(response.data)
+
+        console.log('Enviando formulario')
+        console.log(base_url(server,`change/category/client`))
+
+        const data = {
+           "barber"    : CheckBarber,
+           "trenzas"   : CheckTrenzas,
+           "pedicure"  : CheckPedicure,
+           "id_client" : userDetails.id
+        }
+       
+        console.log(data)
+  
+        axios.post( base_url(server,`change/category/client`), data).then(function (response) {
+          setLoad(false)
+          ToastAndroid.showWithGravity(
+                "La solicitud fue enviada debe esperar su aprobacion",
+                ToastAndroid.SHORT,
+                ToastAndroid.CENTER
+            );
+
+            goToScreen("Profile")
         })
         .catch(function (error) {
             console.log('Error al enviar formulario')
-          console.log(error)
+          console.log(error.response)
             ToastAndroid.showWithGravity(
               "ha ocurrido un error",
               ToastAndroid.SHORT,
