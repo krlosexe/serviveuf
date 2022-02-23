@@ -37,6 +37,8 @@ function Index(props) {
 
 
   useEffect(()=>{
+
+    console.log(userDetails.mode_service_provider, "userDetails")
     if(userDetails.register){
       goToScreen("StepOne", false)
     }

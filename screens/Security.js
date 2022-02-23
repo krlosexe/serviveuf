@@ -221,7 +221,7 @@ function Index(props) {
                 </Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.BtnOptions} onPress={()=>Linking.openURL(`tel:112`)}>
+            <TouchableOpacity style={styles.BtnOptions} onPress={()=>Linking.openURL(`tel:119`)}>
                 <Text style={{fontSize: 18}}>
                     <Text>Llamar los Bomberos</Text>
                 </Text>

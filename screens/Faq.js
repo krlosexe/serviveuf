@@ -24,51 +24,46 @@ function Index(props) {
 
     const [Menu , setMenu ]  = React.useState([
         { 
-          title: '¿CUÁL ES LA EXPERIENCIA DE USTEDES EN ESTE TIPO DE SERVICIOS?', 
-          data: 'Cirucredito es producto de la reunión de médicos cirujanos a nivel nacional que determinaron la posibilidad de brindar a toda la población colombiana, la posibilidad de realizar sus sueños quirúrgicos sin la necesidad de acudir a una entidad crediticia, así directamente, se ha financiado a más de 6.000 pacientes en todo el territorio nacional. Hoy en día cuentan con un amplio portafolio de servicios financieros para procedimientos médicos y quirúrgicos.',
+          title: '¿Cómo se toma un pedido?', 
+          data: `Inicialmente eliges el servicio en la bandeja de servicio Diligencia el formulario con sus datos teniendo en cuenta:
+          \n\nAgenda: para el mismo día con un promedio de 2 horas antes del servicio\n\n
+          Foto: Suba una foto del servicio que desea realizarse\n\n si tiene algún detalle extra utiliza los
+          comentarios para hacernos saber y tenerlo en cuenta al momento de hacer la cotización,
+          Envía tu solicitud y espera ofertas de nuestros prestadores de servicio, elige la que mejor
+          te parezca. `,
         },
         { 
-          title: '¿CÓMO INICIO EL  PROCESO DE FINANCIACIÓN?',
-          data: 'Lo primero que debes hacer es pedir el preaprobado de tu procedimiento, así veremos si tu crédito es viable. Diligencia tu formulario'
+          title: '¿Cómo pagar mi servicio?',
+          data: 'Mediante pago en efectivo o transferencia a cuenta bancaria, se concreta con el prestador de servicio '
         },
         { 
-         title: '¿CÓMO PUEDO PAGAR LOS SERVICIOS QUE OFRECEN?         ',
-         data: 'Hemos estructurado unos métodos de pago que permiten acceder con facilidad a todos nuestros servicios, en nuestra página web puedes consultarlo o en nuestra línea amiga; manejamos varias líneas de financiación y métodos de programación de pagos.'
+         title: '¿Qué hago si necesito el cabello para mis trenzas?',
+         data: `Diligencia el formulario y en la parte de “cabello” eliges el tipo con el que deseas hacerte las trenzas, en la parte de comentarios dejas la información de ¿Cuántos paquetes de cabello? ¿Qué color el cabello? O te comunicas con la prestadora de servicio y defines los  detalles sobre el cabello. Tenga en cuenta que las ofertas le llegaran con el precio del cabello incluido o será variable en caso que no defina todos los detalles sobre el cabello.`
         },
         { 
-          title: '¿SI DEVENGO DE UN SALARIO MÍNIMO PUEDO ACCEDER A UN CRÉDITO?',
-          data: 'Si, nuestras estructuras financieras son directamente sin banco o cooperativa, financiamos fácilmente y con la posibilidad de tener hasta sesenta meses de crédito.'
+          title: '¿Prestador de servicios no llega?',
+          data: `Antes de cancelar el servicio, comuníquese con el prestador de servicio, si este no contesta, comunicarse con el área de soporte`
         },
         { 
-            title: '¿NECESITO DE UN BANCO PARA FINANCIAR?',
-            data: 'La gran mayoría de financiaciones que otorgamos se hacen directamente sin la necesidad de un intermediario, como un banco o cooperativa; todo depende del porcentaje a financiar y de su capacidad de endeudamiento.'
+            title: '¿Cómo identifico un prestador de servicio?',
+            data: 'El prestador de servicio debe identificarse al momento de llegada, mostrar evidencia con el servicio en proceso y utilizar las herramientas de trabajo correspondientes a su labor'
           },
           { 
-            title: '¿SI SOY UNA PERSONA DEPENDIENTE QUE DOCUMENTACIÓN NECESITO PARA FINANCIAR?',
-            data: 'Hemos estructurado financiaciones sin la necesidad de un fiador, por lo cual es importante para la cita que nuestra asesora financiera determine si usted sola como paciente o un tomador puedan ejecutar el crédito sin la necesidad de un segundo o fiador.'
+            title: '¿Qué hago cuando mi servicio ha finalizado?',
+            data:  `Le llegara una notificación indicándole la finalización de su servicio, le invitamos a calificar el prestador o prestadora de servicio según su satisfacción. En caso de no ser notificado, puede acceder a la pestaña “mis servicios” y realizar la calificación.`
           },
           { 
-            title: '¿SI SOY UNA PERSONA INDEPENDIENTE QUE DOCUMENTACIÓN NECESITO PARA FINANCIAR?',
-            data: 'Para los pacientes que son independientes, deben demostrar sus ingresos por medio de: Rut o Cámara de comercio, Certificado de ingresos y retenciones (dado por contador) / Extractos Bancarios, Copia de la cédula, Formularios diligenciados, Comprobante pago estudio de crédito'
+            title: '¿Cómo convertirse en prestador de servicio?',
+            data: `Se requiere una experiencia mínima de 1 año verificable en las modalidades que elija, el proceso inicial es diligenciar el formulario, nos pondremos en contacto contigo para la inducción, de ser aceptado seguiría la activación en plataforma.`
           },
           { 
-            title: '¿NECESITO UN FIADOR?',
-            data: 'Hemos estructurado financiaciones sin la necesidad de un fiador, por lo cual es importante para la cita que nuestra asesora financiera determine si usted sola como paciente o un tomador puedan ejecutar el crédito sin la necesidad de un segundo o fiador.'
+            title: '¿Cómo recargar mi cuenta?',
+            data: `En la pestaña, “abonar a mi cuenta” eliges el método de pago que mas utilices y realizas la operación, teniendo en cuenta el abono mínimo`
           },
           { 
-            title: '¿FINANCIAN PROCEDIMIENTOS EN TODAS LAS CIUDADES DEL PAÍS?',
-            data: 'Financiamos tus sueños en más de 20 clínicas a nivel nacional, por lo cual debes preguntarle a tu asesora, qué clínica y qué cirujano es el más adecuado para ti.'
-          },
-
-          { 
-            title: '¿CUAL ES EL INTERÉS QUE MANEJAN?',
-            data: 'El interés depende de la línea de crédito por donde se tramite la documentación de cada paciente, va del 1% al 3%, una vez en consulta, el paciente podrá hacer una simulación de crédito con su asesora y conocer esta información según su caso.'
-          },
-
-          { 
-            title: '¿DE CUÁNTO ES LA CUOTA MENSUAL A PAGAR?',
-            data: 'El máximo plan de pagos que se puede tramitar es a 48 meses, es decir 4 años. El paciente es libre de definir la cuota a manejar con el fin de no atrasarse en el tema de los pagos, siempre y cuando no supere los 48 meses.'
-          },
+            title: '¿Cómo cancelar una agenda?',
+            data: `Todas las agendas canceladas sin justa causa tendrán un cobro del 5% que solo se cobrara si la cita es cancelada. Invitamos a modificar la agenda, opción que solo se puede hacer una vez. `
+          }
 
       ])
 
@@ -97,8 +92,31 @@ function Index(props) {
           <View style={{width : "100%",alignItems: 'center', marginTop: 130}}>
                 <ScrollView style={styles.scrollView}>
 
+                    <Text style={{fontSize : 20, color : "black", textAlign : "center"}}>Nuestros datos de contacto</Text>
+                    <Text style={{fontSize : 15, color : "black", textAlign : "center"}}>Email: informacion@serviuf.com</Text>
+
+
+                    <View style={styles.ContentSuport}>
+                      <TouchableOpacity style={{...styles.BtnOptions, width : "35%", backgroundColor : "#808080"}} onPress={()=>Linking.openURL(`tel:${3135300742}`)}>
+                          <Image
+                              style={{width: 35, height: 35}}
+                                  source={require('../src/images/icon_phone_suport.png')}
+                          />
+                      </TouchableOpacity>
+
+                      <TouchableOpacity style={{...styles.BtnOptions, width : "35%", backgroundColor : "#39B54A"}} onPress={()=>Linking.openURL('whatsapp://send?phone=+573135300742')}>
+                          <Image
+                              style={{width: 35, height: 35}}
+                                  source={require('../src/images/icon_whatsap.png')}
+                          />
+                      </TouchableOpacity>
+                  </View>
+
+
+
+
                     <View style={{flexDirection  : "row",justifyContent : "space-evenly", backgroundColor: "white", marginTop: 10, padding: 10}}>
-                        <TouchableOpacity style={ TabsActive == 1  ? styles.BtnFaqActive : styles.BtnFaq} onPress={()=>SetTab(1)} >
+                        <TouchableOpacity style={ TabsActive == 1  ? styles.BtnFaqActive : styles.BtnFaq} >
                             <Text style={{fontSize : 20, color : "#0B4E6B"}}>Preguntas Frecuentes</Text>
                         </TouchableOpacity>
                     </View>
@@ -137,7 +155,25 @@ const styles = StyleSheet.create({
         marginHorizontal: 20,
         marginBottom: 10,
         width: "90%",
-      }
+      },
+
+      ContentSuport : {
+        width : "100%",
+        flexDirection : "row",
+        justifyContent : "space-around",
+        alignItems : "center"
+    },
+    BtnOptions:{
+      width:"80%",
+      backgroundColor:"#E6E6E6",
+      borderRadius:25,
+      height:55,
+      alignItems:"center",
+      justifyContent:"center",
+      marginTop:20,
+      alignSelf : "center",
+      marginBottom : 10
+    },
   
 
 });

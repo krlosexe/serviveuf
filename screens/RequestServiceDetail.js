@@ -507,7 +507,7 @@ function Index(props) {
           <View style={styles.inputView} >
             <TextInput
               style={styles.inputText}
-              placeholder="Tiempo"
+              placeholder="Duración"
               placeholderTextColor="#777"
               editable={editable}
               value={formInfo.time}
@@ -532,7 +532,7 @@ function Index(props) {
                   <ActivityIndicator size="large" color="#fff" />
                 }
                 {!Load &&
-                  <Text style={{ fontSize: 20 }}>Guardar</Text>
+                  <Text style={{ fontSize: 20 }}>Ofertar</Text>
                 }
               </Text>
             </TouchableOpacity>

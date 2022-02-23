@@ -31,7 +31,7 @@ export default class Accordian extends Component{
             {
                 this.state.expanded &&
                 <View style={styles.child}>
-                    <Text>{this.props.data}</Text>    
+                    <Text style={{textAlign : "center"}}>{this.props.data}</Text>    
                 </View>
             }
             

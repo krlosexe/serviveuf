@@ -155,12 +155,13 @@ function Index(props) {
                   }}>
                     <Image
                       style={{
-                        width: null,
+                        width: "105%",
                         height: null,
+                        position : "relative",
                         flex: 1,
                         resizeMode: "cover"
                       }}
-                      source={require('../src/images/trenzas.jpg')}
+                      source={require('../src/images/trenzas.png')}
                     />
                   </View>
                   

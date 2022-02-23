@@ -1,14 +1,8 @@
-import React, {useEffect} from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, StatusBar, Image, ToastAndroid, ImageBackground} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, StatusBar, Image, ToastAndroid, ActivityIndicator} from 'react-native';
 
-import {serverQa, base_url} from '../Env'    
+import {server, base_url} from '../Env'    
 import axios from 'axios'
-
-
-import messaging from '@react-native-firebase/messaging';
-import AsyncStorage from '@react-native-community/async-storage'
-import UserContext from '../contexts/UserContext'
-import CheckBox from '@react-native-community/checkbox';
 
 function Index(props) {  
 
@@ -16,71 +10,23 @@ function Index(props) {
   const { navigation } = props
 
   function goToScreen(screen)
-  {   
-
-      ToastAndroid.showWithGravity(
-           screen,
-            ToastAndroid.SHORT,
-            ToastAndroid.CENTER
-          );
-   return false
+  {     
+    navigation.navigate(screen, {randomCode : Math.random()})
   }
 
+  const [Load, setLoad] = React.useState(false);
+    const [editable, setEditable] = useState(false)
 
-    
-    const [notificationToken , setNotificationToken] = React.useState('')
-    const { UserDetails, setUserDetails } = React.useContext(UserContext)
-    const [editable, setEditable] = React.useState(false)
-    const [isSelected, setSelection] = React.useState(false);
-
-    
-    React.useEffect(()=>{
+    useEffect(()=>{
       setTimeout(() => {
         setEditable(true)
       }, 100)
     },[])
 
 
-    const [formInfo , setFormInfo]       = React.useState({
-      email     : '',
-      password  : ''
-  })
-
-
-
-    React.useEffect(()=>{
-      async function getToken(){
-          const fcmToken = await messaging().getToken();
-        
-          if (fcmToken)
-              {setNotificationToken(fcmToken)} 
-          else
-          {console.log('user doesnt have a device token yet')}
-
-          console.log(fcmToken, "TOKEN")
-        }
-        getToken()
-    },[])
-
-
-
-    const _storeData = async (data) => {
-      try {
-          await AsyncStorage.setItem('@Passport', JSON.stringify(data) );
-          //console.log(data)
-          console.log('Authentication successfully')
-          setUserDetails({...data})
-      
-      }
-      catch (error) {
-        // Error saving data
-      }
-    }
-
-
-
-
-
+    const [formInfo , setFormInfo]  = useState({
+        email : '',
+    })
 
 
     function onChangeText(text, key){
@@ -88,58 +34,46 @@ function Index(props) {
           ...formInfo,
           [key] : text
       })
-    }
+    } 
 
-
+  
 
     function sendForm(){
       const data = {
         ...formInfo
       }
-
+      setLoad(true)
+      if( data.email === ''){
+        setLoad(false)
         ToastAndroid.showWithGravity(
-            "LOGIN",
+            "Introduce tus email",
             ToastAndroid.SHORT,
             ToastAndroid.CENTER
           );
-      
-  return false
-      data.fcmToken = notificationToken
-
-      if( data.email === '' || data.password === ''){
-
-        ToastAndroid.showWithGravity(
-            "Introduce tus datos de acceso",
-            ToastAndroid.SHORT,
-            ToastAndroid.CENTER
-          );
-           
         return false;
       }
 
 
       console.log('Enviando formulario')
-      console.log(base_url(serverQa,`auth/app/financing`))
+      console.log(base_url(server,`auth/recovery`))
       console.log(data)
 
 
-      axios.post( base_url(serverQa,`auth/app/financing`), data ).then(function (res) {
-
-        _storeData(res.data)
-    
+      axios.post( base_url(server,`auth/recovery`), data ).then(function (res) {
+        setLoad(false)
+        goToScreen("Login")
       })
       .catch(function (error) {
-          console.log('Error al enviar formulario')
-        console.log(error)
-          ToastAndroid.showWithGravity(
-            "Correo o clave invalida",
-            ToastAndroid.SHORT,
-            ToastAndroid.CENTER
+        console.log('Error al enviar formulario')
+        console.log(error.response.data)
+        ToastAndroid.showWithGravity(
+          error.response.data,
+          ToastAndroid.SHORT,
+          ToastAndroid.CENTER
         );
 
-
-
-      })
+      setLoad(false)
+    })
       .then(function () {
 
 
@@ -186,17 +120,19 @@ function Index(props) {
                 placeholderTextColor="#777"
                 keyboardType={'email-address'}
                 editable={editable}
-                onChangeText={text => onChangeText(text, 'names')}/>
+                onChangeText={text => onChangeText(text, 'email')}/>
             </View>
 
             <TouchableOpacity style={styles.loginBtn} onPress={()=>sendForm()}>
-              <Text style={styles.loginText}>Enviar</Text>
+                {Load &&
+                    <ActivityIndicator size="large" color="#fff" />
+                }
+                {!Load &&
+                    <Text style={styles.loginText}>Enviar</Text>
+                }
             </TouchableOpacity>
 
           </View>
-
-
-      
 
     </View>
   );

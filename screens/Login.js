@@ -25,11 +25,15 @@ function Index(props) {
     const { UserDetails, setUserDetails } = React.useContext(UserContext)
     const [editable, setEditable] = React.useState(false)
     const [Load, setLoad] = React.useState(false);
-
+    const userDetails  = React.useContext(UserContext)
 
 
 
     useEffect(() => {
+
+      console.log(userDetails, "SUERS")
+
+
       const backAction = () => {
         //goToBack()
         console.log(".1.")
@@ -78,12 +82,19 @@ function Index(props) {
     const _storeData = async (data) => {
 
       data.register = false
-      data.mode_service_provider = false
+
+      if(data.service_provider_status == "Active"){
+        data.mode_service_provider = true
+      }else{
+        data.mode_service_provider = false
+      }
+      
       try {
           await AsyncStorage.setItem('@Passport', JSON.stringify(data) );
           //console.log(data)
           console.log('Authentication successfully')
           setUserDetails({...data})
+          props.navigation.navigate("Home")
       }
       catch (error) {
         // Error saving data
@@ -129,9 +140,9 @@ function Index(props) {
       console.log(base_url(server,`authApp`))
       console.log(data)
 
-      axios.post( base_url(server,`authApp`), data ).then(function (res) {
-
-        _storeData(res.data)
+      axios.post( base_url(server,`authApp`), data ).then(function (response) {
+        console.log(response.data, "RESPONSE")
+        _storeData(response.data)
         setLoad(false)
       })
       .catch(function (error) {

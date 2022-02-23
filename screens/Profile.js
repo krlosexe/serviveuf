@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, StatusBar, Image, ImageBackground, ActivityIndicator, ScrollView} from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, StatusBar, Image, ImageBackground, ActivityIndicator, ScrollView, Linking} from 'react-native';
 
 import {file_server, server, base_url} from '../Env'   
 import AsyncStorage from '@react-native-community/async-storage'
@@ -201,9 +201,10 @@ function Index(props) {
 
     const logout = async () => {
         try {
-          await AsyncStorage.removeItem('@Passport');
+          //await AsyncStorage.removeItem('@Passport');
+          await AsyncStorage.setItem('@Passport', JSON.stringify({"mode_service_provider" : userDetails.mode_service_provider }) );
           console.log('logout')
-          setUserDetails({})
+          setUserDetails({"mode_service_provider" : userDetails.mode_service_provider })
           goToScreen("Home")
         } catch (error) {
           console.log(error.message);
@@ -270,7 +271,7 @@ function Index(props) {
             </View>
 
 
-            <View style={{width : "80%", alignSelf :"center", flexDirection : "row", justifyContent : "space-around"}}>
+            {/* <View style={{width : "80%", alignSelf :"center", flexDirection : "row", justifyContent : "space-around"}}>
               {
                 Categories.length > 0 &&
 
@@ -278,7 +279,7 @@ function Index(props) {
                   return <Text style={{backgroundColor : "#063046", borderRadius : 200, padding: 2, paddingHorizontal : 10, color : "white"}}>{item.name}</Text>
                 })
               }
-            </View>
+            </View> */}
 
             <TouchableOpacity style={styles.BtnOptions} onPress={()=>goToScreen("ProfileEdit")}>
                 <Text style={{fontSize: 18}}>
@@ -295,17 +296,7 @@ function Index(props) {
               </TouchableOpacity>
             }
 
-
-
-
-            {userDetails.mode_service_provider &&
-                <TouchableOpacity style={styles.BtnOptions} onPress={()=>goToScreen("CreditAccount")}>
-                    <Text style={{fontSize: 18}}>
-                        <Text>Abonar a la cuenta</Text>
-                    </Text>
-                </TouchableOpacity>
-            }
-            
+           
 
             <TouchableOpacity style={styles.BtnOptions} onPress={()=>goToScreen("MovementHistory")}>
                 <Text style={{fontSize: 18}}>
@@ -323,6 +314,18 @@ function Index(props) {
 
 
 
+            {userDetails.mode_service_provider &&
+                <TouchableOpacity style={styles.BtnOptions} onPress={()=>goToScreen("Interes")}>
+                    <Text style={{fontSize: 18}}>
+                        <Text>De interes</Text>
+                    </Text>
+                </TouchableOpacity>
+            }
+
+
+
+
+
             <TouchableOpacity style={styles.BtnOptions} onPress={()=>logout()}>
                 <Text style={{fontSize: 18}}>
                     <Text>Cerrar sesion</Text>
@@ -332,14 +335,14 @@ function Index(props) {
             <Text style={{marginTop : 40, fontSize : 23, textAlign : "center", color : "#063046"}}>Soporte</Text>
 
             <View style={styles.ContentSuport}>
-                <TouchableOpacity style={{...styles.BtnOptions, width : "35%", backgroundColor : "#808080"}} onPress={()=>logout()}>
+                <TouchableOpacity style={{...styles.BtnOptions, width : "35%", backgroundColor : "#808080"}} onPress={()=>Linking.openURL(`tel:${3135300742}`)}>
                     <Image
                         style={{width: 35, height: 35}}
                             source={require('../src/images/icon_phone_suport.png')}
                     />
                 </TouchableOpacity>
 
-                <TouchableOpacity style={{...styles.BtnOptions, width : "35%", backgroundColor : "#39B54A"}} onPress={()=>logout()}>
+                <TouchableOpacity style={{...styles.BtnOptions, width : "35%", backgroundColor : "#39B54A"}} onPress={()=>Linking.openURL('whatsapp://send?phone=+573135300742')}>
                     <Image
                         style={{width: 35, height: 35}}
                             source={require('../src/images/icon_whatsap.png')}
