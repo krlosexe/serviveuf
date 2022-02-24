@@ -1,5 +1,5 @@
 import React, { useEffect, useContext, useState } from 'react';
-import { StyleSheet, Text, View, ScrollView, TouchableOpacity, Image, ActivityIndicator } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, TouchableOpacity, Image, ActivityIndicator, ImageBackground } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { server, base_url } from '../Env'
 import axios from 'axios'
@@ -89,7 +89,7 @@ function Index(props) {
 
      
         <View style={{flexDirection:"column", marginBottom: 20}}>
-        <View style={{ width: "100%", height: 110,  backgroundColor: "pink", alignSelf: "center", borderRadius: 14, flexDirection: "row", overflow: "hidden", justifyContent: "space-around" }}>
+        <View style={{ width: "100%", height: 110, alignSelf: "center", borderRadius: 14, flexDirection: "row", overflow: "hidden", justifyContent: "space-around" }}>
           <LinearGradient style={{
             width: "70%",
             flexDirection: "column",
@@ -144,116 +144,62 @@ function Index(props) {
 
             <View style={{flexDirection:"column", marginBottom: 20,}}>
 
+              <View style={{ width: "100%", height: 110, alignSelf: "center", borderRadius: 14, flexDirection: "row", overflow: "hidden", justifyContent: "space-around" }}>
 
-                 
-
-                <View style={{ width: "100%", height: 110,  backgroundColor: "pink", alignSelf: "center", borderRadius: 14, flexDirection: "row", overflow: "hidden", justifyContent: "space-around" }}>
-                  
-                <View style={{
-                    height: 110,
-                    width: 145
-                  }}>
-                    <Image
-                      style={{
-                        width: "105%",
-                        height: null,
-                        position : "relative",
-                        flex: 1,
-                        resizeMode: "cover"
-                      }}
-                      source={require('../src/images/trenzas.png')}
-                    />
-                  </View>
-                  
-
-
-                  <LinearGradient style={{
-                    width: "70%",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    zIndex: 999,
-                    //opacity: 0.5,
-                    position: "relative"
-                  }}
-                    start={{ x: 0, y: 0 }}
-                    end={{ x: 1, y: 0 }}
-                    colors={["transparent","#FF9700", "#FF9700", "#FF9700", "#FF9700", "#FF9700", "#FF9700", "#FF9700"]}
-                  >
+                <ImageBackground source={require('../src/images/banner_trenzas.png')}  style={{width : "100%"}}>
+                  <View style={{position : "absolute", right : "20%", top : "25%", alignItems : "center"}}>
                     <Text style={styles.services_item_text_small}>Servicio de</Text>
                     <Text style={styles.services_item_text_long}>Trenzas</Text>
-                  </LinearGradient>
-                  
-                </View>
+                  </View>
+                </ImageBackground>
+                
+              </View>
 
-                  <TouchableOpacity style={{
-                        width:90,
-                        padding : 5,
-                        backgroundColor:"#ED6306",
-                        borderRadius : 100,
-                        alignItems:"center",
-                        justifyContent:"center",
-                        alignSelf : "center",
-                        marginTop : -14
-                    }} onPress={()=>goToScreen("RequestService", "Trenzas", 2)}>
-                        <Text style={{color : "white"}}>
-                        Ordenar
-                        </Text>
-                    </TouchableOpacity>
-                </View>
+              <TouchableOpacity style={{
+                    width:90,
+                    padding : 5,
+                    backgroundColor:"#ED6306",
+                    borderRadius : 100,
+                    alignItems:"center",
+                    justifyContent:"center",
+                    alignSelf : "center",
+                    marginTop : -14
+                }} onPress={()=>goToScreen("RequestService", "Trenzas", 2)}>
+                    <Text style={{color : "white"}}>
+                    Ordenar
+                    </Text>
+                </TouchableOpacity>
+            </View>
 
 
+            <View style={{flexDirection:"column", marginBottom: 20}}>
 
-        <View style={{flexDirection:"column", marginBottom: 20,}}>
+              <View style={{ width: "100%", height: 110, alignSelf: "center", borderRadius: 14, flexDirection: "row", overflow: "hidden", justifyContent: "space-around" }}>
 
-        <View style={{ width: "100%", height: 110,  backgroundColor: "pink", alignSelf: "center", borderRadius: 14, flexDirection: "row", overflow: "hidden", justifyContent: "space-around" }}>
-          <LinearGradient style={{
-            width: "70%",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-            zIndex: 999,
-            //opacity: 0.5,
-            position: "relative"
-          }}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 0 }}
-            colors={["#0B4E6B", "#0B4E6B", "#0B4E6B", "#0B4E6B", "#0B4E6B", "#0B4E6B", "#0B4E6B", "transparent"]}
-          >
-              <Text style={styles.services_item_text_small}>Servicio de</Text>
-              <Text style={{...styles.services_item_text_long,  width : "60%", textAlign : "center"}}>Manicure y Pedicure</Text>
-          </LinearGradient>
-          <View style={{
-            height: "100%",
-            width: "70%"
-          }}>
-            <Image
-              style={{
-                width: null,
-                height: null,
-                flex: 1,
-                resizeMode: "cover"
-              }}
-              source={require('../src/images/unas.jpg')}
-            />
-          </View>
-        </View>
+                <ImageBackground source={require('../src/images/banner_unas.png')}  style={{width : "100%"}}>
+                  <View style={{alignItems : "center", position : "absolute", left : "1%", top: "20%", height : 50}}>
+                    <Text style={styles.services_item_text_small}>Servicio de</Text>
+                    <Text style={{...styles.services_item_text_long,  width : "60%", textAlign : "center"}}>Manicure y Pedicure</Text>
+                  </View>
+                </ImageBackground>
+                
+              </View>
 
-          <TouchableOpacity style={{
-                width:90,
-                padding : 5,
-                backgroundColor:"#ED6306",
-                borderRadius : 100,
-                alignItems:"center",
-                justifyContent:"center",
-                alignSelf : "center",
-                marginTop : -14
-              }} onPress={() => goToScreen("RequestService", "Pedicure", 3)}>
-                <Text style={{color : "white"}}>
-                Ordenar
-                </Text>
-            </TouchableOpacity>
-        </View>
+              <TouchableOpacity style={{
+                    width:90,
+                    padding : 5,
+                    backgroundColor:"#ED6306",
+                    borderRadius : 100,
+                    alignItems:"center",
+                    justifyContent:"center",
+                    alignSelf : "center",
+                    marginTop : -14
+                }} onPress={()=>goToScreen("RequestService", "Pedicure", 2)}>
+                    <Text style={{color : "white"}}>
+                    Ordenar
+                    </Text>
+                </TouchableOpacity>
+            </View>
 
 
       </View>
