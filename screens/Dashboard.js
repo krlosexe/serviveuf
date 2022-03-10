@@ -38,10 +38,10 @@ function Index(props) {
 
   useEffect(()=>{
 
-    console.log(userDetails.mode_service_provider, "userDetails")
-    if(userDetails.register){
-      goToScreen("StepOne", false)
-    }
+    console.log(userDetails.register, "userDetailsssssss")
+    // if(userDetails.register){
+    //   goToScreen("StepOne", false)
+    // }
     GetStatusClint()
   },[randomCode])
 

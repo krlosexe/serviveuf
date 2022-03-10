@@ -20,9 +20,7 @@ import ServiceProviderRegister from './screens/ServiceProviderRegister'
 import MovementHistory from './screens/MovementHistory'
 
 import Dashboard from './screens/Dashboard'
-import StepOne from './screens/StepOne'
-import StepTwo from './screens/StepTwo'
-import StepThree from './screens/StepThree'
+
 import RequestService from './screens/RequestService'
 import RequestServiceDetail from './screens/RequestServiceDetail'
 import RequestOfferts from './screens/RequestOfferts'
@@ -41,6 +39,7 @@ import ReportProblem from './screens/ReportProblem'
 import ProfileEditCtagories from './screens/ProfileEditCtagories'
 import Interes from './screens/Interes'
 import Security from './screens/Security'
+import IntroServiceProvider from './screens/IntroServiceProvider'
 
 
 const Drawer = createDrawerNavigator();
@@ -61,9 +60,6 @@ function App(){
          <Drawer.Screen name="ProfileEdit"                 component={ ProfileEdit } />
          <Drawer.Screen name="MovementHistory"             component={ MovementHistory } />
          <Drawer.Screen name="Dashboard"                   component={ Dashboard } />
-         <Drawer.Screen name="StepOne"                     component={ StepOne } />
-         <Drawer.Screen name="StepTwo"                     component={ StepTwo } />
-         <Drawer.Screen name="StepThree"                   component={ StepThree } />
          <Drawer.Screen name="RequestService"              component={ RequestService } />
          <Drawer.Screen name="RequestServiceDetail"        component={ RequestServiceDetail } />
          <Drawer.Screen name="RequestOfferts"              component={ RequestOfferts } />
@@ -82,7 +78,7 @@ function App(){
          <Drawer.Screen name="Security"                    component={ Security } />
          <Drawer.Screen name="ProfileEditCtagories"        component={ ProfileEditCtagories } />
          <Drawer.Screen name="Interes"                     component={ Interes } />
-         
+         <Drawer.Screen name="IntroServiceProvider"        component={ IntroServiceProvider } />
          
        </Drawer.Navigator>
       </UserProvider>

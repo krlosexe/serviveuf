@@ -90,7 +90,7 @@ function App(props) {
     setprint(!print)
   }, 3000);
   return (
-    <TouchableOpacity onPress={() => goToScreen("ServiceProviderRegister")} style={styles.wrapper}>
+    <TouchableOpacity onPress={() => goToScreen("IntroServiceProvider")} style={styles.wrapper}>
       <Animated.Text style={{ ...styles.BannerText, opacity: fadeAnim_one }}>¡Trabaja con nosotros!</Animated.Text>
       <Animated.Text style={{ ...styles.BannerText, opacity: fadeAnim_two }} >Gana ingresos extras...</Animated.Text>
     </TouchableOpacity>

@@ -58,7 +58,7 @@ function Index(props) {
     <View style={styles.container}>
       <Image
           style={styles.step_image}
-          source={require('../src/images/step_one.png')}
+          source={require('../src/images/intro_provider.png')}
       />
     </View>
   );

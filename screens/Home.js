@@ -9,7 +9,7 @@ import axios from 'axios'
 
 import RequestPermission from '../permission';
 import Splash from './Splash'
-import Login from './Login'
+import Intro from './Intro'
 import Dashboard from './Dashboard'
 
 import messaging from '@react-native-firebase/messaging';
@@ -115,7 +115,7 @@ function Index(props){
 
 
     if( !userDetails.email && !isSplashing)
-        return <Login {...props}/>
+        return <Intro {...props}/>
 
 
     // if(userDetails.email && !isSplashing)
