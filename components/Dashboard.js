@@ -194,7 +194,7 @@ function Index(props) {
                     justifyContent:"center",
                     alignSelf : "center",
                     marginTop : -14
-                }} onPress={()=>goToScreen("RequestService", "Pedicure", 2)}>
+                }} onPress={()=>goToScreen("RequestService", "Pedicure", 3)}>
                     <Text style={{color : "white"}}>
                     Ordenar
                     </Text>

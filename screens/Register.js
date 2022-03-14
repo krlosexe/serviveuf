@@ -1,5 +1,5 @@
 import React, {useEffect, useState, useContext, useCallback} from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, StatusBar, Image, ToastAndroid, ActivityIndicator, Linking} from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, StatusBar, Image, ToastAndroid, ActivityIndicator, Linking, BackHandler} from 'react-native';
 
 import {server, base_url} from '../Env'    
 import axios from 'axios'
@@ -19,13 +19,27 @@ function Index(props) {
   function goToScreen(screen)
   {   
 
-      ToastAndroid.showWithGravity(
-           screen,
-            ToastAndroid.SHORT,
-            ToastAndroid.CENTER
-          );
-   return false
+    navigation.navigate(screen, {randomCode : Math.random()})
   }
+
+
+  // useEffect(() => {
+
+
+  //   const backAction = () => {
+  //     console.log(".1.")
+  //    // goToScreen("Login")
+  //     return true;
+  //   };
+  //   const backHandler = BackHandler.addEventListener(
+  //     "hardwareBackPress",
+  //     backAction
+  //   );
+
+  //   console.log(backHandler, "asfs")
+  //   return () => backHandler.goBack();
+  // }, []);
+
 
 
     

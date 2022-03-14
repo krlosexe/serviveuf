@@ -179,7 +179,7 @@ function Index(props) {
       data.latitude    = Latitude
       data.longitude   = Longitude
 
-     
+      console.log(data.id_category, "TYPE")
     
       setLoad(true)
       setLoadOrder(true)

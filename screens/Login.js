@@ -29,22 +29,22 @@ function Index(props) {
 
 
 
-    useEffect(() => {
+    // useEffect(() => {
 
-      console.log(userDetails, "SUERS")
+    //   console.log(userDetails, "SUERS")
 
+    //   const backAction = () => {
+    //     console.log(".1.")
+    //     return true;
+    //   };
+    //   const backHandler = BackHandler.addEventListener(
+    //     "hardwareBackPress",
+    //     backAction
+    //   );
 
-      const backAction = () => {
-        //goToBack()
-        console.log(".1.")
-        return true;
-      };
-      const backHandler = BackHandler.addEventListener(
-        "hardwareBackPress",
-        backAction
-      );
-      return () => backHandler.remove();
-    }, []);
+    //   console.log(backHandler, "asfs")
+    //   return () => backHandler.remove();
+    // }, []);
 
 
 
