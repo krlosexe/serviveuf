@@ -50,7 +50,7 @@ function Index(props) {
     const [Load, setLoad] = useState(false);
     const [PhotoProfile, setPhotoProfile] = useState("https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg")
     const [PhotoUpload, setPhotoUpload] = useState(false)
-    const [Terminos, setTerminos]  = useState("https://cirucredito.com/assets/descargables/POLITICA%20DE%20TRATAMIENTO%20PERSONAL.pdf")
+    const [Terminos, setTerminos]  = useState("https://serviceuf.pdtcomunicaciones.com/document.pdf")
 
     useEffect(()=>{
       setTimeout(() => {

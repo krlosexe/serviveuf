@@ -297,12 +297,14 @@ function Index(props) {
             }
 
            
-
-            <TouchableOpacity style={styles.BtnOptions} onPress={()=>goToScreen("MovementHistory")}>
-                <Text style={{fontSize: 18}}>
-                    <Text>Historial de movimientos</Text>
-                </Text>
+            {userDetails.mode_service_provider &&
+               <TouchableOpacity style={styles.BtnOptions} onPress={()=>goToScreen("MovementHistory")}>
+               <Text style={{fontSize: 18}}>
+                   <Text>Historial de movimientos</Text>
+               </Text>
             </TouchableOpacity>
+            }
+            
 
             {userDetails.mode_service_provider &&
                 <TouchableOpacity style={styles.BtnOptions} onPress={()=>goToScreen("CreditAccount")}>

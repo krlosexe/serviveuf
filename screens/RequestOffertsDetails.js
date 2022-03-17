@@ -40,7 +40,7 @@ function Index(props) {
     const [ClientReportService, setClientReportService] = useState(false);
     const [CommentsReportService, setCommentsReportService] = useState(false);
     const [PhotoReportService, setPhotoReportService] = useState(false);
-
+    const [checked, setChecked] = useState('second');
 
     let randomCode 
     if(props.route.params){
@@ -293,10 +293,10 @@ function Index(props) {
                         <View style={styles.MethodPaysItems}>
                             <RadioButton
                                 value="first"
+                                status={ checked === 'first' ? 'checked' : 'unchecked' }
+                                onPress={() => setChecked('first')}
                                 color = "#FF9700"
                                 uncheckedColor = "#063046"
-                                status={ "unchecked"}
-                                onPress={(value) => console.log(value)}
                             />
             
                             <Text style={{color: "#4D4D4D"}}>Transaccion electronica</Text>
@@ -305,11 +305,11 @@ function Index(props) {
             
                         <View style={styles.MethodPaysItems}>
                             <RadioButton
-                                value="first"
+                                value="second"
+                                status={ checked === 'second' ? 'checked' : 'unchecked' }
+                                onPress={() => setChecked('second')}
                                 color = "#FF9700"
                                 uncheckedColor = "#063046"
-                                status={ "checked"}
-                                onPress={(value) => console.log(value)}
                             />
             
                             <Text style={{color: "#4D4D4D"}}>Efectivo</Text>
@@ -371,7 +371,7 @@ function Index(props) {
 
 
 
-        {ReportService &&
+        {ReportService && userDetails.mode_service_provider && 
             <View>
               <View style={{ justifyContent: "center", marginTop: 20, marginBottom: 20 }}>
                 <View style={{

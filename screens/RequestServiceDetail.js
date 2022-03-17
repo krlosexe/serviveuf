@@ -200,6 +200,38 @@ function Index(props) {
   }
 
 
+
+  const CancelOfferts = (id) => {
+    console.log(id)
+
+    console.log(base_url(server, `request/offerts/${id}`))
+    axios.delete(base_url(server, `request/offerts/${id}`)).then(function (response) {
+      setLoad(false)
+
+      ToastAndroid.showWithGravity(
+        "Tu oferta fue  cancelada",
+        ToastAndroid.SHORT,
+        ToastAndroid.CENTER
+      );
+
+      goToScreen("MyOffertsServices", false)
+
+    })
+      .catch(function (error) {
+        console.log('Error al enviar formulario')
+        console.log(error.response.data)
+        ToastAndroid.showWithGravity(
+          error.response.data,
+          ToastAndroid.SHORT,
+          ToastAndroid.CENTER
+        );
+        setLoad(false)
+      })
+      .then(function () { });
+
+
+  }
+
   const ProcessService = (id) => {
     setLoad(true)
 
@@ -271,15 +303,19 @@ function Index(props) {
 
 
         <View style={styles.Item}>
-          <Text style={styles.ItemText}>Servicio:</Text>
+          <Text style={styles.ItemText}>Servicios:</Text>
           <Text style={styles.ItemText}>{DataService.name_category}</Text>
         </View>
 
 
-        <View style={styles.Item}>
-          <Text style={styles.ItemText}>Tipo:</Text>
-          <Text style={styles.ItemText}>{DataService.type}</Text>
-        </View>
+
+        {DataService.name_category != "Barberia" &&
+          <View style={styles.Item}>
+            <Text style={styles.ItemText}>Tipo:</Text>
+            <Text style={styles.ItemText}>{DataService.type}</Text>
+         </View>
+        }
+        
 
 
         <TouchableOpacity style={{
@@ -462,6 +498,8 @@ function Index(props) {
 
 
 
+        <Text style={{textAlign : "center", marginTop : 20, fontSize : 15, fontWeight : "bold", color : "#063046"}}>Imagen del Resultado esperado</Text>
+
         <Image style={styles.ImageService} source={{ uri: `${file_server}/img/request_services/${DataService.photo}` }}
         />
 
@@ -536,6 +574,22 @@ function Index(props) {
               </Text>
             </TouchableOpacity>
           }
+
+
+
+
+        {props.route.params.detail_service.status == "Pendiente" && props.route.params.detail_service.lock == true &&
+           <TouchableOpacity style={{ ...styles.loginBtn, width: 120,backgroundColor: "#ED6306" }} onPress={() => CancelOfferts(props.route.params.detail_service.id)}>
+              <Text style={styles.loginText}>
+                {Load &&
+                  <ActivityIndicator size="large" color="#fff" />
+                }
+                {!Load &&
+                  <Text style={{ fontSize: 14 }}>Cancelar</Text>
+                }
+              </Text>
+            </TouchableOpacity>
+        }
 
 
           {props.route.params.detail_service.status == "Aprobada" &&

@@ -38,7 +38,7 @@ function Index(props) {
     const [Longitude, setLongitude]         = useState("")
     const [SelectType, setSelectType]       = useState(false)
 
-    const [TypeService, setTypeService]   = useState("Tipo")
+    const [TypeService, setTypeService]   = useState(props.route.params.service)
 
     const ref = useRef();
     let randomCode 
@@ -59,14 +59,19 @@ function Index(props) {
       if(props.route.params.service == "Trenzas"){
         console.log("TRENZAS")
         setSelectType(true)
+        setTypeService("Cabello")
       }
 
       if(props.route.params.service == "Pedicure"){
         console.log("Pedicure")
         setSelectType(true)
+        setTypeService("Tipo")
       }
 
       setLoad(false)
+
+     
+
 
     },[randomCode])
 
@@ -183,7 +188,7 @@ function Index(props) {
     
       setLoad(true)
       setLoadOrder(true)
-      if(data.id_client === '' || data.id_category === '' || data.date === '' || data.phone === '' || data.address === '' || data.comments === '' || data.photo === ''){
+      if(data.id_client === '' || data.id_category === '' || data.date === '' || data.phone === '' || data.address === '' ||  data.photo === ''){
         ToastAndroid.showWithGravity(
             "Completa todos los campos",
             ToastAndroid.SHORT,
@@ -224,7 +229,14 @@ function Index(props) {
         <StatusBar translucent backgroundColor="transparent" barStyle="dark-content" />
          <HeadNavigate title="Ordenar" props={props} />
 
-         <Text style={styles.titleService}>{props.route.params.service}</Text>
+         {props.route.params.service == "Pedicure" && 
+           <Text style={styles.titleService}>Manicure y pedicure</Text>
+         }
+
+         {props.route.params.service != "Pedicure" && 
+           <Text style={styles.titleService}>{props.route.params.service}</Text>
+         }
+        
 
           {!Load && 
 
@@ -362,11 +374,11 @@ function Index(props) {
                           <View style={styles.inputText}>
                               <Text style={{marginTop : 14, textAlign : "center"}}>
                                 {props.route.params.service == "Trenzas" && 
-                                  <Text>Cabello</Text>
+                                  <Text>{TypeService}</Text>
                                 }
 
                               {props.route.params.service != "Trenzas" && 
-                                  <Text>Tipo</Text>
+                                  <Text>{TypeService}</Text>
                                 }
 
                               </Text>

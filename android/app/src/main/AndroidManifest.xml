@@ -38,6 +38,6 @@
         android:name="com.google.android.maps.v2.API_KEY"
         android:value="AIzaSyBm_gLphZClLWDkUHnD0PrxCx1H0GCoXeM"/>
 
-
+  <meta-data android:name="com.google.firebase.messaging.default_notification_sound" android:resource="@raw/iphone"/>
     </application>
 </manifest>

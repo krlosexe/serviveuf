@@ -124,7 +124,7 @@ function Index(props) {
       
 
 
-         <ScrollView>
+         <ScrollView style={{marginBottom :80}}>
             {Services.length > 0 &&
                 Services.map((item, key)=>{
                     return <CardService

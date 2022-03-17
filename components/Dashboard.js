@@ -1,5 +1,5 @@
 import React, { useEffect, useContext, useState } from 'react';
-import { StyleSheet, Text, View, ScrollView, TouchableOpacity, Image, ActivityIndicator, ImageBackground } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, TouchableOpacity, Image, ActivityIndicator, ImageBackground, Alert } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { server, base_url } from '../Env'
 import axios from 'axios'
@@ -24,7 +24,14 @@ function Index(props) {
   const userDetails = useContext(UserContext)
 
   function goToScreen(screen, service, id_service) {
-    navigation.navigate(screen, { randomCode: Math.random(), service, id_service })
+    
+    console.log(Request)
+    if(Request && screen == "RequestService"){
+      Alert.alert("Ya tienes un servicio pendiente")
+    }else{
+      navigation.navigate(screen, { randomCode: Math.random(), service, id_service })
+    }
+    
   }
 
   let randomCode

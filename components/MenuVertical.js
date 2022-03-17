@@ -305,14 +305,20 @@ function Menu(props) {
             </View>
             <Text style={{...styles.name, marginBottom : 10}}>{props.userDetails.names} {props.userDetails.last_names}</Text>
 
-            <StarRating
-              disabled={false}
-              maxStars={5}
-              rating={Rating}
-              fullStarColor={'#FF9700'}
-              emptyStarColor = {"#fff"}
-              starSize = {23}
-            />
+
+            {props.userDetails.mode_service_provider &&
+                 <StarRating
+                  disabled={false}
+                  maxStars={5}
+                  rating={Rating}
+                  fullStarColor={'#FF9700'}
+                  emptyStarColor = {"#fff"}
+                  starSize = {23}
+                />
+              }
+
+
+           
 
           </LinearGradient>
 

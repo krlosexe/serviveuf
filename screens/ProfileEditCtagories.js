@@ -126,7 +126,7 @@ function Index(props) {
             </View>
 
             <View style={styles.itemCheck}>
-                <Text>Pedicure</Text>
+                <Text>Manicure y Pedicure</Text>
                 <CheckBox
                     value={CheckPedicure}
                     onValueChange={(newValue) => setCheckPedicure(newValue)}
