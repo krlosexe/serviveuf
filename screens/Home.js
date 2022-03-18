@@ -1,11 +1,11 @@
 import React, {useState, useEffect, useContext}  from 'react';
-import { StyleSheet} from 'react-native';
+import { Alert, StyleSheet} from 'react-native';
 
 import UserContext from '../contexts/UserContext'
 import AsyncStorage from '@react-native-community/async-storage'
 
-import {serverQa, base_url} from '../Env' 
-import axios from 'axios'
+import { Notifier, Easing } from 'react-native-notifier';
+
 
 import RequestPermission from '../permission';
 import Splash from './Splash'
@@ -67,6 +67,31 @@ function Index(props){
         _retrieveData()
     },[])
 
+
+
+
+    useEffect(() => {
+        messaging().onMessage(async remoteMessage => {
+
+            console.log(remoteMessage)
+
+           // if(remoteMessage.data.type == "chat"){
+                Notifier.showNotification({
+                    title: remoteMessage.notification.title,
+                    description: remoteMessage.notification.body,
+                    showAnimationDuration: 800,
+                    showEasing: Easing.bounce,
+                    onHidden: () => console.log('Hidden'),
+                    onPress: () => console.log('Press'),
+                    hideOnPress: true,
+                    componentProps: {
+                        titleStyle: {color : "#0B4E6B"},
+                      },
+                })
+           // }
+            
+        });
+    }, [])
 
 
 

@@ -20,7 +20,8 @@ function Index(props) {
   const [RequestDate, setRequestDate] = useState(false);
   const [RequestId, setRequestId] = useState(false);
   const [CountOfferts, setCountOfferts] = useState(0);
-
+  const [CreatedAt, setCreatedAt] = useState(0);
+  const [Time , setTime] = useState(0)
   const userDetails = useContext(UserContext)
 
   function goToScreen(screen, service, id_service) {
@@ -29,7 +30,7 @@ function Index(props) {
     if(Request && screen == "RequestService"){
       Alert.alert("Ya tienes un servicio pendiente")
     }else{
-      navigation.navigate(screen, { randomCode: Math.random(), service, id_service })
+      navigation.navigate(screen, { randomCode: Math.random(), service, id_service, CreatedAt })
     }
     
   }
@@ -52,6 +53,23 @@ function Index(props) {
 
   }, [randomCode])
 
+
+  function startTimer(duration) {
+    var timer = duration, minutes, seconds;
+    setInterval(function () {
+        minutes = parseInt(timer / 60, 10);
+        seconds = parseInt(timer % 60, 10);
+
+        minutes = minutes < 10 ? "0" + minutes : minutes;
+        seconds = seconds < 10 ? "0" + seconds : seconds;
+        setTime(minutes + ":" + seconds)
+       // console.log(minutes + ":" + seconds)
+        if (--timer < 0) {
+            timer = duration;
+        }
+    }, 1000);
+  }
+
   const getRequestServices = (init) => {
 
     if (init) {
@@ -61,15 +79,14 @@ function Index(props) {
     console.log(base_url(server, `request/service/by/client/${userDetails.id}`))
     axios.get(base_url(server, `request/service/by/client/${userDetails.id}`)).then(function (response) {
       if (response.data.id) {
-
         setRequest(true)
-
         setRequestStatus(response.data.status)
         setRequestCategory(response.data.name_category)
         setRequestDate(response.data.date)
         setRequestId(response.data.id)
         setCountOfferts(response.data.count_offerts)
-        console.log(response.data.id)
+        setCreatedAt(response.data.time)
+        startTimer(response.data.time)
       }
     })
       .catch(function (error) {
@@ -225,12 +242,14 @@ function Index(props) {
                 <Text>Solicitud: {RequestStatus}</Text>
                 <Text>{RequestCategory}</Text>
                 <Text>{RequestDate}</Text>
+                
               </View>
 
               <View>
                 <ActivityIndicator size="small" color="#0B4E6B" />
 
-                <Text style={{ fontWeight: "bold", textAlign: "center", marginTop: 10 }}>{CountOfferts}</Text>
+                <Text style={{ fontWeight: "bold", textAlign: "center", marginTop: 10, marginBottom : 20 }}>{CountOfferts}</Text>
+                <Text>{Time}</Text>
               </View>
             </View>
           </View>

@@ -1,4 +1,5 @@
 import React from 'react'
+import { NotifierWrapper } from 'react-native-notifier';
 
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
@@ -47,42 +48,45 @@ const Drawer = createDrawerNavigator();
 
 function App(){
   return (
-    <NavigationContainer>
-      <UserProvider>
-       <Drawer.Navigator>
-         <Drawer.Screen name="Home"                        component={ Home } />
-         <Drawer.Screen name="Login"                       component={ Login } />
-         <Drawer.Screen name="Register"                    component={ Register } />
-         <Drawer.Screen name="Forgout"                     component={ Forgout } />
-         <Drawer.Screen name="ForgoutPasswordSuccess"      component={ ForgoutPasswordSuccess } />
-         <Drawer.Screen name="Profile"                     component={ Profile } />
-         <Drawer.Screen name="ServiceProviderRegister"     component={ ServiceProviderRegister } />
-         <Drawer.Screen name="ProfileEdit"                 component={ ProfileEdit } />
-         <Drawer.Screen name="MovementHistory"             component={ MovementHistory } />
-         <Drawer.Screen name="Dashboard"                   component={ Dashboard } />
-         <Drawer.Screen name="RequestService"              component={ RequestService } />
-         <Drawer.Screen name="RequestServiceDetail"        component={ RequestServiceDetail } />
-         <Drawer.Screen name="RequestOfferts"              component={ RequestOfferts } />
-         <Drawer.Screen name="RequestOffertsDetails"       component={ RequestOffertsDetails } />
-         <Drawer.Screen name="MyRequestServices"           component={ MyRequestServices } />
-         <Drawer.Screen name="MyOffertsServices"           component={ MyOffertsServices } />
-         <Drawer.Screen name="Faq"                         component={ Faq } />
-         <Drawer.Screen name="Chat"                        component={ Chat } />
-         <Drawer.Screen name="CalificationServiceProvider" component={ CalificationServiceProvider } />
-         <Drawer.Screen name="CreditAccount"               component={ CreditAccount } />
-         <Drawer.Screen name="MethodPay"                   component={ MethodPay } />
-         <Drawer.Screen name="PayToCard"                   component={ PayToCard } />
-         <Drawer.Screen name="PayToNequi"                  component={ PayToNequi } />
-         <Drawer.Screen name="PaymentSummary"              component={ PaymentSummary } />
-         <Drawer.Screen name="ReportProblem"               component={ ReportProblem } />
-         <Drawer.Screen name="Security"                    component={ Security } />
-         <Drawer.Screen name="ProfileEditCtagories"        component={ ProfileEditCtagories } />
-         <Drawer.Screen name="Interes"                     component={ Interes } />
-         <Drawer.Screen name="IntroServiceProvider"        component={ IntroServiceProvider } />
-         
-       </Drawer.Navigator>
-      </UserProvider>
-    </NavigationContainer>
+
+    <NotifierWrapper>
+      <NavigationContainer>
+        <UserProvider>
+        <Drawer.Navigator>
+          <Drawer.Screen name="Home"                        component={ Home } />
+          <Drawer.Screen name="Login"                       component={ Login } />
+          <Drawer.Screen name="Register"                    component={ Register } />
+          <Drawer.Screen name="Forgout"                     component={ Forgout } />
+          <Drawer.Screen name="ForgoutPasswordSuccess"      component={ ForgoutPasswordSuccess } />
+          <Drawer.Screen name="Profile"                     component={ Profile } />
+          <Drawer.Screen name="ServiceProviderRegister"     component={ ServiceProviderRegister } />
+          <Drawer.Screen name="ProfileEdit"                 component={ ProfileEdit } />
+          <Drawer.Screen name="MovementHistory"             component={ MovementHistory } />
+          <Drawer.Screen name="Dashboard"                   component={ Dashboard } />
+          <Drawer.Screen name="RequestService"              component={ RequestService } />
+          <Drawer.Screen name="RequestServiceDetail"        component={ RequestServiceDetail } />
+          <Drawer.Screen name="RequestOfferts"              component={ RequestOfferts } />
+          <Drawer.Screen name="RequestOffertsDetails"       component={ RequestOffertsDetails } />
+          <Drawer.Screen name="MyRequestServices"           component={ MyRequestServices } />
+          <Drawer.Screen name="MyOffertsServices"           component={ MyOffertsServices } />
+          <Drawer.Screen name="Faq"                         component={ Faq } />
+          <Drawer.Screen name="Chat"                        component={ Chat } />
+          <Drawer.Screen name="CalificationServiceProvider" component={ CalificationServiceProvider } />
+          <Drawer.Screen name="CreditAccount"               component={ CreditAccount } />
+          <Drawer.Screen name="MethodPay"                   component={ MethodPay } />
+          <Drawer.Screen name="PayToCard"                   component={ PayToCard } />
+          <Drawer.Screen name="PayToNequi"                  component={ PayToNequi } />
+          <Drawer.Screen name="PaymentSummary"              component={ PaymentSummary } />
+          <Drawer.Screen name="ReportProblem"               component={ ReportProblem } />
+          <Drawer.Screen name="Security"                    component={ Security } />
+          <Drawer.Screen name="ProfileEditCtagories"        component={ ProfileEditCtagories } />
+          <Drawer.Screen name="Interes"                     component={ Interes } />
+          <Drawer.Screen name="IntroServiceProvider"        component={ IntroServiceProvider } />
+          
+        </Drawer.Navigator>
+        </UserProvider>
+      </NavigationContainer>
+    </NotifierWrapper>
   )
 }
 console.disableYellowBox = true

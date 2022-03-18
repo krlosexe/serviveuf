@@ -26,11 +26,32 @@ function Index(props) {
     navigation.navigate(screen, {randomCode : Math.random(), detail_offert})
   }
 
+
+  function startTimer(duration) {
+    var timer = duration, minutes, seconds;
+    setInterval(function () {
+        minutes = parseInt(timer / 60, 10);
+        seconds = parseInt(timer % 60, 10);
+
+        minutes = minutes < 10 ? "0" + minutes : minutes;
+        seconds = seconds < 10 ? "0" + seconds : seconds;
+        setTime(minutes + ":" + seconds)
+       // console.log(minutes + ":" + seconds)
+        if (--timer < 0) {
+            timer = duration;
+            CancelService()
+        }
+    }, 1000);
+  }
+
+
+
     const { UserDetails, setUserDetails } = useContext(UserContext)
     const userDetails                     = useContext(UserContext)
 
     const [Offerts , setOfferts] = useState([])
     const [Load , setLoad] = useState(false)
+    const [Time , setTime] = useState(0)
     
     let randomCode 
     if(props.route.params){
@@ -39,16 +60,22 @@ function Index(props) {
         randomCode = 1
     }
   useEffect(() => {
-
     GetOfferts(props.route.params.service, true)
     const unsubscribe = messaging().onMessage(async remoteMessage => {
      GetOfferts(props.route.params.service, false)
     });
 
-    
+      console.log(props.route.params.CreatedAt)
 
   }, [randomCode])
 
+
+
+
+  useEffect(() => {
+    startTimer(props.route.params.CreatedAt)
+
+  }, [])
 
 
 
@@ -195,6 +222,14 @@ function Index(props) {
 
 
 
+
+    
+
+
+
+
+
+
     const [Load , setLoad] = useState(false)
 
 
@@ -314,7 +349,7 @@ function Index(props) {
                         <ActivityIndicator size="large" color="#fff" />
                     }
                     {!Load &&
-                        <Text style={{color : "white"}}>Cancelar Pedido</Text>
+                        <Text style={{color : "white"}}>Cancelar Pedido {Time}</Text>
                     }
                   </Text>
             </TouchableOpacity>
