@@ -54,7 +54,7 @@ function Index(props) {
   }, [randomCode])
 
 
-  function startTimer(duration) {
+  function startTimer(duration, id_service) {
     var timer = duration, minutes, seconds;
     setInterval(function () {
         minutes = parseInt(timer / 60, 10);
@@ -63,12 +63,21 @@ function Index(props) {
         minutes = minutes < 10 ? "0" + minutes : minutes;
         seconds = seconds < 10 ? "0" + seconds : seconds;
         setTime(minutes + ":" + seconds)
-       // console.log(minutes + ":" + seconds)
+      //  console.log(id_service)
         if (--timer < 0) {
             timer = duration;
+            CancelService(id_service)
         }
     }, 1000);
   }
+
+
+
+  useEffect(() => {
+    
+  }, [randomCode])
+
+
 
   const getRequestServices = (init) => {
 
@@ -86,7 +95,7 @@ function Index(props) {
         setRequestId(response.data.id)
         setCountOfferts(response.data.count_offerts)
         setCreatedAt(response.data.time)
-        startTimer(response.data.time)
+        startTimer(response.data.time, response.data.id)
       }
     })
       .catch(function (error) {
@@ -94,11 +103,34 @@ function Index(props) {
         console.log(error.response.data.message)
         console.log('Error al enviar formularioss')
         setLoad(false)
+        setRequest(false)
       })
       .then(function (response) {
         setLoad(false)
       });
   }
+
+
+
+
+  const CancelService = (id_service) =>{
+    setLoad(true)
+    console.log(base_url(server,`cancel/request/service/${id_service}`))
+    axios.get( base_url(server,`cancel/request/service/${id_service}`)).then(function (response) {
+      setLoad(false)
+      setRequest(false)
+      getRequestServices(true)
+    })
+    .catch(function (error) {
+        console.log('Error al enviar formulario')
+      
+      setLoad(false)
+    })
+    .then(function () {});
+  } 
+
+
+
 
   useEffect(() => {
     if (userDetails.register) {
