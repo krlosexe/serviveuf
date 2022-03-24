@@ -47,6 +47,7 @@ function Index(props) {
   const [ClientReportService, setClientReportService] = useState(false);
   const [CommentsReportService, setCommentsReportService] = useState(false);
   const [PhotoReportService, setPhotoReportService] = useState(false);
+  const [Type, setType] = useState(false);
 
   const GOOGLE_MAPS_APIKEY = 'AIzaSyBm_gLphZClLWDkUHnD0PrxCx1H0GCoXeM';
   const [RegionInitial, setRegionInitial] = useState({
@@ -76,13 +77,25 @@ function Index(props) {
     })
     setDataService(props.route.params.detail_service)
 
-    console.log(props.route.params.detail_service)
-
+    
 
     if (props.route.params.detail_service.status == "Reportado") {
       GetReportService()
     }
   }, [props.route.params.detail_service])
+
+
+
+
+  useEffect(() => {
+
+    if(DataService.name_category == "Trenzas"){
+      setType("Cabello")
+    }else{
+      setType("Tipo")
+    }
+  }, [DataService])
+
 
 
   useEffect(() => {
@@ -143,7 +156,7 @@ function Index(props) {
     data.id_provider = userDetails.id
 
     setLoad(true)
-    if (data.price === '' || data.time === '' || data.comments === '') {
+    if (data.price === '' || data.time === '') {
       ToastAndroid.showWithGravity(
         "Completa todos los campos",
         ToastAndroid.SHORT,
@@ -311,7 +324,7 @@ function Index(props) {
 
         {DataService.name_category != "Barberia" &&
           <View style={styles.Item}>
-            <Text style={styles.ItemText}>Tipo:</Text>
+            <Text style={styles.ItemText}>{Type}:</Text>
             <Text style={styles.ItemText}>{DataService.type}</Text>
          </View>
         }
@@ -530,10 +543,10 @@ function Index(props) {
         </View>
 
         <View style={{ alignItems: "center", marginTop: 10 }}>
+          <Text style={{textAlign : "left", fontSize : 20, color : "#063046", fontWeight : "bold"}}>Precio</Text>
           <View style={styles.inputView} >
             <TextInput
               style={styles.inputText}
-              placeholder="Precio"
               placeholderTextColor="#777"
               editable={editable}
               value={formInfo.price}
@@ -541,10 +554,12 @@ function Index(props) {
               onChangeText={text => onChangeText(text, 'price')} />
           </View>
 
+
+          <Text style={{textAlign : "left", fontSize : 20, color : "#063046", fontWeight : "bold"}}>Duración</Text>
+
           <View style={styles.inputView} >
             <TextInput
               style={styles.inputText}
-              placeholder="Duración"
               placeholderTextColor="#777"
               editable={editable}
               value={formInfo.time}
@@ -552,10 +567,11 @@ function Index(props) {
           </View>
 
 
+
+          <Text style={{textAlign : "left", fontSize : 20, color : "#063046", fontWeight : "bold"}}>Notas</Text>
           <View style={styles.inputView} >
             <TextInput
               style={styles.inputText}
-              placeholder="Notas"
               placeholderTextColor="#777"
               editable={editable}
               value={formInfo.comments}
@@ -600,7 +616,7 @@ function Index(props) {
                     <ActivityIndicator size="large" color="#fff" />
                   }
                   {!Load &&
-                    <Text style={{ fontSize: 14 }}>Procesar</Text>
+                    <Text style={{ fontSize: 14 }}>Finalizar</Text>
                   }
                 </Text>
               </TouchableOpacity>

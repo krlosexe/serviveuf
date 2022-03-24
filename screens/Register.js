@@ -152,15 +152,15 @@ function Index(props) {
         return false;
       }
 
-      if(!isSelected){
-        ToastAndroid.showWithGravity(
-            "Debe aceptar los términos y condiciones",
-            ToastAndroid.SHORT,
-            ToastAndroid.CENTER
-          );
-          setLoad(false)
-        return false;
-      }
+      // if(!isSelected){
+      //   ToastAndroid.showWithGravity(
+      //       "Debe aceptar los términos y condiciones",
+      //       ToastAndroid.SHORT,
+      //       ToastAndroid.CENTER
+      //     );
+      //     setLoad(false)
+      //   return false;
+      // }
 
       
 
@@ -354,12 +354,12 @@ function Index(props) {
 
 
                     <View style={styles.checkboxContainer}>
-                        <CheckBox
+                        {/* <CheckBox
                             value={isSelected}
                             onValueChange={setSelection}
                             style={styles.checkbox}
-                        />
-                        <Text style={styles.label}>Acepto <OpenURLButton url={Terminos}><Text style={{fontWeight : "bold"}}>términos y condiciones.*</Text></OpenURLButton></Text>
+                        /> */}
+                        <Text style={styles.label}>Al registrarme acepto <OpenURLButton url={Terminos}><Text style={{fontWeight : "bold"}}>términos y condiciones.*</Text></OpenURLButton></Text>
                     </View>
 
                   
