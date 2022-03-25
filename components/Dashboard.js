@@ -8,6 +8,10 @@ import UserContext from '../contexts/UserContext'
 
 import messaging from '@react-native-firebase/messaging';
 
+import BackgroundTimer from 'react-native-background-timer';
+
+
+
 function Index(props) {
 
   const { navigation } = props
@@ -23,6 +27,9 @@ function Index(props) {
   const [CreatedAt, setCreatedAt] = useState(0);
   const [Time , setTime] = useState(0)
   const userDetails = useContext(UserContext)
+
+  
+  const [intervalId , setintervalId] = useState(false)
 
   function goToScreen(screen, service, id_service) {
     
@@ -45,15 +52,20 @@ function Index(props) {
   useEffect(() => {
     setRequest(false)
     getRequestServices(true)
-
     const unsubscribe = messaging().onMessage(async remoteMessage => {
       getRequestServices(false)
     });
     return unsubscribe
 
+    
+
+
+
   }, [randomCode])
 
 
+
+/*
   function startTimer(duration, id_service) {
     var timer = duration, minutes, seconds;
     setInterval(function () {
@@ -71,7 +83,7 @@ function Index(props) {
     }, 1000);
   }
 
-
+*/
 
   useEffect(() => {
     
@@ -113,7 +125,38 @@ function Index(props) {
 
 
 
+  function startTimer(duration, id_service) {
+
+    let minutes = 0
+
+    setintervalId(
+      BackgroundTimer.setInterval(() => {
+        minutes++
+        setTime(parseInt((duration - minutes) / 60))
+        console.log((duration - minutes) / 60, 'tic');
+        return (duration - minutes) / 60
+      }, 1000)
+    )
+
+  }
+
+
+  useEffect(() => {
+
+    if(Time == 0) {
+      console.log("CANCEL")
+      BackgroundTimer.clearInterval(intervalId);
+      CancelService(RequestId)
+    }
+      console.log(Time, "TIME")
+  }, [Time])
+
+
+
+
+
   const CancelService = (id_service) =>{
+    BackgroundTimer.stop();
     setLoad(true)
     console.log(base_url(server,`cancel/request/service/${id_service}`))
     axios.get( base_url(server,`cancel/request/service/${id_service}`)).then(function (response) {
@@ -274,16 +317,18 @@ function Index(props) {
                 <Text>Solicitud: {RequestStatus}</Text>
                 <Text>{RequestCategory}</Text>
                 <Text>{RequestDate}</Text>
-                
               </View>
 
               <View>
                 <ActivityIndicator size="small" color="#0B4E6B" />
-
                 <Text style={{ fontWeight: "bold", textAlign: "center", marginTop: 10, marginBottom : 20 }}>{CountOfferts}</Text>
-                <Text>{Time}</Text>
               </View>
             </View>
+
+            <View>
+                <Text>Tiempo Restante : {Time} min</Text>
+              </View>
+
           </View>
         </TouchableOpacity>
 
