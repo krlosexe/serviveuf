@@ -328,6 +328,15 @@ function Index(props) {
             <Text style={styles.ItemText}>{DataService.type}</Text>
          </View>
         }
+
+
+
+      {props.route.params.detail_service.status == "Aprobada" &&
+         <View style={styles.Item}>
+            <Text style={styles.ItemText}>Forma de Pago:</Text>
+            <Text style={styles.ItemText}>Efectivo</Text>
+         </View>
+      }
         
 
 
@@ -335,7 +344,6 @@ function Index(props) {
           color: "black",
           width: "50%",
           alignSelf: "center",
-          paddingHorizontal: 20,
           textAlign: "center",
           fontSize: 17,
           borderWidth: 2,
@@ -343,11 +351,13 @@ function Index(props) {
           borderRadius: 17,
           paddingVertical: 5,
           marginTop: 20,
-          marginBottom: 20
+          marginBottom: 20,
+          justifyContent : "center",
+          alignItems : "center"
         }} onPress={() => OpenLocation(DataService.latitude, DataService.longitude)}>
           <Text style={{ color: "white", textAlign: "center" }}><View style={{ flexDirection: "row" }}>
             <Icon style={{ alignSelf: "center" }} name='navigation-2' width={20} height={20} fill='white' />
-            <Text style={{ marginLeft: 10, fontWeight: "bold", color: "white" }}>Ver ubicacion</Text>
+            <Text style={{fontWeight: "bold", color: "white" }}>Ver ubicacion</Text>
           </View></Text>
         </TouchableOpacity>
 
@@ -443,8 +453,11 @@ function Index(props) {
 
                   <Marker
                     coordinate={{ latitude: Region.latitude, longitude: Region.longitude }}
-                    image={require('../src/images/marker.png')}
-                  />
+                    // image={require('../src/images/marker.png')}
+                  >
+
+                      <Image source={require('../src/images/marker.png')} resizeMode="contain" style={{ width: 26, height: 31, resizeMode : "center" }} />
+                  </Marker>
                 </MapView>
               </View>
 

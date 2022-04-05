@@ -318,8 +318,6 @@ function Menu(props) {
               }
 
 
-           
-
           </LinearGradient>
 
 

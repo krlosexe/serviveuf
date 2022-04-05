@@ -56,8 +56,6 @@ function Index(props){
 
 
       useEffect(()=>{
-
- 
         if (Platform.OS === 'android') {
             RequestPermission().then(_ => {
               console.log('requested!');
