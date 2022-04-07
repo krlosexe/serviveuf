@@ -186,6 +186,27 @@ function Index(props) {
     } 
 
 
+
+    const CancelService = (data) => {
+      setLoad(true)
+      console.log(base_url(server,`client/cancel/request/service/${data.id}`))
+      axios.get( base_url(server,`client/cancel/request/service/${data.id}`)).then(function (response) {
+        setLoad(false)
+        goToScreen("MyRequestServices")
+      })
+      .catch(function (error) {
+          console.log('Error al enviar formulariosssss')
+           console.log(error)
+          ToastAndroid.showWithGravity(
+            error.response.data.message,
+            ToastAndroid.SHORT,
+            ToastAndroid.CENTER
+        );
+        setLoad(false)
+      })
+      .then(function () {});
+    }
+
   return (
     <View style={styles.container}>
         <StatusBar translucent backgroundColor="transparent" barStyle="dark-content" />
@@ -280,6 +301,24 @@ function Index(props) {
               </View></Text>
             </TouchableOpacity>
           }
+
+
+
+
+        {props.route.params.detail_offert.status == "En proceso" &&
+            <TouchableOpacity style={{ ...styles.loginBtn,  alignSelf: "center", width: 120,backgroundColor: "#ED6306" }} onPress={() => CancelService(props.route.params.detail_offert)}>
+              <Text style={styles.loginText}>
+                {Load &&
+                  <ActivityIndicator size="large" color="#fff" />
+                }
+                {!Load &&
+                  <Text style={{ fontSize: 14, color : "#fff" }}>Cancelar</Text>
+                }
+              </Text>
+            </TouchableOpacity>
+          }
+
+
 
 
 
@@ -520,6 +559,17 @@ const styles = StyleSheet.create({
         width : 30,
         height : 30,
         resizeMode : "contain"
+    },
+
+    loginBtn: {
+      width: "55%",
+      backgroundColor: "#063046",
+      borderRadius: 25,
+      height: 50,
+      alignItems: "center",
+      justifyContent: "center",
+      marginTop: 10,
+      marginBottom: 20
     }
 
 
