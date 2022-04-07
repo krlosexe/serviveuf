@@ -51,7 +51,7 @@ function Index(props){
 
 
 
-    useEffect(()=>{
+    useEffect(()=>{ 
 
       setRequesting(false)
       setRequestingNequi(false)
@@ -185,18 +185,38 @@ function Index(props){
           "payment_method"  : props.route.params.payment_method.type
         }
 
-        axios.post(base_url(server,`store/credit/client`), data).then(function (response) {
-          
 
-        }).catch(function (error) {
-            setRequesting(false)
-            console.log('Error al enviar formulario2')
-          //console.log(error);
-            console.log(error.response, "EL ERROR2");
+        if(props.route.params.chargue == true){
+
+            console.log(base_url(server,`store/charge/client`))
+            axios.post(base_url(server,`store/charge/client`), data).then(function (response) {
+            
+
+            }).catch(function (error) {
+                setRequesting(false)
+                console.log('Error al enviar formulario2')
+              //console.log(error);
+                console.log(error.response, "EL ERROR2");
+                  
+              }).then(function () {
               
-          }).then(function () {
-          
-        });
+            });
+        }else{
+          axios.post(base_url(server,`store/credit/client`), data).then(function (response) {
+            
+
+          }).catch(function (error) {
+              setRequesting(false)
+              console.log('Error al enviar formulario2')
+            //console.log(error);
+              console.log(error.response, "EL ERROR2");
+                
+            }).then(function () {
+            
+          });
+        }
+
+        
     }
 
 

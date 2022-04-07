@@ -26,6 +26,7 @@ function Index(props){
     useEffect(()=>{
         setAmountFee(parseFloat(props.route.params.amount))
         setCheck(false)
+
     },[randomCode])
 
     useEffect(()=>{
@@ -64,7 +65,8 @@ function Index(props){
             amount_in_cents  : AmountFee,
             payment_concept  : props.route.params.payment_concept,
             payment_method   : payment_method,
-            id_fee           : props.route.params.id_fee
+            id_fee           : props.route.params.id_fee,
+            chargue          : props.route.params.charge
         })
 
     }

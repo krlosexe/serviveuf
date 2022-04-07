@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, StatusBar, Image, TextInput, ScrollView, ActivityIndicator, ToastAndroid, Modal } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, StatusBar, Image, TextInput, ScrollView, ActivityIndicator, ToastAndroid, Modal, Alert } from 'react-native';
 
 import { server, file_server, base_url } from '../Env'
 
@@ -275,6 +275,47 @@ function Index(props) {
 
 
   }
+
+
+  const NoAssistance = (id_service) =>{
+    console.log(id_service)
+
+    Alert.alert(
+      "Alerta",
+      `¿Esta seguro?`,
+      [
+        {
+          text: "No",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel"
+        },
+        { text: "Si", onPress: () => CancelServiceClient(id_service) }
+      ]
+    );
+  }
+
+
+  const CancelServiceClient = (id) =>{
+    setLoad(true)
+    console.log(base_url(server,`no/assistance/client/${id}/${formInfo.price * 0.05}`))
+    axios.get( base_url(server,`no/assistance/client/${id}/${formInfo.price * 0.05}`)).then(function (response) {
+      setLoad(false)
+      goToScreen("Dashboard")
+    })
+    .catch(function (error) {
+        console.log('Error al enviar formulariosssss')
+        console.log(error)
+        ToastAndroid.showWithGravity(
+          error.response.data.message,
+          ToastAndroid.SHORT,
+          ToastAndroid.CENTER
+      );
+      setLoad(false)
+    })
+    .then(function () {});
+  } 
+
+
 
 
   return (
@@ -646,6 +687,25 @@ function Index(props) {
               </TouchableOpacity>
             </View>
           }
+
+
+
+        {props.route.params.detail_service.status == "Aprobada" &&
+            <View style={{ flexDirection: "row", justifyContent: "space-around", width: "100%" }}>
+              <TouchableOpacity style={{ ...styles.loginBtn, width: 120, backgroundColor : "red"}} onPress={() => NoAssistance(props.route.params.detail_service.id_service)}>
+                <Text style={styles.loginText}>
+                  {Load &&
+                    <ActivityIndicator size="large" color="#fff" />
+                  }
+                  {!Load &&
+                    <Text style={{ fontSize: 14 }}>No asistio</Text>
+                  }
+                </Text>
+              </TouchableOpacity>
+            </View>
+          }
+
+
 
 
           {props.route.params.detail_service.status == "Finalizada" &&

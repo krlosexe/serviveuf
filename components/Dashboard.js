@@ -39,7 +39,14 @@ function Index(props) {
     if(Request && screen == "RequestService"){
       Alert.alert("Ya tienes un servicio pendiente")
     }else{
-      navigation.navigate(screen, { randomCode: Math.random(), service, id_service, CreatedAt })
+
+
+      if(Charge){
+        navigation.navigate(screen, { randomCode: Math.random(), service, id_service, CreatedAt, Charge })
+      }else{
+        navigation.navigate(screen, { randomCode: Math.random(), service, id_service, CreatedAt })
+      }
+      
     }
     
   }
@@ -182,7 +189,7 @@ function Index(props) {
 
 
         {Charge  &&
-          <TouchableOpacity onPress={() => navigation.navigate("MethodPay", { amount :  DataCharge.amount})}>
+          <TouchableOpacity onPress={() => navigation.navigate("MethodPay", { amount :  DataCharge.amount, charge : true})}>
               <View style={styles.request}>
                 <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
                   <View>

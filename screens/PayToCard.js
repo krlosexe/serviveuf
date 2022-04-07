@@ -175,7 +175,8 @@ function Index(props){
                 payment_concept  : "Recarga de Saldo",
                 payment_method   : payment_method,
                 data_card,
-                acceptance_token : acceptance_token
+                acceptance_token : acceptance_token,
+                chargue : props.route.params.chargue
             })
 
             /*

@@ -124,6 +124,12 @@ function Index(props) {
 
     const AcceptOffert = (id_offert, id_service)=>{
 
+
+      if(props.route.params.charge){
+        Alert.alert("No puedes aceptar ofertas, debes pagar tu cargo pendiente")
+        return false
+      }
+
         const data = { id_offert, id_service }
         console.log('Enviando formulario')
         console.log(base_url(server,`accept/offert`))

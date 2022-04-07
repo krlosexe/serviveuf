@@ -22,8 +22,14 @@ function Index(props) {
   function goToScreen(screen, detail_offert)
   {     
 
-    console.log(detail_offert, "detail_offert")
-    navigation.navigate(screen, {randomCode : Math.random(), detail_offert})
+
+    if(props.route.params.Charge){
+      navigation.navigate(screen, {randomCode : Math.random(), detail_offert, charge : true})
+    }else{
+      navigation.navigate(screen, {randomCode : Math.random(), detail_offert})
+    }
+   
+    
   }
 
 
@@ -60,6 +66,7 @@ function Index(props) {
         randomCode = 1
     }
   useEffect(() => {
+
     GetOfferts(props.route.params.service, true)
     const unsubscribe = messaging().onMessage(async remoteMessage => {
      GetOfferts(props.route.params.service, false)
@@ -110,6 +117,12 @@ function Index(props) {
 
 
   const AcceptOffert = (id_offert, id_service)=>{
+
+
+      if(props.route.params.Charge){
+        Alert.alert("No puedes aceptar ofertas, debes pagar tu cargo pendiente")
+        return false
+      }
 
       const data = { id_offert, id_service }
       console.log('Enviando formulario')

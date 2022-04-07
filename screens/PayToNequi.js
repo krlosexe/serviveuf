@@ -129,7 +129,8 @@ function Index(props){
             payment_concept  : "Recarga de Saldo",
             payment_method   : payment_method,
             acceptance_token : acceptance_token,
-            id_fee           : props.route.params.id_fee
+            id_fee           : props.route.params.id_fee,
+            chargue : props.route.params.chargue
         })
 
         goToScreen("PaymentSummary")
