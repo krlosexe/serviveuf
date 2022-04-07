@@ -174,7 +174,7 @@ function Index(props) {
       })
       .catch(function (error) {
           console.log('Error al enviar formulariosssss')
-        console.log(error)
+          console.log(error)
           ToastAndroid.showWithGravity(
             error.response.data.message,
             ToastAndroid.SHORT,
@@ -187,6 +187,28 @@ function Index(props) {
 
 
 
+
+    const CancelServiceClient = (id, pay) =>{
+      setLoad(true)
+      console.log(base_url(server,`cancel/request/service/pay/${id}/${pay}`))
+      axios.get( base_url(server,`cancel/request/service/pay/${id}/${pay}`)).then(function (response) {
+        setLoad(false)
+        goToScreen("Dashboard")
+      })
+      .catch(function (error) {
+          console.log('Error al enviar formulariosssss')
+          console.log(error)
+          ToastAndroid.showWithGravity(
+            error.response.data.message,
+            ToastAndroid.SHORT,
+            ToastAndroid.CENTER
+        );
+        setLoad(false)
+      })
+      .then(function () {});
+    } 
+
+
     const CancelService = (data) => {
       setLoad(true)
       console.log(base_url(server,`client/cancel/request/service/${data.id}`))
@@ -197,15 +219,24 @@ function Index(props) {
       .catch(function (error) {
           console.log('Error al enviar formulariosssss')
            console.log(error)
-          ToastAndroid.showWithGravity(
-            error.response.data.message,
-            ToastAndroid.SHORT,
-            ToastAndroid.CENTER
-        );
+           Alert.alert(
+            "Alerta",
+            `Para cancelar la cita debes pagar el 5% del costo de la oferta: COP ${props.route.params.detail_offert.price  * 0.05}`,
+            [
+              {
+                text: "No",
+                onPress: () => console.log("Cancel Pressed"),
+                style: "cancel"
+              },
+              { text: "Si", onPress: () => CancelServiceClient(data.id, props.route.params.detail_offert.price  * 0.05) }
+            ]
+          );
         setLoad(false)
       })
       .then(function () {});
     }
+
+    
 
   return (
     <View style={styles.container}>

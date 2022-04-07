@@ -28,7 +28,9 @@ function Index(props) {
   const [Time , setTime] = useState(0)
   const userDetails = useContext(UserContext)
 
-  
+  const [Charge, setCharge] = useState(false);
+  const [DataCharge, setDataCharge] = useState(false);
+
   const [intervalId , setintervalId] = useState(false)
 
   function goToScreen(screen, service, id_service) {
@@ -52,6 +54,7 @@ function Index(props) {
   useEffect(() => {
     setRequest(false)
     getRequestServices(true)
+    getChargue()
     const unsubscribe = messaging().onMessage(async remoteMessage => {
       getRequestServices(false)
     });
@@ -65,32 +68,17 @@ function Index(props) {
 
 
 
-/*
-  function startTimer(duration, id_service) {
-    var timer = duration, minutes, seconds;
-    setInterval(function () {
-        minutes = parseInt(timer / 60, 10);
-        seconds = parseInt(timer % 60, 10);
-
-        minutes = minutes < 10 ? "0" + minutes : minutes;
-        seconds = seconds < 10 ? "0" + seconds : seconds;
-        setTime(minutes + ":" + seconds)
-      //  console.log(id_service)
-        if (--timer < 0) {
-            timer = duration;
-            CancelService(id_service)
-        }
-    }, 1000);
+  const getChargue = () => {
+    console.log(base_url(server, `get/charge/client/${userDetails.id}`))
+    axios.get(base_url(server, `get/charge/client/${userDetails.id}`)).then(function (response) {
+      console.log(response.data, "response.date")
+      setCharge(true)
+      setDataCharge(response.data)
+    })
+      .catch(function (error) {
+        setCharge(false)
+      })
   }
-
-*/
-
-  useEffect(() => {
-    
-  }, [randomCode])
-
-
-
   const getRequestServices = (init) => {
 
     if (init) {
@@ -184,7 +172,32 @@ function Index(props) {
   return (
 
     <ScrollView style={{marginBottom: 90}}>
+
+
+
+      
       <View style={styles.content_services}>
+
+
+
+
+        {Charge  &&
+          <TouchableOpacity onPress={() => navigation.navigate("MethodPay", { amount :  DataCharge.amount})}>
+              <View style={styles.request}>
+                <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+                  <View>
+                    <Text style={{textAlign : "center"}}>Tienes un cargo pendiente por pagar: {RequestStatus}</Text>
+                    <Text style={{fontWeight : "bold", fontSize : 20, textAlign : "center"}}>{DataCharge.amount}</Text>
+                    
+                  </View>
+                </View>
+
+              </View>
+          </TouchableOpacity>
+        }
+
+        
+
 
      
         <View style={{flexDirection:"column", marginBottom: 20}}>

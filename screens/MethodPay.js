@@ -51,18 +51,11 @@ function Index(props){
         let screen
         if(type_pay == "CARD"){
             screen = "PayToCard"
-            if(!Check){
-                Toast.show("Debes aceptar los gastos bancarios (+5%)")
-                return false;
-            }
+            
         }
             
         
         if(type_pay == "NEQUI"){
-            if(!Check){
-                Toast.show("Debes aceptar los gastos bancarios (+5%)")
-                return false;
-            }
             screen = "PayToNequi"
         }
 
@@ -129,17 +122,6 @@ function Index(props){
                         </TouchableOpacity>
 
                     </View>
-
-                    <View style={styles.checkboxContainer}>
-                        <CheckBox
-                            value={Check}
-                            onValueChange={setCheck}
-                            style={styles.checkbox}
-                        />
-                        <Text style={styles.label}>Pagar el <Text style={{fontWeight: "bold"}}>5% adicional</Text> por gastos bancarios</Text>
-                    </View>
-
-
 
 
             </ScrollView>
