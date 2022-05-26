@@ -59,6 +59,20 @@ function Index(props) {
         return false;
       }
 
+      const price = parseInt(data.amount_credit)
+
+      console.log(typeof price,"parseInt(data.amount_credit)")
+      if(price < 30000){
+        ToastAndroid.showWithGravity(
+            "Monto minimo 30.000",
+            ToastAndroid.SHORT,
+            ToastAndroid.CENTER
+          );
+          setLoad(false)
+        return false;
+      }
+
+
       goToScreen("MethodPay", data.amount_credit)
     }
 

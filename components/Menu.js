@@ -49,8 +49,12 @@ function Index(props) {
             </View>
           }
 
-
-
+          <View>
+            <TouchableOpacity style={styles.itemMenu} onPress={()=>goToScreen('Shop')}>
+                <Image style={{width: 24, height: 30, resizeMode: "contain"}} source={require('../src/images/icon_shop.png')}/>
+                <Text  style={styles.texMenu}>Tienda</Text>
+            </TouchableOpacity>
+        </View>
        
         <View>
             <TouchableOpacity style={styles.itemMenu} onPress={()=>goToScreen('Profile')}>

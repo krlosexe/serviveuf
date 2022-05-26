@@ -42,6 +42,7 @@ import Interes from './screens/Interes'
 import Security from './screens/Security'
 import IntroServiceProvider from './screens/IntroServiceProvider'
 
+import Shop from './screens/Shop'
 
 const Drawer = createDrawerNavigator();
 
@@ -82,6 +83,7 @@ function App(){
           <Drawer.Screen name="ProfileEditCtagories"        component={ ProfileEditCtagories } />
           <Drawer.Screen name="Interes"                     component={ Interes } />
           <Drawer.Screen name="IntroServiceProvider"        component={ IntroServiceProvider } />
+          <Drawer.Screen name="Shop"        component={ Shop } />
           
         </Drawer.Navigator>
         </UserProvider>
