@@ -8,7 +8,7 @@ import HeadNavigate from '../components/HeadNavigate'
 
 import {server, file_server, base_url} from '../Env'    
 import axios from 'axios'
-import ImagePicker from 'react-native-image-picker';
+import {launchImageLibrary} from 'react-native-image-picker';
 
 function Index(props) {  
 
@@ -135,18 +135,18 @@ function Index(props) {
 
 
 
-      const launchImageLibrary = () => {
+      const launchLibrary = () => {
         let options = {
-          storageOptions: {
-            skipBackup: true,
-            path: 'images',
-          },
+          selectionLimit: 0,
+          mediaType: 'photo',
+          includeBase64: true,
+          includeExtra: true,
         };
-        ImagePicker.launchImageLibrary(options, (response) => {
+        launchImageLibrary(options, (response) => {
           console.log('Response = ', response);
 
-          if(response.data){
-            setPhotoProfile(`data:image/png;base64,${response.data}`)
+          if(response.base64){
+            setPhotoProfile(`data:image/png;base64,${response.base64}`)
 
             UpdatePhotoProfile(response.data)
           }
@@ -202,7 +202,7 @@ r          })
             
             <View style={styles.HeadProfile}>
 
-                <TouchableOpacity onPress={() =>launchImageLibrary()}   >
+                <TouchableOpacity onPress={() =>launchLibrary()}   >
                     <View>
                         <Image style={styles.HeadProfileImageBackgroud} source={require('../src/images/profile_edit.png')}
                         />
@@ -211,7 +211,7 @@ r          })
                         />
 
 
-                        <TouchableOpacity onPress={() =>launchImageLibrary()}   >
+                        <TouchableOpacity onPress={() =>launchLibrary()}   >
                             <Image style={{
                                 width: 50, height: 50, 
                                 alignSelf : "center",

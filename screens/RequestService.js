@@ -7,7 +7,8 @@ import DatePicker from 'react-native-date-picker'
 import UserContext from '../contexts/UserContext'
 
 import HeadNavigate from '../components/HeadNavigate'
-import PhotoUpload from 'react-native-photo-upload'
+
+import {launchImageLibrary} from 'react-native-image-picker';
 import { Pulse } from 'react-native-animated-spinkit'
 
 import { ActionSheet } from 'react-native-cross-actionsheet'
@@ -224,6 +225,24 @@ function Index(props) {
     }
 
 
+    const launchLibrary = () => {
+      let options = {
+        selectionLimit: 0,
+        mediaType: 'photo',
+        includeBase64: true,
+        includeExtra: true,
+      };
+      launchImageLibrary(options, (response) => {
+        console.log('Response = ', response);
+        if(response.base64){
+          onChangeText(response.base64, 'photo')
+        }
+      });
+  
+    }
+
+    
+
   return (
     <View style={styles.container}>
         <StatusBar translucent backgroundColor="transparent" barStyle="dark-content" />
@@ -394,24 +413,14 @@ function Index(props) {
                         onChangeText={text => onChangeText(text, 'comments')}/>
                     </View>
 
-                    <PhotoUpload 
-
-                      photoPickerTitle = "Seleccione una Foto"
-                      containerStyle={{marginTop : -10}}  
-                     onPhotoSelect={image => {
-                      if (image) {
-                          //console.log(image) 
-                          onChangeText(image, 'photo')
-                        }}
-                      }>
-                      
+                    <TouchableOpacity onPress={() =>launchLibrary()}   >
                         <Image style={{
                             width: 250,
                             height : 150,
                             resizeMode : "contain"
                         }}title = "jaja"
-                        source={require('../src/images/upload_image.png')} />
-                    </PhotoUpload>
+                        source={formInfo.photo === '' ? require('../src/images/upload_image.png') : {uri: `data:image/png;base64,${formInfo.photo}`}} />
+                    </TouchableOpacity>
 
 
                   </View>
