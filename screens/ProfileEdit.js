@@ -148,7 +148,7 @@ function Index(props) {
           if(response.base64){
             setPhotoProfile(`data:image/png;base64,${response.base64}`)
 
-            UpdatePhotoProfile(response.data)
+            UpdatePhotoProfile(response.base64)
           }
             
         });
