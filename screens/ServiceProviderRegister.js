@@ -4,10 +4,9 @@ import { StyleSheet, Text, View, TextInput, TouchableOpacity, StatusBar, Image, 
 import {server, base_url} from '../Env'    
 import axios from 'axios'
 
-
+import {Picker} from '@react-native-picker/picker';
 import UserContext from '../contexts/UserContext'
 import CheckBox from '@react-native-community/checkbox';
-import { ActionSheet } from 'react-native-cross-actionsheet'
 
 
 function Index(props) {  
@@ -200,11 +199,19 @@ function onChangeText(text, key){
                             onChangeText={text => onChangeText(text, 'phone')}/>
                     </View>
 
-                    <TouchableOpacity style={styles.inputView} onPress={()=>typeDocument()}>
-                        <View style={styles.inputText}>
-                            <Text style={{marginTop : 14}}>{TypeDocument}</Text>
+                      <View style={styles.inputView} >
+                          <Picker
+                            selectedValue={TypeDocument}
+                            style={{ height: 50, width: '100%', ...styles.inputText }}
+                              onValueChange={(itemValue, itemIndex) => setTypeDocument(itemValue)}
+                            >
+                            <Picker.Item label={TypeDocument} value={TypeDocument} />
+                            <Picker.Item label={'Cedula de Ciudadania'} value={'Cedula de Ciudadania'} />
+                            <Picker.Item label={'Cedula de Extrangeria'} value={'Cedula de Extrangeria'} />
+                            <Picker.Item label={'Pasaporte'} value={'Pasaporte'} />
+                            
+                          </Picker>
                         </View>
-                    </TouchableOpacity>
 
 
 

@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, StatusBar, Image, ImageBackground, ActivityIndicator, ScrollView, Linking} from 'react-native';
 
 import {file_server, server, base_url} from '../Env'   
-import AsyncStorage from '@react-native-community/async-storage'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import UserContext from '../contexts/UserContext'
 import Menu from '../components/Menu'
 import axios from 'axios'

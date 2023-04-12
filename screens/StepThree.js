@@ -2,7 +2,7 @@ import React, {useEffect} from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, StatusBar, Image, ImageBackground} from 'react-native';
 
 
-import AsyncStorage from '@react-native-community/async-storage'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import UserContext from '../contexts/UserContext'
 import Menu from '../components/Menu'
 function Index(props) {  

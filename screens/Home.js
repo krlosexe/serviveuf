@@ -2,7 +2,7 @@ import React, {useState, useEffect, useContext}  from 'react';
 import { Alert, StyleSheet} from 'react-native';
 
 import UserContext from '../contexts/UserContext'
-import AsyncStorage from '@react-native-community/async-storage'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 import { Notifier, Easing } from 'react-native-notifier';
 

@@ -4,9 +4,10 @@ import { StyleSheet, Text, View, TouchableOpacity, StatusBar, ImageBackground, I
 import {file_server, server, base_url} from '../Env'   
 import axios from 'axios'
 
+import {Picker} from '@react-native-picker/picker';
+
 import HeadNavigate from '../components/HeadNavigate'
 import Menu from '../components/Menu'
-import { ActionSheet } from 'react-native-cross-actionsheet'
 import StarRating from 'react-native-star-rating';
 function Index(props) {  
 
@@ -140,12 +141,20 @@ function Index(props) {
             </View>
 
 
-
-            <TouchableOpacity style={{...styles.inputView, width : "80%", alignSelf : "center"}} onPress={()=>SelectComment()}>
-                <View style={{...styles.inputText}}>
-                    <Text style={{textAlign : "center"}}>{formInfo.comments}</Text>
-                </View>
-            </TouchableOpacity>
+            <View style={{...styles.inputView, width : "80%", alignSelf : "center"}} >
+                <Picker
+                  selectedValue={formInfo.comments}
+                  style={{ height: 50, width: '100%', ...styles.inputText }}
+                    onValueChange={(itemValue, itemIndex) => onChangeText(itemValue, 'comments')}
+                  >
+                  <Picker.Item label={formInfo.comments} value={formInfo.comments} />
+                  <Picker.Item label={'Excelente servicio'} value={'Excelente servicio'} />
+                  <Picker.Item label={'Buena actitud'} value={'Buena actitud'} />
+                  <Picker.Item label={'Buena conversació'} value={'Buena conversació'} />
+                  <Picker.Item label={'Me encanto el resultado'} value={'Me encanto el resultado'} />
+                  <Picker.Item label={'No me gusto'} value={'No me gusto'} />
+                </Picker>
+              </View>
 
 
             {/* <Text style={{textAlign : "center", color :"#063046", fontSize : 25, marginTop : -10}}>Comentarios</Text> */}

@@ -1,6 +1,6 @@
 import React, {useEffect, useState, useContext, useRef} from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, StatusBar, ScrollView, Image, ToastAndroid, ActivityIndicator, PermissionsAndroid, Content} from 'react-native';
-
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, StatusBar, ScrollView, Image, ToastAndroid, ActivityIndicator, PermissionsAndroid} from 'react-native';
+import {Picker} from '@react-native-picker/picker';
 import {server, base_url, tokenApiMaps} from '../Env'    
 import axios from 'axios'
 import DatePicker from 'react-native-date-picker'
@@ -11,7 +11,7 @@ import HeadNavigate from '../components/HeadNavigate'
 import {launchImageLibrary} from 'react-native-image-picker';
 import { Pulse } from 'react-native-animated-spinkit'
 
-import { ActionSheet } from 'react-native-cross-actionsheet'
+
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import Geolocation from 'react-native-geolocation-service';
 import { Icon } from 'react-native-eva-icons';
@@ -38,6 +38,7 @@ function Index(props) {
     const [Latitude, setLatitude]           = useState("")
     const [Longitude, setLongitude]         = useState("")
     const [SelectType, setSelectType]       = useState(false)
+    const [options, setOptions]       = useState([])
 
     const [TypeService, setTypeService]   = useState(props.route.params.service)
 
@@ -71,7 +72,7 @@ function Index(props) {
 
       setLoad(false)
 
-     
+      typeSelect();
 
 
     },[randomCode])
@@ -141,28 +142,26 @@ function Index(props) {
     let optionsSelect = []
     if(props.route.params.service == "Trenzas"){
        optionsSelect = [
-        { text: 'Kanekalon', onPress:() => setTypeService('Kanekalon') },
-        { text: 'Sintético', onPress:() => setTypeService('Sintético') },
-        { text: 'Kinky',     onPress:() => setTypeService('Kinky') },
-        { text: 'Lana',      onPress:() => setTypeService('Lana') }
+        { text: 'Kanekalon' },
+        { text: 'Sintético' },
+        { text: 'Kinky'     },
+        { text: 'Lana' }
       ]
     }
 
     if(props.route.params.service == "Pedicure"){
        optionsSelect =  [
-        { text: 'Sencillas',      onPress:()  => setTypeService('Sencillas') },
-        { text: 'Semipermanente', onPress:()  => setTypeService('Semipermanente') },
-        { text: 'Acrílicas',      onPress:()  => setTypeService('Acrílicas') },
-        { text: 'Esculpidas',     onPress:()  => setTypeService('Esculpidas') },
-        { text: 'Retoque',         onPress:() => setTypeService('Retoque') },
-        { text: 'Retiro',         onPress:() => setTypeService('Retiro') }
+        { text: 'Sencillas'      },
+        { text: 'Semipermanente' },
+        { text: 'Acrílicas'      },
+        { text: 'Esculpidas'     },
+        { text: 'Retoque'         },
+        { text: 'Retiro'          }
       ]
-    }
+    } 
 
-      ActionSheet.options({
-          options: optionsSelect,
-          cancel: { onPress: () => console.log('cancel') }
-      })
+    setOptions(optionsSelect);
+
     }
 
 
@@ -389,20 +388,18 @@ function Index(props) {
                     </View>
 
                     {SelectType &&
-                      <TouchableOpacity style={styles.inputView} onPress={()=>typeSelect()}>
-                          <View style={styles.inputText}>
-                              <Text style={{marginTop : 14, textAlign : "center"}}>
-                                {props.route.params.service == "Trenzas" && 
-                                  <Text>{TypeService}</Text>
-                                }
-
-                              {props.route.params.service != "Trenzas" && 
-                                  <Text>{TypeService}</Text>
-                                }
-
-                              </Text>
-                          </View>
-                      </TouchableOpacity>
+                      <View style={styles.inputView} >
+                        <Picker
+                          selectedValue={TypeService}
+                          style={{ height: 50, width: '100%', ...styles.inputText }}
+                            onValueChange={(itemValue, itemIndex) => setTypeService(itemValue)}
+                          >
+                          <Picker.Item label={TypeService} value={TypeService} />
+                          {options.map((item, key)=>{
+                            return <Picker.Item label={item.text} value={item.text} />
+                          })}
+                        </Picker>
+                      </View>
                     }
 
                     <View style={styles.inputView} >

@@ -1,6 +1,9 @@
 apply plugin: "com.android.application"
-
+apply plugin: "com.facebook.react"
+apply plugin: 'com.android.application'
+apply plugin: 'com.google.gms.google-services' // apply after this line
 import com.android.build.OutputFile
+import org.apache.tools.ant.taskdefs.condition.Os
 
 /**
  * The react.gradle file registers a task for each build variant (e.g. bundleDebugJsAndAssets
@@ -195,7 +198,7 @@ apply plugin: 'com.google.gms.google-services'
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     //noinspection GradleDynamicVersion
-    implementation "com.facebook.react:react-native:+"  // From node_modules
+     implementation "com.facebook.react:react-native:0.68.1"  // From node_modules
     implementation platform('com.google.firebase:firebase-bom:26.5.0')
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
 

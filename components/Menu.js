@@ -1,7 +1,7 @@
 import React, {useContext} from 'react';
 import { Image, View, TouchableOpacity, Text, StyleSheet, Touchable, Alert } from "react-native";
 
-import AsyncStorage from '@react-native-community/async-storage'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import UserContext from '../contexts/UserContext'
 import { Icon } from 'react-native-eva-icons';
 

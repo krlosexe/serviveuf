@@ -16,7 +16,7 @@ import {
 import {server, base_url} from '../Env';
 import axios from 'axios';
 import messaging from '@react-native-firebase/messaging';
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import UserContext from '../contexts/UserContext';
 import {launchImageLibrary} from 'react-native-image-picker';
 import {ScrollView} from 'react-native-gesture-handler';

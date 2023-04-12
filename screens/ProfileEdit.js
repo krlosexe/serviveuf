@@ -3,7 +3,7 @@ import React, {useEffect, useState} from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, StatusBar, Image, TextInput, ActivityIndicator, ToastAndroid} from 'react-native';
 
 import UserContext from '../contexts/UserContext'
-import AsyncStorage from '@react-native-community/async-storage'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import HeadNavigate from '../components/HeadNavigate'
 
 import {server, file_server, base_url} from '../Env'    

@@ -1,7 +1,7 @@
 import React, { useState, useRef, useContext, useEffect } from 'react';
 import { View, Modal, Text, TouchableWithoutFeedback, Image, TouchableOpacity, StyleSheet, Button, Dimensions, Animated, ActivityIndicator, Switch, Platform} from 'react-native';
 import { Icon } from 'react-native-eva-icons';
-import AsyncStorage from '@react-native-community/async-storage'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import UserContext from '../contexts/UserContext'
 import LinearGradient from 'react-native-linear-gradient';
 import { base_url, server, file_server } from '../Env.js';
